@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navigation = () => {
+
+    const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+    useEffect(()=>{console.log(isAuthenticated)},[isAuthenticated])
+
     return(
         <div className="nav">
             <h2>EzInvoice</h2>
@@ -11,7 +16,8 @@ const Navigation = () => {
                 <NavLink to="/clients" activeClassName="selected">Clients</NavLink>
                 <NavLink to="/items" activeClassName="selected">Items</NavLink>
                 <NavLink to="/settings" activeClassName="selected">Settings</NavLink>
-                <NavLink to="/login" activeClassName="selected">Login</NavLink>
+                {!isAuthenticated && <NavLink to="/login" onClick={() => {loginWithRedirect()}}>Login</NavLink>}
+                {isAuthenticated && <NavLink to="/" onClick={() => {logout()}}>Logout</NavLink>}
                 <span id="lang-icon"></span>
             </div>
         </div>
