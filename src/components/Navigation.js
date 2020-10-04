@@ -73,8 +73,6 @@ const Navigation = () => {
                     </Button>
                     
                 </Toolbar>
-                
-                <span id="lang-icon"></span>
             </AppBar>
         </div>
     )
