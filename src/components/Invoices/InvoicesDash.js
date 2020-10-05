@@ -29,10 +29,11 @@ const InvoicesDash = props => {
                     value={tab}
                     onChange={tabChange}
                 >
-                    <Tab label="All" />
-                    <Tab label="Outstanding" />
-                    <Tab label="Paid" />
-                    <Button
+                    <Tab label="All" value="all"/>
+                    <Tab label="Outstanding" value="outstanding"/>
+                    <Tab label="Paid" value="paid"/>
+                </Tabs>
+                <Button
                         variant="contained"
                         className={classes.button}
                         onClick={ () => {
@@ -44,7 +45,6 @@ const InvoicesDash = props => {
                         variant="contained"
                         className={classes.button}
                     >Send</Button>
-                </Tabs>
             </div>
             <div>
                 {/* list header */}

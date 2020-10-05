@@ -71,7 +71,6 @@ const Navigation = () => {
                         {!isAuthenticated && <NavLink to="/login" onClick={() => {loginWithRedirect()}} className={classes.navLink}>Login</NavLink>}
                         {isAuthenticated && <NavLink to="/" onClick={() => {logout()}} className={classes.navLink}>Logout</NavLink>}
                     </Button>
-                    
                 </Toolbar>
             </AppBar>
         </div>
