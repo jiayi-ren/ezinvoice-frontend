@@ -1,9 +1,17 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { Button, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles({
+    button: {
+        margin: '10px'
+    }
+})
 
 const ItemsDash = props => {
 
     const history = useHistory()
+    const classes = useStyles()
 
     return (
         <div>
@@ -11,11 +19,14 @@ const ItemsDash = props => {
                 Search
             </div>
             <div>
-                <button 
+                <Button
+                    variant="contained"
+                    className={classes.button}
                     onClick={ () => {
                         history.push(`${history.location.pathname}/new`)
                     }}
-                    >New</button>
+                >New
+                </Button>
             </div>
             <div>
                 {/* list header */}
