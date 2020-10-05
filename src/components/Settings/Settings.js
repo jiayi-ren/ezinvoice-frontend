@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
+import { Button, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles({
+    button: {
+        margin: '10px'
+    }
+})
 
 const InitialForm = {
     name: "",
@@ -12,6 +19,7 @@ const InitialForm = {
 
 const Settings = props => {
 
+    const classes = useStyles()
     const [formValues, setFormValues] = useState(InitialForm);
 
     const handleChange = event => {
@@ -97,7 +105,12 @@ const Settings = props => {
                     />
                 </label>
             </form>
-            <button onClick={saveSettings}>Save</button>
+            <Button 
+                variant="contained"
+                className={classes.button}
+                onClick={saveSettings}
+            >Save
+            </Button>
         </div>
     )
 };
