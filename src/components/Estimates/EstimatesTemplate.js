@@ -1,4 +1,61 @@
 import React, { useState } from "react";
+import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
+
+const useStyles = makeStyles({
+    form: {
+        border: '2px black solid',
+        margin: '50px',
+        maxWidth: '70%'
+    },
+    templateHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        margin: '10% 10% 2%',
+    },
+    templateHeaderInfo: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    templateInfo: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    templateFrom : {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '35%',
+        margin: '0 10%'
+    },
+    templateTo: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '35%',
+        margin: '0 10%'
+    },
+    templateTable: {
+        margin: '5% 10% 0',
+        maxWidth: '80%'
+    },
+    templateTableHeader: {
+        border: '1px black solid',
+        backgroundColor: 'lightgrey'
+    },
+    templateTableBody: {
+        border: '1px black solid'
+    },
+    templateTableRow: {
+        width: '70%'
+    },
+    templateTableCol: {
+        
+    },
+    templateTableDel: {
+        
+    },
+    addButton: {
+        margin: '1% 10% 5%'
+    }
+})
 
 const fromInit = {
     name: "",
@@ -36,6 +93,8 @@ const InitialForm = {
 
 
 const EstimatesTemplate = props => {
+
+    const classes = useStyles()
 
     const [template, setTemplate] = useState(InitialForm);
 
@@ -92,183 +151,173 @@ const EstimatesTemplate = props => {
 
     return (
         <div>
-            <form>
-                <div className="template-header">
-                    <label>
-                        <input
+            <form className={classes.form}>
+                <div className={classes.templateHeader}>
+                    <TextField
                             name="title"
                             type="text"
                             value={template.title}
-                            placeholder="Estimate"
+                            label="Title"
                             onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
+                            inputProps={{style: {fontSize: 30}}}
+                    />
+                    <div className={classes.templateHeaderInfo}>
+                        <TextField
                             name="estimateNumber"
                             type="text"
                             value={template.estimateNumber}
-                            placeholder="Estimate Number"
+                            label="Estimate #"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="date"
                             type="date"
                             value={template.date}
-                            placeholder={`${template.date}`}
+                            label="Date"
                             onChange={handleChange}
                         />
-                    </label>
+                    </div>
                 </div>
-                    
-                <div className="template-from">
-                    <label>
-                        <input
+                <div className={classes.templateInfo}>
+                    <div className={classes.templateFrom}>
+                        <TextField
                             name="from-name"
                             type="text"
                             value={template.from.name}
-                            placeholder="Business Name"
+                            label="Business Name"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="from-email"
                             type="text"
                             value={template.from.email}
-                            placeholder="name@business.com"
+                            label="Business Email"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="from-street"
                             type="text"
                             value={template.from.street}
-                            placeholder="Street"
+                            label="Street"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="from-cityState"
                             type="text"
                             value={template.from.cityState}
-                            placeholder="City, State"
+                            label="City, State"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="from-zip"
                             type="text"
                             value={template.from.zip}
-                            placeholder="Zip Code"
+                            label="Zip Code"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="from-phone"
                             type="text"
                             value={template.from.phone}
-                            placeholder="123-456-7890"
+                            label="123-456-7890"
                             onChange={handleChange}
                         />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <input
+                    </div>
+                    <div className={classes.templateTo}>
+                        <TextField
                             name="to-name"
                             type="text"
                             value={template.to.name}
-                            placeholder="Client Name"
+                            label="Client Name"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="to-email"
                             type="text"
                             value={template.to.email}
-                            placeholder="name@client.com"
+                            label="Client Email"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="to-street"
                             type="text"
                             value={template.to.street}
-                            placeholder="Street"
+                            label="Street"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="to-cityState"
                             type="text"
                             value={template.to.cityState}
-                            placeholder="City, State"
+                            label="City, State"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="to-zip"
                             type="text"
                             value={template.to.zip}
-                            placeholder="Zip Code"
+                            label="Zip Code"
                             onChange={handleChange}
                         />
-                    </label>
-                    <label>
-                        <input
+                        <TextField
                             name="to-phone"
                             type="text"
                             value={template.to.phone}
-                            placeholder="123-456-7890"
+                            label="123-456-7890"
                             onChange={handleChange}
                         />
-                    </label>
+                    </div>
                 </div>
-                <div>
+                <Table className={classes.templateTable}>
+                    <TableHead className={`${classes.templateTableHeader}`}>
+                        <TableRow>
+                            <TableCell className={classes.templateTableDel}></TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell align="right">Amount</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {template.items.map( (item, id) => {
-                        return (
-                            <div key={id}>
-                                <button
-                                    name={id}
-                                    onClick={handleItemDelete}
-                                >X</button>
-                                <label>
-                                    <input
+                        return (                           
+                            <TableRow key={id} className={classes.templateTableRow}>
+                                <TableCell className={classes.templateTableDel}>
+                                    <Button
+                                        variant="outlined"
+                                        name={id}
+                                        onClick={handleItemDelete}
+                                    >X</Button>
+                                </TableCell>
+                                <TableCell className={classes.templateTableCol} align="right">
+                                    <TextField
                                         name={`items-${id}-description`}
                                         type="text"
                                         value={item.description}
-                                        placeholder="Description"
+                                        label="Description"
                                         onChange={handleChange}
+                                        fullWidth
                                     />
-                                </label>
-                                <label>
-                                    <input
+                                </TableCell>
+                                <TableCell className={classes.templateTableCol} align="right">
+                                    <TextField
                                         name={`items-${id}-amount`}
                                         type="text"
                                         value={item.amount}
-                                        placeholder="0.00"
+                                        label="0.00"
                                         onChange={handleChange}
+                                        width="10%"
                                     />
-                                </label>
-                            </div>
+                                </TableCell>
+                            </TableRow>
                         )
                     })}
-                </div>
-                <button
+                    </TableBody>
+                </Table>
+                <Button
+                    variant="outlined"
                     onClick={handleItemAdd}
+                    className={classes.addButton}
                 >+
-                </button>
+                </Button>
             </form>
         </div>
     )
