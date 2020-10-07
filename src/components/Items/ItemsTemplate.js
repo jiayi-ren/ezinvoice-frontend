@@ -1,3 +1,4 @@
+import { TextField } from "@material-ui/core";
 import React, { useState } from "react";
 
 const InitialForm = {
@@ -23,26 +24,20 @@ const ItemsTemplate = props => {
     return (
         <div className="items-template">
             <form>
-                <div className="template-header">
-                    <label>
-                        <input
-                            name="description"
-                            type="text"
-                            value={template.description}
-                            placeholder="Item Description"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="amount"
-                            type="text"
-                            value={template.amount}
-                            placeholder="0.00"
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
+                <TextField
+                    name="description"
+                    type="text"
+                    value={template.description}
+                    label="Item Description"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="amount"
+                    type="text"
+                    value={template.amount}
+                    label="0.00"
+                    onChange={handleChange}
+                />
             </form>
         </div>
     )
