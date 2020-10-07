@@ -1,4 +1,14 @@
+import { makeStyles, TextField } from "@material-ui/core";
 import React, { useState } from "react";
+
+const useStyles = makeStyles({
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '500px',
+        margin: 'auto'
+    }
+})
 
 const InitialForm = {
     name: "",
@@ -11,6 +21,7 @@ const InitialForm = {
 
 const ClientsTemplate = props => {
 
+    const classes = useStyles()
     const [template, setTemplate] = useState(InitialForm);
 
     const handleChange = event => {
@@ -26,63 +37,49 @@ const ClientsTemplate = props => {
 
     return (
         <div>
-            <form>
-                <div className="template-header">
-                    <label>
-                        <input
-                            name="name"
-                            type="text"
-                            value={template.name}
-                            placeholder="Client Name"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="email"
-                            type="text"
-                            value={template.email}
-                            placeholder="name@client.com"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="street"
-                            type="text"
-                            value={template.street}
-                            placeholder="Street"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="cityState"
-                            type="text"
-                            value={template.cityState}
-                            placeholder="City, State"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="zip"
-                            type="text"
-                            value={template.zip}
-                            placeholder="Zip Code"
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            name="phone"
-                            type="text"
-                            value={template.phone}
-                            placeholder="123-456-7890"
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
+            <form className={classes.form}>
+                <TextField
+                    name="name"
+                    type="text"
+                    value={template.name}
+                    label="Client Name"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="email"
+                    type="text"
+                    value={template.email}
+                    label="name@client.com"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="street"
+                    type="text"
+                    value={template.street}
+                    label="Street"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="cityState"
+                    type="text"
+                    value={template.cityState}
+                    label="City, State"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="zip"
+                    type="text"
+                    value={template.zip}
+                    label="Zip Code"
+                    onChange={handleChange}
+                />
+                <TextField
+                    name="phone"
+                    type="text"
+                    value={template.phone}
+                    label="123-456-7890"
+                    onChange={handleChange}
+                />
             </form>
         </div>
     )

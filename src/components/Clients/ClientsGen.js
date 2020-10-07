@@ -1,6 +1,7 @@
 import React from 'react';
 import ClientsTemplate from './ClientsTemplate';
 import { useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 const ClientsGen = props => {
 
@@ -9,12 +10,12 @@ const ClientsGen = props => {
     return (
         <div>
             <ClientsTemplate />
-            <button
+            <Button variant="contained"
                 onClick={ () => {
                     history.push(`${history.location.pathname.slice(0,-4)}`)
                 }}
-            >Close</button>
-            <button>Save</button>
+            >Close</Button>
+            <Button variant="contained">Save</Button>
         </div>
     )
 }
