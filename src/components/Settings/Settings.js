@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles({
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '500px',
+        margin: 'auto'
+    },
     button: {
         margin: '10px'
     }
@@ -49,61 +55,49 @@ const Settings = props => {
 
     return (
         <div className="settings">
-            <form>
-                <label>
-                    <input
+            <form className={classes.form}>
+                    <TextField
                         name="name"
                         type="text"
                         value={formValues.name}
-                        placeholder="Name"
+                        label="Name"
                         onChange={handleChange}
                     />
-                </label>
-                <label>
-                    <input
+                    <TextField
                         name="email"
                         type="text"
                         value={formValues.email}
-                        placeholder="name@business.com"
+                        label="name@business.com"
                         onChange={handleChange}
                     />
-                </label>
-                <label>
-                    <input
+                    <TextField
                         name="street"
                         type="text"
                         value={formValues.street}
-                        placeholder="Street"
+                        label="Street"
                         onChange={handleChange}
                     />
-                </label>
-                <label>
-                    <input
+                    <TextField
                         name="cityState"
                         type="text"
                         value={formValues.cityState}
-                        placeholder="City, State"
+                        label="City, State"
                         onChange={handleChange}
                     />
-                </label>
-                <label>
-                    <input
+                    <TextField
                         name="zip"
                         type="text"
                         value={formValues.zip}
-                        placeholder="Zip Code"
+                        label="Zip Code"
                         onChange={handleChange}
                     />
-                </label>
-                <label>
-                    <input
+                    <TextField
                         name="phone"
                         type="text"
                         value={formValues.phone}
-                        placeholder="123-456-7890"
+                        label="123-456-7890"
                         onChange={handleChange}
                     />
-                </label>
             </form>
             <Button 
                 variant="contained"
