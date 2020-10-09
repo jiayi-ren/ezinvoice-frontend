@@ -1,5 +1,5 @@
 import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const useStyles = makeStyles({
     form: {
@@ -77,6 +77,8 @@ const toInit = {
 
 const item = {
     description: "",
+    qty: "",
+    rate: "",
     amount: "",
 };
 
@@ -84,10 +86,10 @@ const itemInit = [JSON.parse(JSON.stringify(item))];
 
 const InitialForm = {
     title: "Invoice",
-    invoiceNumber: "00000",
+    docNumber: "00000",
     date: new Date().toJSON().slice(0, 10),
-    from: fromInit,
-    to: toInit,
+    business: fromInit,
+    client: toInit,
     items: itemInit,
 };
 
@@ -96,7 +98,13 @@ const InvoicesTemplate = props => {
 
     const classes = useStyles()
 
+    const { setPdfData } = props
+
     const [template, setTemplate] = useState(InitialForm);
+
+    useEffect(() => {
+        setPdfData(template)
+    }, [template, setPdfData])
 
     const handleChange = event => {
 
@@ -105,7 +113,7 @@ const InvoicesTemplate = props => {
         const info = target.split("-");
         const nextState = Object.assign(template);
 
-        if (target.includes("from") || target.includes("to")) {
+        if (target.includes("business") || target.includes("client")) {
             nextState[`${info[0]}`][`${info[1]}`] = value;
         }else if (target.includes("items")) {
             nextState[`${info[0]}`][parseInt(info[1])][`${info[2]}`] = value;
@@ -163,9 +171,9 @@ const InvoicesTemplate = props => {
                     />
                     <div className={classes.templateHeaderInfo}>
                         <TextField
-                            name="invoiceNumber"
+                            name="docNumber"
                             type="text"
-                            value={template.invoiceNumber}
+                            value={template.docNumber}
                             label="Invoice #"
                             onChange={handleChange}
                         />
@@ -181,88 +189,88 @@ const InvoicesTemplate = props => {
                 <div className={classes.templateInfo}>
                     <div className={classes.templateFrom}>
                         <TextField
-                            name="from-name"
+                            name="business-name"
                             type="text"
-                            value={template.from.name}
+                            value={template.business.name}
                             label="Business Name"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="from-email"
+                            name="business-email"
                             type="text"
-                            value={template.from.email}
+                            value={template.business.email}
                             label="Business Email"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="from-street"
+                            name="business-street"
                             type="text"
-                            value={template.from.street}
+                            value={template.business.street}
                             label="Street"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="from-cityState"
+                            name="business-cityState"
                             type="text"
-                            value={template.from.cityState}
+                            value={template.business.cityState}
                             label="City, State"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="from-zip"
+                            name="business-zip"
                             type="text"
-                            value={template.from.zip}
+                            value={template.business.zip}
                             label="Zip Code"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="from-phone"
+                            name="business-phone"
                             type="text"
-                            value={template.from.phone}
+                            value={template.business.phone}
                             label="123-456-7890"
                             onChange={handleChange}
                         />
                     </div>
                     <div className={classes.templateTo}>
                         <TextField
-                            name="to-name"
+                            name="client-name"
                             type="text"
-                            value={template.to.name}
+                            value={template.client.name}
                             label="Client Name"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="to-email"
+                            name="client-email"
                             type="text"
-                            value={template.to.email}
+                            value={template.client.email}
                             label="Client Email"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="to-street"
+                            name="client-street"
                             type="text"
-                            value={template.to.street}
+                            value={template.client.street}
                             label="Street"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="to-cityState"
+                            name="client-cityState"
                             type="text"
-                            value={template.to.cityState}
+                            value={template.client.cityState}
                             label="City, State"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="to-zip"
+                            name="client-zip"
                             type="text"
-                            value={template.to.zip}
+                            value={template.client.zip}
                             label="Zip Code"
                             onChange={handleChange}
                         />
                         <TextField
-                            name="to-phone"
+                            name="client-phone"
                             type="text"
-                            value={template.to.phone}
+                            value={template.client.phone}
                             label="123-456-7890"
                             onChange={handleChange}
                         />
@@ -273,6 +281,8 @@ const InvoicesTemplate = props => {
                         <TableRow>
                             <TableCell className={classes.templateTableDel}></TableCell>
                             <TableCell>Description</TableCell>
+                            <TableCell>Qty</TableCell>
+                            <TableCell>Rate</TableCell>
                             <TableCell align="right">Amount</TableCell>
                         </TableRow>
                     </TableHead>
@@ -293,6 +303,26 @@ const InvoicesTemplate = props => {
                                         type="text"
                                         value={item.description}
                                         label="Description"
+                                        onChange={handleChange}
+                                        fullWidth
+                                    />
+                                </TableCell>
+                                <TableCell className={classes.templateTableCol} align="right">
+                                    <TextField
+                                        name={`items-${id}-qty`}
+                                        type="text"
+                                        value={item.qty}
+                                        label="Qty"
+                                        onChange={handleChange}
+                                        fullWidth
+                                    />
+                                </TableCell>
+                                <TableCell className={classes.templateTableCol} align="right">
+                                    <TextField
+                                        name={`items-${id}-rate`}
+                                        type="text"
+                                        value={item.rate}
+                                        label="Rate"
                                         onChange={handleChange}
                                         fullWidth
                                     />
