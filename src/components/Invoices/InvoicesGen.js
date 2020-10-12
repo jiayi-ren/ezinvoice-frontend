@@ -1,22 +1,42 @@
 import { Button } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
+import { PDF } from '../Common/PDF';
 import InvoicesTemplate from './InvoicesTemplate';
 
 const InvoicesGen = props => {
 
+    const [isPreviewing, setIsPreviewing] = useState(false)
+    const [pdfData, setPdfData] = useState({})
+
+    const togglePreview = () => {
+        setIsPreviewing(!isPreviewing)
+    }
+
     return (
         <div>
             <div>
-                <Button variant="outlined">Preview</Button>
-                <Button variant="outlined">Edit</Button>
+                {isPreviewing? 
+                    (
+                        <Button variant="outlined" onClick={togglePreview}>Edit</Button>
+                    ):
+                    (
+                        <Button variant="outlined" onClick={togglePreview}>Preview</Button>
+                    )
+                }
                 <Button variant="outlined">Email</Button>
                 <Button variant="outlined">Save</Button>
                 <Button variant="outlined">Print</Button>
                 <Button variant="outlined">Delete</Button>
             </div>
-            <>
-                <InvoicesTemplate />
-            </>
+            {isPreviewing? 
+                (
+                    <PDF data={pdfData}/>
+                ):
+                (
+                    <InvoicesTemplate setPdfData={setPdfData}/>
+                )
+            }
+
         </div>
     )
 }
