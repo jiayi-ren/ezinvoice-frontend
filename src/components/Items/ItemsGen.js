@@ -1,6 +1,7 @@
 import React from 'react';
 import ItemsTemplate from './ItemsTemplate';
 import { useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 const ItemsGen = props => {
 
@@ -9,12 +10,12 @@ const ItemsGen = props => {
     return (
         <div>
             <ItemsTemplate />
-            <button
+            <Button variant="contained"
                 onClick={ () => {
                     history.push(`${history.location.pathname.slice(0,-4)}`)
                 }}
-            >Close</button>
-            <button>Save</button>
+            >Close</Button>
+            <Button variant="contained">Save</Button>
         </div>
     )
 }
