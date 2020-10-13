@@ -1,4 +1,4 @@
-# easyInvoice
+# ezInvoice
 
 You can find the deployed project at https://ezinvoice.netlify.app/
 
