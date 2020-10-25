@@ -23,7 +23,6 @@ const PDF = props => {
         setPdfData(data);
     }, [data]);
 
-    console.log(data);
     return (
         <PDFViewer width="1000" height="600">
             <Document title="pdf">

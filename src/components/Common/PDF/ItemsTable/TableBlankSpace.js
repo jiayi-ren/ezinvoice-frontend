@@ -11,21 +11,21 @@ const Description = styled.Text`
     width: 60%;
     padding: 3px 0;
     border-bottom: 1px;
-    textalign: left;
+    text-align: left;
 `;
 const Qty = styled.Text`
     width: 10%;
     padding: 3px 0;
     border-left: 1px;
     border-bottom: 1px;
-    textalign: right;
+    text-align: right;
 `;
 const Rate = styled.Text`
     width: 15%;
     padding: 3px 0;
     border-left: 1px;
     border-bottom: 1px;
-    textalign: right;
+    text-align: right;
 `;
 const Amount = styled.Text`
     width: 15%;
