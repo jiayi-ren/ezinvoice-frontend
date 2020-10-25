@@ -29,7 +29,7 @@ const TableFooter = props => {
     const total = items
         .map(item => parseInt(item.qty) * parseFloat(item.rate))
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    console.log(total);
+
     return (
         <TableFooterContainer>
             <Description>TOTAL</Description>
