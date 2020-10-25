@@ -10,10 +10,10 @@ const TableFooterContainer = styled.View`
 `;
 const Description = styled.Text`
     padding: 3px 0;
-    textalign: right;
+    text-align: right;
     padding-right: 5px;
     width: 85%;
-    verticalalign: baseline;
+    vertical-align: baseline;
 `;
 const Total = styled.Text`
     width: 15%;
@@ -33,7 +33,9 @@ const TableFooter = props => {
     return (
         <TableFooterContainer>
             <Description>TOTAL</Description>
-            <Total>{Number.parseFloat(total).toFixed(2)}</Total>
+            <Total>
+                {isNaN(total) ? ' ' : Number.parseFloat(total).toFixed(2)}
+            </Total>
         </TableFooterContainer>
     );
 };

@@ -31,8 +31,6 @@ const Info = styled.Text`
 
 const ContactInfo = props => {
     const { business, client } = props;
-    console.log(business);
-    console.log(client);
 
     const [businessInfo, setBusinessInfo] = useState(business);
     const [clientInfo, setClientInfo] = useState(client);
