@@ -1,31 +1,29 @@
-import { makeStyles, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import { makeStyles, TextField } from '@material-ui/core';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles({
     form: {
         display: 'flex',
         flexDirection: 'column',
         width: '500px',
-        margin: 'auto'
-    }
-})
+        margin: 'auto',
+    },
+});
 
 const InitialForm = {
-    name: "",
-    email: "",
-    street: "",
-    cityState: "",
-    zip: "",
-    phone: "",
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
 };
 
 const ClientsTemplate = props => {
-
-    const classes = useStyles()
+    const classes = useStyles();
     const [template, setTemplate] = useState(InitialForm);
 
     const handleChange = event => {
-
         const value = event.target.value;
         const target = event.target.name;
 
@@ -82,7 +80,7 @@ const ClientsTemplate = props => {
                 />
             </form>
         </div>
-    )
+    );
 };
 
 export default ClientsTemplate;

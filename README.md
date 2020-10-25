@@ -8,40 +8,40 @@ You can find the deployed project at https://ezinvoice.netlify.app/
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Project Overview
-This project is designed to better generate, organize, and search invoices/estimates. 
+
+This project is designed to better generate, organize, and search invoices/estimates.
 
 ### Key Features
 
-- [x] Auth0 for identify management with social login (Google and Dropbox) 
-- [x] Preview Invoice as PDF
-- [x] Download PDF to local computer
-- [ ] Upload to Cloud Storage such as Google Drive or Dropbox
-- [ ] Search by keywords (Date, Client, Address)
-- [ ] Sort by Date, Client or Address
-  
+-   [x] Auth0 for identify management with social login (Google and Dropbox)
+-   [x] Preview Invoice as PDF
+-   [x] Download PDF to local computer
+-   [ ] Upload to Cloud Storage such as Google Drive or Dropbox
+-   [ ] Search by keywords (Date, Client, Address)
+-   [ ] Sort by Date, Client or Address
+
 More coming soon...
 
 ## Tech Stack
 
 #### [Front end](https://github.com/jiayi-ren/ezinvoice-frontend) built using:
 
-#### *React*, *Javascript*, *Redux*, *MaterialUI*, *react-pdf*
+#### _React_, _Javascript_, _Redux_, _MaterialUI_, _react-pdf_
 
 #### Front end deployed to `https://ezinvoice.netlify.app/`
 
 #### [Back end](https://github.com/jiayi-ren/ezinvoice-backend) built using:
 
-#### *NodeJS*, *ExpressJS*, *Knex*
+#### _NodeJS_, _ExpressJS_, _Knex_
 
-#  Environment Variables
+# Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables. There should be a .env file containing the following:
 
-    *  REACT_APP_CLIENT_ID - this is the client id specifically for this auth0 application 
+    *  REACT_APP_CLIENT_ID - this is the client id specifically for this auth0 application
     *  REACT_APP_AUTH0_DOMAIN - auth0 developer domain
 
-
-#  Installation Instructions
+# Installation Instructions
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -1,17 +1,15 @@
-import { TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import { TextField } from '@material-ui/core';
+import React, { useState } from 'react';
 
 const InitialForm = {
-    description: "",
-    amount: "",
+    description: '',
+    amount: '',
 };
 
 const ItemsTemplate = props => {
-
     const [template, setTemplate] = useState(InitialForm);
 
     const handleChange = event => {
-
         const value = event.target.value;
         const target = event.target.name;
 
@@ -40,7 +38,7 @@ const ItemsTemplate = props => {
                 />
             </form>
         </div>
-    )
+    );
 };
 
 export default ItemsTemplate;

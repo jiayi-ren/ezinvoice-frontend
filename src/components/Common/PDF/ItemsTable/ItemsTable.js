@@ -12,24 +12,23 @@ const TableContainer = styled.View`
 `;
 
 const ItemsTable = props => {
-
     const tableRowsCount = 25;
-    const { items } = props
+    const { items } = props;
 
-    const [itemList, setItemList] = useState(items)
+    const [itemList, setItemList] = useState(items);
 
     useEffect(() => {
-        setItemList(items)
-    }, [items])
+        setItemList(items);
+    }, [items]);
 
     return (
         <TableContainer>
             <TableHeader />
-            <TableRow items={itemList}/>
-            <TableBlankSpace rowsCount={ tableRowsCount - itemList.length} />
+            <TableRow items={itemList} />
+            <TableBlankSpace rowsCount={tableRowsCount - itemList.length} />
             <TableFooter items={itemList} />
         </TableContainer>
-    )
-}
+    );
+};
 
 export default ItemsTable;

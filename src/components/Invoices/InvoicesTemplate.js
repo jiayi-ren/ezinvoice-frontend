@@ -1,11 +1,20 @@
-import { Button, makeStyles, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import {
+    Button,
+    makeStyles,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField,
+} from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles({
     form: {
         border: '2px black solid',
         margin: '50px',
-        maxWidth: '70%'
+        maxWidth: '70%',
     },
     templateHeader: {
         display: 'flex',
@@ -20,104 +29,97 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
     },
-    templateFrom : {
+    templateFrom: {
         display: 'flex',
         flexDirection: 'column',
         width: '35%',
-        margin: '0 10%'
+        margin: '0 10%',
     },
     templateTo: {
         display: 'flex',
         flexDirection: 'column',
         width: '35%',
-        margin: '0 10%'
+        margin: '0 10%',
     },
     templateTable: {
         margin: '5% 10% 0',
-        maxWidth: '80%'
+        maxWidth: '80%',
     },
     templateTableHeader: {
         border: '1px black solid',
-        backgroundColor: 'lightgrey'
+        backgroundColor: 'lightgrey',
     },
     templateTableBody: {
-        border: '1px black solid'
+        border: '1px black solid',
     },
     templateTableRow: {
-        width: '70%'
+        width: '70%',
     },
-    templateTableCol: {
-        
-    },
-    templateTableDel: {
-        
-    },
+    templateTableCol: {},
+    templateTableDel: {},
     addButton: {
-        margin: '1% 10% 5%'
-    }
-})
+        margin: '1% 10% 5%',
+    },
+});
 
 const fromInit = {
-    name: "",
-    email: "",
-    street: "",
-    cityState: "",
-    zip: "",
-    phone: "",
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
 };
 
 const toInit = {
-    name: "",
-    email: "",
-    street: "",
-    cityState: "",
-    zip: "",
-    phone: "",
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
 };
 
 const item = {
-    description: "",
-    qty: "",
-    rate: "",
-    amount: "",
+    description: '',
+    qty: '',
+    rate: '',
+    amount: '',
 };
 
 const itemInit = [JSON.parse(JSON.stringify(item))];
 
 const InitialForm = {
-    title: "Invoice",
-    docNumber: "00000",
+    title: 'Invoice',
+    docNumber: '00000',
     date: new Date().toJSON().slice(0, 10),
     business: fromInit,
     client: toInit,
     items: itemInit,
 };
 
-
 const InvoicesTemplate = props => {
+    const classes = useStyles();
 
-    const classes = useStyles()
-
-    const { setPdfData } = props
+    const { setPdfData } = props;
 
     const [template, setTemplate] = useState(InitialForm);
 
     useEffect(() => {
-        setPdfData(template)
-    }, [template, setPdfData])
+        setPdfData(template);
+    }, [template, setPdfData]);
 
     const handleChange = event => {
-
         const value = event.target.value;
         const target = event.target.name;
-        const info = target.split("-");
+        const info = target.split('-');
         const nextState = Object.assign(template);
 
-        if (target.includes("business") || target.includes("client")) {
+        if (target.includes('business') || target.includes('client')) {
             nextState[`${info[0]}`][`${info[1]}`] = value;
-        }else if (target.includes("items")) {
+        } else if (target.includes('items')) {
             nextState[`${info[0]}`][parseInt(info[1])][`${info[2]}`] = value;
-        }else {
+        } else {
             nextState[`${info[0]}`] = value;
         }
 
@@ -131,11 +133,11 @@ const InvoicesTemplate = props => {
         event.preventDefault();
         const index = parseInt(event.target.name);
         const nextState = Object.assign(template);
-        
+
         if (index !== 0) {
-            nextState["items"].splice(index, 1);
-        }else {
-            nextState["items"][0] = JSON.parse(JSON.stringify(item));
+            nextState['items'].splice(index, 1);
+        } else {
+            nextState['items'][0] = JSON.parse(JSON.stringify(item));
         }
 
         setTemplate({
@@ -149,7 +151,7 @@ const InvoicesTemplate = props => {
         const nextState = Object.assign(template);
         const newItem = JSON.parse(JSON.stringify(item));
 
-        nextState["items"].push(newItem);
+        nextState['items'].push(newItem);
 
         setTemplate({
             ...template,
@@ -162,12 +164,12 @@ const InvoicesTemplate = props => {
             <form className={classes.form}>
                 <div className={classes.templateHeader}>
                     <TextField
-                            name="title"
-                            type="text"
-                            value={template.title}
-                            label="Title"
-                            onChange={handleChange}
-                            inputProps={{style: {fontSize: 30}}}
+                        name="title"
+                        type="text"
+                        value={template.title}
+                        label="Title"
+                        onChange={handleChange}
+                        inputProps={{ style: { fontSize: 30 } }}
                     />
                     <div className={classes.templateHeaderInfo}>
                         <TextField
@@ -279,7 +281,9 @@ const InvoicesTemplate = props => {
                 <Table className={classes.templateTable}>
                     <TableHead className={`${classes.templateTableHeader}`}>
                         <TableRow>
-                            <TableCell className={classes.templateTableDel}></TableCell>
+                            <TableCell
+                                className={classes.templateTableDel}
+                            ></TableCell>
                             <TableCell>Description</TableCell>
                             <TableCell>Qty</TableCell>
                             <TableCell>Rate</TableCell>
@@ -287,70 +291,90 @@ const InvoicesTemplate = props => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {template.items.map( (item, id) => {
-                        return (                           
-                            <TableRow key={id} className={classes.templateTableRow}>
-                                <TableCell className={classes.templateTableDel}>
-                                    <Button
-                                        variant="outlined"
-                                        name={id}
-                                        onClick={handleItemDelete}
-                                    >X</Button>
-                                </TableCell>
-                                <TableCell className={classes.templateTableCol} align="right">
-                                    <TextField
-                                        name={`items-${id}-description`}
-                                        type="text"
-                                        value={item.description}
-                                        label="Description"
-                                        onChange={handleChange}
-                                        fullWidth
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.templateTableCol} align="right">
-                                    <TextField
-                                        name={`items-${id}-qty`}
-                                        type="text"
-                                        value={item.qty}
-                                        label="Qty"
-                                        onChange={handleChange}
-                                        fullWidth
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.templateTableCol} align="right">
-                                    <TextField
-                                        name={`items-${id}-rate`}
-                                        type="text"
-                                        value={item.rate}
-                                        label="Rate"
-                                        onChange={handleChange}
-                                        fullWidth
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.templateTableCol} align="right">
-                                    <TextField
-                                        name={`items-${id}-amount`}
-                                        type="text"
-                                        value={item.amount}
-                                        label="0.00"
-                                        onChange={handleChange}
-                                        width="10%"
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
+                        {template.items.map((item, id) => {
+                            return (
+                                <TableRow
+                                    key={id}
+                                    className={classes.templateTableRow}
+                                >
+                                    <TableCell
+                                        className={classes.templateTableDel}
+                                    >
+                                        <Button
+                                            variant="outlined"
+                                            name={id}
+                                            onClick={handleItemDelete}
+                                        >
+                                            X
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell
+                                        className={classes.templateTableCol}
+                                        align="right"
+                                    >
+                                        <TextField
+                                            name={`items-${id}-description`}
+                                            type="text"
+                                            value={item.description}
+                                            label="Description"
+                                            onChange={handleChange}
+                                            fullWidth
+                                        />
+                                    </TableCell>
+                                    <TableCell
+                                        className={classes.templateTableCol}
+                                        align="right"
+                                    >
+                                        <TextField
+                                            name={`items-${id}-qty`}
+                                            type="text"
+                                            value={item.qty}
+                                            label="Qty"
+                                            onChange={handleChange}
+                                            fullWidth
+                                        />
+                                    </TableCell>
+                                    <TableCell
+                                        className={classes.templateTableCol}
+                                        align="right"
+                                    >
+                                        <TextField
+                                            name={`items-${id}-rate`}
+                                            type="text"
+                                            value={item.rate}
+                                            label="Rate"
+                                            onChange={handleChange}
+                                            fullWidth
+                                        />
+                                    </TableCell>
+                                    <TableCell
+                                        className={classes.templateTableCol}
+                                        align="right"
+                                    >
+                                        <TextField
+                                            name={`items-${id}-amount`}
+                                            type="text"
+                                            value={item.amount}
+                                            label="0.00"
+                                            onChange={handleChange}
+                                            width="10%"
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
                 <Button
                     variant="outlined"
                     onClick={handleItemAdd}
                     className={classes.addButton}
-                >+
+                >
+                    +
                 </Button>
             </form>
         </div>
-    )
+    );
 };
 
 export default InvoicesTemplate;

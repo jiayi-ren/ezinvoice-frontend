@@ -24,18 +24,17 @@ const Date = styled.Text`
 `;
 
 const Header = props => {
+    const { title, docNumber, date } = props;
 
-    const { title, docNumber, date } = props
+    const [pdfTitle, setPdfTitle] = useState(title);
+    const [pdfDocNumber, setPdfDocNumber] = useState(docNumber);
+    const [pdfDate, setPdfDate] = useState(date);
 
-    const [pdfTitle, setPdfTitle] = useState(title)
-    const [pdfDocNumber, setPdfDocNumber] = useState(docNumber)
-    const [pdfDate, setPdfDate] = useState(date)
-
-    useEffect(() =>{
-        setPdfTitle(title)
-        setPdfDocNumber(docNumber)
-        setPdfDate(date)
-    }, [title, docNumber, date])
+    useEffect(() => {
+        setPdfTitle(title);
+        setPdfDocNumber(docNumber);
+        setPdfDate(date);
+    }, [title, docNumber, date]);
 
     return (
         <>
@@ -47,8 +46,7 @@ const Header = props => {
                 <Date>Date: {pdfDate}</Date>
             </HeaderContainer>
         </>
-    )
-   
-}
+    );
+};
 
 export default Header;

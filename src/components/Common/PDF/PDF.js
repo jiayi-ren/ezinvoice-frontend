@@ -15,28 +15,34 @@ const StyledPage = styled.Page`
 `;
 
 const PDF = props => {
+    const { data } = props;
 
-    const { data } = props
+    const [pdfData, setPdfData] = useState(data);
 
-    const [pdfData, setPdfData] = useState(data)
+    useEffect(() => {
+        setPdfData(data);
+    }, [data]);
 
-    useEffect(() =>{
-        setPdfData(data)
-    }, [data])
-
-    console.log(data)
+    console.log(data);
     return (
         <PDFViewer width="1000" height="600">
             <Document title="pdf">
                 <StyledPage size="LETTER">
-                    <Header title={pdfData.title} docNumber={pdfData.docNumber} date={pdfData.date}/>
-                    <ContactInfo business={pdfData.business} client ={pdfData.client}/>
-                    <ItemsTable items={pdfData.items}/>
-                    <Footer business={pdfData.business}/>
+                    <Header
+                        title={pdfData.title}
+                        docNumber={pdfData.docNumber}
+                        date={pdfData.date}
+                    />
+                    <ContactInfo
+                        business={pdfData.business}
+                        client={pdfData.client}
+                    />
+                    <ItemsTable items={pdfData.items} />
+                    <Footer business={pdfData.business} />
                 </StyledPage>
             </Document>
         </PDFViewer>
-    )
-}
+    );
+};
 
 export default PDF;

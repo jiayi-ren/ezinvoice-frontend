@@ -30,25 +30,26 @@ const Info = styled.Text`
 `;
 
 const ContactInfo = props => {
+    const { business, client } = props;
+    console.log(business);
+    console.log(client);
 
-    const { business, client } = props
-    console.log(business)
-    console.log(client)
+    const [businessInfo, setBusinessInfo] = useState(business);
+    const [clientInfo, setClientInfo] = useState(client);
 
-    const [businessInfo, setBusinessInfo] = useState(business)
-    const [clientInfo, setClientInfo] = useState(client)
-
-    useEffect(()=> {
-        setBusinessInfo(business)
-        setClientInfo(client)
-    }, [business, client])
+    useEffect(() => {
+        setBusinessInfo(business);
+        setClientInfo(client);
+    }, [business, client]);
 
     return (
         <ContactContainer>
             <BusinessContainer>
                 <BusinessName>{businessInfo.name}</BusinessName>
                 <Info>{businessInfo.street}</Info>
-                <Info>{businessInfo.cityState} {businessInfo.zipCode}</Info>
+                <Info>
+                    {businessInfo.cityState} {businessInfo.zipCode}
+                </Info>
                 <Info>{businessInfo.phone}</Info>
                 <Info>{businessInfo.email}</Info>
             </BusinessContainer>
@@ -56,13 +57,14 @@ const ContactInfo = props => {
                 <Info>Bill To:</Info>
                 <ClientName>{clientInfo.name}</ClientName>
                 <Info>{clientInfo.street}</Info>
-                <Info>{clientInfo.cityState} {clientInfo.zipCode}</Info>
+                <Info>
+                    {clientInfo.cityState} {clientInfo.zipCode}
+                </Info>
                 <Info>{clientInfo.phone}</Info>
                 <Info>{clientInfo.email}</Info>
             </ClientContainer>
         </ContactContainer>
-    )
-    
-}
+    );
+};
 
 export default ContactInfo;

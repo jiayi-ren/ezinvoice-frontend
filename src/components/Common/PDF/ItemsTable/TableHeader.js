@@ -32,7 +32,6 @@ const Amount = styled.Text`
 `;
 
 const TableHeader = props => {
-
     return (
         <TableHeaderContainer>
             <Description>Item Description</Description>
@@ -40,7 +39,7 @@ const TableHeader = props => {
             <Rate>Rate</Rate>
             <Amount>Amount</Amount>
         </TableHeaderContainer>
-    )
-}
+    );
+};
 
 export default TableHeader;

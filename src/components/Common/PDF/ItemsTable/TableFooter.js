@@ -10,10 +10,10 @@ const TableFooterContainer = styled.View`
 `;
 const Description = styled.Text`
     padding: 3px 0;
-    textAlign: right;
+    textalign: right;
     padding-right: 5px;
     width: 85%;
-    verticalAlign: baseline;
+    verticalalign: baseline;
 `;
 const Total = styled.Text`
     width: 15%;
@@ -24,18 +24,18 @@ const Total = styled.Text`
 `;
 
 const TableFooter = props => {
+    const { items } = props;
 
-    const { items } = props
+    const total = items
+        .map(item => parseInt(item.qty) * parseFloat(item.rate))
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-    const total = items.map(item => parseInt(item.qty) * parseFloat(item.rate))
-        .reduce((accumulator, currentValue) => accumulator + currentValue , 0)
-
-    return(    
+    return (
         <TableFooterContainer>
             <Description>TOTAL</Description>
-            <Total>{ Number.parseFloat(total).toFixed(2)}</Total>
+            <Total>{Number.parseFloat(total).toFixed(2)}</Total>
         </TableFooterContainer>
-    )
+    );
 };
-  
+
 export default TableFooter;

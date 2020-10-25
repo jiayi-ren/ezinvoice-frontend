@@ -15,24 +15,27 @@ const FooterThankyou = styled.Text`
 `;
 
 const Footer = props => {
+    const { business } = props;
 
-    const { business } = props
-
-    const [businessInfo, setBusinessInfo] = useState(business)
+    const [businessInfo, setBusinessInfo] = useState(business);
 
     useEffect(() => {
-        setBusinessInfo(business)
-    }, [business])
+        setBusinessInfo(business);
+    }, [business]);
 
     return (
         <>
             <FooterContainer>
-                <FooterMsg>Please make all checks payable to {businessInfo.name}</FooterMsg>
-                <FooterMsg>If you have any questions, feel free to contact us.</FooterMsg>
+                <FooterMsg>
+                    Please make all checks payable to {businessInfo.name}
+                </FooterMsg>
+                <FooterMsg>
+                    If you have any questions, feel free to contact us.
+                </FooterMsg>
                 <FooterThankyou>Thank you for your business!</FooterThankyou>
             </FooterContainer>
         </>
-    )
-}
+    );
+};
 
 export default Footer;

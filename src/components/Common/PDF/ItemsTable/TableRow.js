@@ -11,7 +11,7 @@ const Description = styled.Text`
     width: 60%;
     padding: 3px 0;
     border-bottom: 1px;
-    textAlign: left;
+    textalign: left;
     padding-left: 5px;
 `;
 const Qty = styled.Text`
@@ -19,7 +19,7 @@ const Qty = styled.Text`
     padding: 3px 0;
     border-left: 1px;
     border-bottom: 1px;
-    textAlign: right;
+    textalign: right;
     padding-right: 5px;
 `;
 const Rate = styled.Text`
@@ -27,7 +27,7 @@ const Rate = styled.Text`
     padding: 3px 0;
     border-left: 1px;
     border-bottom: 1px;
-    textAlign: right;
+    textalign: right;
     padding-right: 5px;
 `;
 const Amount = styled.Text`
@@ -40,21 +40,21 @@ const Amount = styled.Text`
 `;
 
 const TableRow = props => {
-    
-    const { items } = props
+    const { items } = props;
 
     return (
         <>
-        {items && items.map( (item,index) => 
-            (<TableRowContainer key={`item ${index}`}>
-                <Description>{item.description}</Description>
-                <Qty>{parseInt(item.qty)}</Qty>
-                <Rate>{parseFloat(item.rate).toFixed(2)}</Rate>
-                <Amount>{parseFloat(item.amount).toFixed(2)}</Amount>
-            </TableRowContainer>)
-        )}
+            {items &&
+                items.map((item, index) => (
+                    <TableRowContainer key={`item ${index}`}>
+                        <Description>{item.description}</Description>
+                        <Qty>{parseInt(item.qty)}</Qty>
+                        <Rate>{parseFloat(item.rate).toFixed(2)}</Rate>
+                        <Amount>{parseFloat(item.amount).toFixed(2)}</Amount>
+                    </TableRowContainer>
+                ))}
         </>
-    )
+    );
 };
-  
-export default TableRow
+
+export default TableRow;
