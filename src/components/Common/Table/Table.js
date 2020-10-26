@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Checkbox,
-    TableSortLabel,
-    Paper,
-} from '@material-ui/core';
+import { Table, TableBody, TableContainer, Paper } from '@material-ui/core';
 import TableRowComponent from './TableRow';
 import TableHeadComponent from './TableHead';
 
