@@ -22,9 +22,11 @@ const InvoicesGen = props => {
         }
 
         let newInvoices = JSON.parse(window.localStorage.getItem('invoices'));
+        // if save button has not been clicked in the same session
         if (isSaved === false) {
             setIsSaved(true);
         } else {
+            // pop the last saved copy
             newInvoices.pop();
         }
         newInvoices.push(data);
