@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '../Common/Table/Table';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
 
 const headCells = [
-    { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
-    { id: 'client', numeric: false, disablePadding: false, label: 'Client' },
-    { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
-    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+    {
+        id: 'description',
+        numeric: false,
+        disablePadding: true,
+        label: 'Description',
+    },
     { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
 ];
 
-const InvoicesList = () => {
+const ItemsList = props => {
     const { isAuthenticated } = useAuth0;
-    const [invoices, setInvoices] = useState([]);
+    const [items, setItems] = useState([]);
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
         if (!isAuthenticated) {
-            const localInvoices = JSON.parse(
-                window.localStorage.getItem('invoices'),
-            );
-            setInvoices(localInvoices);
+            const localItems = JSON.parse(window.localStorage.getItem('items'));
+            setItems(localItems);
         }
     }, [isAuthenticated]);
 
     useEffect(() => {
-        const localInvoices = JSON.parse(
-            window.localStorage.getItem('invoices'),
-        );
-        setInvoices(localInvoices);
+        const localItems = JSON.parse(window.localStorage.getItem('items'));
+        setItems(localItems);
     }, []);
 
     const handleChangeDense = event => {
@@ -44,9 +42,9 @@ const InvoicesList = () => {
                 }
                 label="Dense padding"
             />
-            <Table 
-                data={invoices}
-                dataType="Invoice"
+            <Table
+                data={items}
+                dataType={'Item'}
                 dense={dense}
                 headCells={headCells}
             />
@@ -54,4 +52,4 @@ const InvoicesList = () => {
     );
 };
 
-export default InvoicesList;
+export default ItemsList;

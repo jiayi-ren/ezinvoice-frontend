@@ -30,7 +30,7 @@ function stableSort(array, comparator) {
 }
 
 const TableComponent = props => {
-    const { data, dense } = props;
+    const { data, dataType, dense, headCells } = props;
     const [rows, setRows] = useState([]);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
@@ -51,7 +51,6 @@ const TableComponent = props => {
     };
 
     const handleSelectAllClick = event => {
-        console.log('HERE');
         if (event.target.checked) {
             const newSelectedList = rows.map(
                 (row, index) => `${row.title}${index}`,
@@ -99,19 +98,21 @@ const TableComponent = props => {
                         order={order}
                         orderBy={orderBy}
                         createSortHandler={createSortHandler}
+                        headCells={headCells}
                     />
                     <TableBody>
                         {rows &&
                             stableSort(rows, getComparator(order, orderBy)).map(
                                 (row, index) => {
                                     const isItemSelected = isSelected(
-                                        `${row.title}${index}`,
+                                        `${dataType}${index}-row${index}`,
                                     );
                                     const labelId = `checkbox-${index}`;
 
                                     return (
                                         <TableRowComponent
-                                            key={`row${index}`}
+                                            key={`${dataType}${index}-row${index}`}
+                                            dataType={dataType}
                                             row={row}
                                             index={index}
                                             isItemSelected={isItemSelected}

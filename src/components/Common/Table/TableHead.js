@@ -7,14 +7,6 @@ import {
     TableSortLabel,
 } from '@material-ui/core';
 
-const headCells = [
-    { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
-    { id: 'client', numeric: false, disablePadding: false, label: 'Client' },
-    { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
-    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
-    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
-];
-
 const TableHeadComponent = props => {
     const {
         selected,
@@ -23,6 +15,7 @@ const TableHeadComponent = props => {
         order,
         orderBy,
         createSortHandler,
+        headCells,
     } = props;
 
     return (

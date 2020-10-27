@@ -1,25 +1,110 @@
 import React, { useState } from 'react';
-import {
-    Box,
-    Checkbox,
-    Collapse,
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '@material-ui/core';
+import { Checkbox, IconButton, TableCell, TableRow } from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import TableRowExpand from './TableRowExpand';
+
+const TableExpandCell = props => {
+    const { expand, setExpand } = props;
+
+    return (
+        <TableCell>
+            <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => setExpand(!expand)}
+            >
+                {expand ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+        </TableCell>
+    );
+};
+
+const TableCheckBoxCell = props => {
+    const {
+        isItemSelected,
+        labelId,
+        index,
+        handleCheckBoxClick,
+        dataType,
+    } = props;
+
+    return (
+        <TableCell padding="checkbox">
+            <Checkbox
+                checked={isItemSelected}
+                inputProps={{ 'aria-labelledby': labelId }}
+                onClick={event =>
+                    handleCheckBoxClick(
+                        event,
+                        `${dataType}${index}-row${index}`,
+                    )
+                }
+            />
+        </TableCell>
+    );
+};
+
+const TableCustomRow = props => {
+    const { dataType, row } = props;
+
+    if ((dataType === 'Invoice' || dataType === 'Estimate') && row) {
+        return (
+            <>
+                <TableCell scope="row">{row && row.title}</TableCell>
+                <TableCell>{row && row.client.name}</TableCell>
+                <TableCell>
+                    {row &&
+                        `${row.client.street}, ${row.client.cityState} ${row.client.zip}`}
+                </TableCell>
+                <TableCell>{row && row.date}</TableCell>
+                <TableCell>{row && row.amount}</TableCell>
+            </>
+        );
+    } else if (dataType === 'Client' && row) {
+        return (
+            <>
+                <TableCell>{row && row.name}</TableCell>
+                <TableCell>{row && row.email}</TableCell>
+                <TableCell>
+                    {row && `${row.street}, ${row.cityState} ${row.zip}`}
+                </TableCell>
+                <TableCell>{row && row.phone}</TableCell>
+            </>
+        );
+    } else if (dataType === 'Item' && row) {
+        return (
+            <>
+                <TableCell>{row && row.description}</TableCell>
+                <TableCell align="right">
+                    {row && row.amount
+                        ? Number.parseFloat(row.amount).toFixed(2)
+                        : '0.00'}
+                </TableCell>
+            </>
+        );
+    }
+};
 
 const TableRowComponent = props => {
-    const { row, index, isItemSelected, labelId, handleCheckBoxClick } = props;
+    const {
+        dataType,
+        row,
+        index,
+        isItemSelected,
+        labelId,
+        handleCheckBoxClick,
+    } = props;
     const [expand, setExpand] = useState(false);
 
-    const total = row.items
-        .map(item => parseInt(item.qty) * parseFloat(item.rate))
-        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const total =
+        (dataType === 'Invoice' || dataType === 'Estimate') &&
+        row.items
+            .map(item => parseInt(item.qty) * parseFloat(item.rate))
+            .reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0,
+            );
 
     return (
         <>
@@ -31,91 +116,24 @@ const TableRowComponent = props => {
                 key={index}
                 selected={isItemSelected}
             >
-                <TableCell>
-                    <IconButton
-                        aria-label="expand row"
-                        size="small"
-                        onClick={() => setExpand(!expand)}
-                    >
-                        {expand ? (
-                            <KeyboardArrowUpIcon />
-                        ) : (
-                            <KeyboardArrowDownIcon />
-                        )}
-                    </IconButton>
-                </TableCell>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ 'aria-labelledby': labelId }}
-                        onClick={event =>
-                            handleCheckBoxClick(event, `${row.title}${index}`)
-                        }
-                    />
-                </TableCell>
-                <TableCell scope="row">{row && row.title}</TableCell>
-                <TableCell>{row && row.client.name}</TableCell>
-                <TableCell>
-                    {row &&
-                        `${row.client.street}, ${row.client.cityState} ${row.client.zip}`}
-                </TableCell>
-                <TableCell>{row && row.date}</TableCell>
-                <TableCell>{row && row.amount}</TableCell>
+                <TableExpandCell expand={expand} setExpand={setExpand} />
+                <TableCheckBoxCell
+                    isItemSelected={isItemSelected}
+                    labelId={labelId}
+                    index={index}
+                    handleCheckBoxClick={handleCheckBoxClick}
+                    dataType={dataType}
+                />
+                <TableCustomRow dataType={dataType} row={row} />
             </TableRow>
-            <TableRow>
-                <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
-                >
-                    <Collapse in={expand} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Description</TableCell>
-                                        <TableCell align="right">
-                                            Amount
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {row &&
-                                        row.items.map((item, idx) => {
-                                            return (
-                                                <TableRow
-                                                    key={`collapse-${row.title}${index}-item-${idx}`}
-                                                >
-                                                    <TableCell>
-                                                        {item.description}
-                                                    </TableCell>
-                                                    <TableCell align="right">
-                                                        {item.amount
-                                                            ? Number.parseFloat(
-                                                                  item.amount,
-                                                              ).toFixed(2)
-                                                            : '0.00'}
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                    <TableRow>
-                                        <TableCell align="right">
-                                            Total
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {isNaN(total)
-                                                ? '0.00'
-                                                : Number.parseFloat(
-                                                      total,
-                                                  ).toFixed(2)}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
+            {(dataType === 'Invoice' || dataType === 'Estimate') && (
+                <TableRowExpand
+                    row={row}
+                    index={index}
+                    expand={expand}
+                    total={total}
+                />
+            )}
         </>
     );
 };

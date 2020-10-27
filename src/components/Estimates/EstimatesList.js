@@ -3,25 +3,33 @@ import { FormControlLabel, Switch } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Table from '../Common/Table/Table';
 
+const headCells = [
+    { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
+    { id: 'client', numeric: false, disablePadding: false, label: 'Client' },
+    { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
+    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
+];
+
 const EstimatesList = () => {
     const { isAuthenticated } = useAuth0;
-    const [invoices, setInvoices] = useState([]);
+    const [estimates, setEstimates] = useState([]);
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
         if (!isAuthenticated) {
-            const localInvoices = JSON.parse(
+            const localEstimates = JSON.parse(
                 window.localStorage.getItem('estimates'),
             );
-            setInvoices(localInvoices);
+            setEstimates(localEstimates);
         }
     }, [isAuthenticated]);
 
     useEffect(() => {
-        const localInvoices = JSON.parse(
+        const localEstimates = JSON.parse(
             window.localStorage.getItem('estimates'),
         );
-        setInvoices(localInvoices);
+        setEstimates(localEstimates);
     }, []);
 
     const handleChangeDense = event => {
@@ -36,7 +44,12 @@ const EstimatesList = () => {
                 }
                 label="Dense padding"
             />
-            <Table data={invoices} dense={dense} />
+            <Table 
+                data={estimates}
+                dataType="Estimate"
+                dense={dense}
+                headCells={headCells}
+            />
         </>
     );
 };

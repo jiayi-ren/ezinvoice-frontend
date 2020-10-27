@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
-import React, { useState } from 'react';
 
 const InitialForm = {
     description: '',
@@ -7,7 +7,12 @@ const InitialForm = {
 };
 
 const ItemsTemplate = props => {
+    const { setData } = props;
     const [template, setTemplate] = useState(InitialForm);
+
+    useEffect(() => {
+        setData(template);
+    }, [template, setData]);
 
     const handleChange = event => {
         const value = event.target.value;

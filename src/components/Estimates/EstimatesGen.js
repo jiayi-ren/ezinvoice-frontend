@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Collapse } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Button } from '@material-ui/core';
 import { PDF } from '../Common/PDF';
 import EstimatesTemplate from './EstimatesTemplate';
+import SaveAlert from '../Common/SaveAlert';
 
 const EstimatesGen = props => {
     const history = useHistory();
@@ -42,53 +42,17 @@ const EstimatesGen = props => {
         }
     };
 
-    const saveAlert = () => {
-        return (
-            <Collapse in={saveAlertOpen}>
-                {isSaved && (
-                    <Alert severity="success">Saved Successfully</Alert>
-                )}
-                {!isSaved && (
-                    <Alert
-                        variant="filled"
-                        severity="warning"
-                        action={
-                            <>
-                                <Button
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        history.push(`/estimates`);
-                                    }}
-                                >
-                                    Yes
-                                </Button>
-                                <Button
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setSaveAlertOpen(false);
-                                    }}
-                                >
-                                    No
-                                </Button>
-                            </>
-                        }
-                    >
-                        Your work has not been saved. Do you still want to
-                        leave?
-                    </Alert>
-                )}
-            </Collapse>
-        );
-    };
-
     return (
         <div>
             <div>
-                {saveAlertOpen && saveAlert()}
+                {saveAlertOpen && (
+                    <SaveAlert
+                        history={history}
+                        saveAlertOpen={saveAlertOpen}
+                        setSaveAlertOpen={setSaveAlertOpen}
+                        isSaved={isSaved}
+                    />
+                )}
                 <Button variant="outlined" onClick={goBack}>
                     Back
                 </Button>
