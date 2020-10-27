@@ -92,15 +92,9 @@ const InvoicesGen = props => {
                 <Button variant="outlined" onClick={goBack}>
                     Back
                 </Button>
-                {isPreviewing ? (
-                    <Button variant="outlined" onClick={togglePreview}>
-                        Edit
-                    </Button>
-                ) : (
-                    <Button variant="outlined" onClick={togglePreview}>
-                        Preview
-                    </Button>
-                )}
+                <Button variant="outlined" onClick={togglePreview}>
+                    {isPreviewing ? 'Edit' : 'Preview'}
+                </Button>
                 <Button variant="outlined">Email</Button>
                 <Button
                     variant="outlined"
