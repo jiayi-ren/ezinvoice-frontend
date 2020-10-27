@@ -51,7 +51,6 @@ const TableComponent = props => {
     };
 
     const handleSelectAllClick = event => {
-        console.log('HERE');
         if (event.target.checked) {
             const newSelectedList = rows.map(
                 (row, index) => `${row.title}${index}`,
