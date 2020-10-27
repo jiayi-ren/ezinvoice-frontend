@@ -101,13 +101,13 @@ const InitialForm = {
 const EstimatesTemplate = props => {
     const classes = useStyles();
 
-    const { setPdfData } = props;
+    const { setData } = props;
 
     const [template, setTemplate] = useState(InitialForm);
 
     useEffect(() => {
-        setPdfData(template);
-    }, [template, setPdfData]);
+        setData(template);
+    }, [template, setData]);
 
     const handleChange = event => {
         const value = event.target.value;
