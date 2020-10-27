@@ -5,23 +5,23 @@ import Table from '../Common/Table/Table';
 
 const EstimatesList = () => {
     const { isAuthenticated } = useAuth0;
-    const [invoices, setInvoices] = useState([]);
+    const [estimates, setEstimates] = useState([]);
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
         if (!isAuthenticated) {
-            const localInvoices = JSON.parse(
+            const localEstimates = JSON.parse(
                 window.localStorage.getItem('estimates'),
             );
-            setInvoices(localInvoices);
+            setEstimates(localEstimates);
         }
     }, [isAuthenticated]);
 
     useEffect(() => {
-        const localInvoices = JSON.parse(
+        const localEstimates = JSON.parse(
             window.localStorage.getItem('estimates'),
         );
-        setInvoices(localInvoices);
+        setEstimates(localEstimates);
     }, []);
 
     const handleChangeDense = event => {
@@ -36,7 +36,7 @@ const EstimatesList = () => {
                 }
                 label="Dense padding"
             />
-            <Table data={invoices} dense={dense} />
+            <Table data={estimates} dense={dense} />
         </>
     );
 };
