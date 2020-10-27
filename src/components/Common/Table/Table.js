@@ -37,7 +37,11 @@ const TableComponent = props => {
     const [selected, setSelected] = useState([]);
 
     useEffect(() => {
-        setRows(data);
+        if (data) {
+            setRows(data);
+        } else {
+            setRows([]);
+        }
     }, [data]);
 
     const handleRequestSort = (event, property) => {
