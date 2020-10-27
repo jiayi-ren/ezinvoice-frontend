@@ -1,37 +1,116 @@
-import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button, Collapse } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { PDF } from '../Common/PDF';
 import EstimatesTemplate from './EstimatesTemplate';
 
 const EstimatesGen = props => {
+    const history = useHistory();
     const [isPreviewing, setIsPreviewing] = useState(false);
-    const [pdfData, setPdfData] = useState({});
+    const [data, setData] = useState({});
+    const [isSaved, setIsSaved] = useState(false);
+    const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
     };
 
+    const saveToLocal = () => {
+        if (window.localStorage.getItem('estimates') === null) {
+            window.localStorage.setItem('estimates', JSON.stringify([]));
+        }
+
+        let newEstimates = JSON.parse(window.localStorage.getItem('estimates'));
+        // if save button has not been clicked in the same session
+        if (isSaved === false) {
+            setIsSaved(true);
+        } else {
+            // pop the last saved copy
+            newEstimates.pop();
+        }
+        newEstimates.push(data);
+        window.localStorage.setItem('estimates', JSON.stringify(newEstimates));
+        setSaveAlertOpen(false);
+    };
+
+    const goBack = () => {
+        if (isSaved) {
+            history.push(`/estimates`);
+        } else {
+            setSaveAlertOpen(true);
+        }
+    };
+
+    const saveAlert = () => {
+        return (
+            <Collapse in={saveAlertOpen}>
+                {isSaved && (
+                    <Alert severity="success">Saved Successfully</Alert>
+                )}
+                {!isSaved && (
+                    <Alert
+                        variant="filled"
+                        severity="warning"
+                        action={
+                            <>
+                                <Button
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        history.push(`/estimates`);
+                                    }}
+                                >
+                                    Yes
+                                </Button>
+                                <Button
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setSaveAlertOpen(false);
+                                    }}
+                                >
+                                    No
+                                </Button>
+                            </>
+                        }
+                    >
+                        Your work has not been saved. Do you still want to
+                        leave?
+                    </Alert>
+                )}
+            </Collapse>
+        );
+    };
+
     return (
         <div>
             <div>
-                {isPreviewing ? (
-                    <Button variant="outlined" onClick={togglePreview}>
-                        Edit
-                    </Button>
-                ) : (
-                    <Button variant="outlined" onClick={togglePreview}>
-                        Preview
-                    </Button>
-                )}
+                {saveAlertOpen && saveAlert()}
+                <Button variant="outlined" onClick={goBack}>
+                    Back
+                </Button>
+                <Button variant="outlined" onClick={togglePreview}>
+                    {isPreviewing ? 'Edit' : 'Preview'}
+                </Button>
                 <Button variant="outlined">Email</Button>
-                <Button variant="outlined">Save</Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                        saveToLocal();
+                        setSaveAlertOpen(true);
+                    }}
+                >
+                    Save
+                </Button>
                 <Button variant="outlined">Print</Button>
-                <Button variant="outlined">Delete</Button>
             </div>
             {isPreviewing ? (
-                <PDF data={pdfData} />
+                <PDF data={data} />
             ) : (
-                <EstimatesTemplate setPdfData={setPdfData} />
+                <EstimatesTemplate setData={setData} />
             )}
         </div>
     );
