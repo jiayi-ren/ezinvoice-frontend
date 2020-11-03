@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
     AppBar,
@@ -10,6 +11,7 @@ import {
     Toolbar,
 } from '@material-ui/core';
 import TranslateIcon from '@material-ui/icons/Translate';
+import { getUserInfoAct } from '../state/user/userActions';
 
 const useStyles = makeStyles({
     nav: {
@@ -34,17 +36,36 @@ const useStyles = makeStyles({
     },
 });
 
-const Navigation = () => {
-    const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+const Navigation = props => {
+    const { account, status, error, getUserInfoAct } = props;
+
+    const {
+        isAuthenticated,
+        loginWithRedirect,
+        logout,
+        getIdTokenClaims,
+    } = useAuth0();
     const [language, setLanguage] = useState('english');
     const classes = useStyles();
+
+    const getToken = useCallback(async () => {
+        const token = await getIdTokenClaims();
+        window.sessionStorage.setItem('___t', token.__raw);
+    }, [getIdTokenClaims]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            getToken();
+            getUserInfoAct();
+        }
+    }, [isAuthenticated, getToken, getUserInfoAct]);
 
     const languageChange = event => {
         setLanguage(event.target.value);
     };
 
     return (
-        <div>
+        <>
             <AppBar position="static" className={classes.nav}>
                 <Toolbar>
                     <h2>ezInvoice</h2>
@@ -128,10 +149,28 @@ const Navigation = () => {
                             </NavLink>
                         )}
                     </Button>
+                    {status === 'succeeded' && error === '' && (
+                        <Button>
+                            <img
+                                src={account.picture}
+                                alt={'profile'}
+                                width={'40px'}
+                            ></img>
+                        </Button>
+                    )}
                 </Toolbar>
             </AppBar>
-        </div>
+        </>
     );
 };
 
-export default Navigation;
+const mapStateToProps = state => {
+    return {
+        account: state.user.account,
+        status: state.user.status,
+        error: state.user.error,
+    };
+};
+export default connect(mapStateToProps, {
+    getUserInfoAct,
+})(Navigation);
