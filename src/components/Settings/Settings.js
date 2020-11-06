@@ -32,7 +32,6 @@ const InitialForm = {
 const Settings = props => {
     const {
         settings,
-        status,
         getUserSettingsAct,
         createUserSettingsAct,
         updateUserSettingsAct,
