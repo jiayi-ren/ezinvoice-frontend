@@ -1,3 +1,4 @@
+import { convertKeysCase } from '../../utils/caseConversion';
 import {
     getUserInfo,
     getUserSettings,
@@ -33,9 +34,11 @@ export const getUserSettingsAct = () => {
 
         try {
             const res = await getUserSettings();
-            dispatch({ type: GET_USER_SETTINGS_SUCCESS, payload: res.data });
+            dispatch({
+                type: GET_USER_SETTINGS_SUCCESS,
+                payload: convertKeysCase(res.data, 'camel'),
+            });
         } catch (err) {
-            console.log('FAILED');
             dispatch({ type: GET_USER_SETTINGS_FAILURE, payload: err });
         }
     };
@@ -45,15 +48,17 @@ export const CREATE_USER_SETTINGS_REQUEST = 'CREATE_USER_SETTINGS_REQUEST';
 export const CREATE_USER_SETTINGS_SUCCESS = 'CREATE_USER_SETTINGS_SUCCESS';
 export const CREATE_USER_SETTINGS_FAILURE = 'CREATE_USER_SETTINGS_FAILURE';
 
-export const createUserSettingsAct = () => {
+export const createUserSettingsAct = settings => {
     return async dispatch => {
         dispatch({ type: CREATE_USER_SETTINGS_REQUEST });
 
         try {
-            const res = await createUserSettings();
-            dispatch({ type: CREATE_USER_SETTINGS_SUCCESS, payload: res.data });
+            const res = await createUserSettings(settings);
+            dispatch({
+                type: CREATE_USER_SETTINGS_SUCCESS,
+                payload: convertKeysCase(res.data.settings, 'camel'),
+            });
         } catch (err) {
-            console.log('FAILED');
             dispatch({ type: CREATE_USER_SETTINGS_FAILURE, payload: err });
         }
     };
@@ -63,15 +68,17 @@ export const UPDATE_USER_SETTINGS_REQUEST = 'UPDATE_USER_SETTINGS_REQUEST';
 export const UPDATE_USER_SETTINGS_SUCCESS = 'UPDATE_USER_SETTINGS_SUCCESS';
 export const UPDATE_USER_SETTINGS_FAILURE = 'UPDATE_USER_SETTINGS_FAILURE';
 
-export const updateUserSettingsAct = () => {
+export const updateUserSettingsAct = settings => {
     return async dispatch => {
         dispatch({ type: UPDATE_USER_SETTINGS_REQUEST });
 
         try {
-            const res = await updateUserSettings();
-            dispatch({ type: UPDATE_USER_SETTINGS_SUCCESS, payload: res.data });
+            const res = await updateUserSettings(settings);
+            dispatch({
+                type: UPDATE_USER_SETTINGS_SUCCESS,
+                payload: convertKeysCase(res.data.settings, 'camel'),
+            });
         } catch (err) {
-            console.log('FAILED');
             dispatch({ type: UPDATE_USER_SETTINGS_FAILURE, payload: err });
         }
     };
