@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Button, makeStyles, TextField } from '@material-ui/core';
+import { convertKeysCase } from '../../utils/caseConversion';
+import {
+    getUserSettingsAct,
+    createUserSettingsAct,
+    updateUserSettingsAct,
+} from '../../state/user/userActions';
 
 const useStyles = makeStyles({
     form: {
@@ -24,27 +30,45 @@ const InitialForm = {
 };
 
 const Settings = props => {
+    const {
+        settings,
+        getUserSettingsAct,
+        createUserSettingsAct,
+        updateUserSettingsAct,
+    } = props;
+
     const classes = useStyles();
     const [formValues, setFormValues] = useState(InitialForm);
 
+    useEffect(() => {
+        getUserSettingsAct();
+    }, [getUserSettingsAct]);
+
+    useEffect(() => {
+        setFormValues(settings);
+    }, [settings]);
+
     const handleChange = event => {
-        const target = event.target.name;
+        const name = event.target.name;
         const value = event.target.value;
 
         setFormValues({
             ...formValues,
-            [target]: value,
+            [name]: value,
         });
     };
 
     const saveSettings = event => {
-        const port = process.env.PORT || 8000;
-        const url = `${process.env.BACKEND_URL}/${port}` || `localhost:${port}`;
-        Axios.post(url, { formValues })
-            .then(res => {})
-            .catch(err => {
-                console.log(err);
-            });
+        event.preventDefault();
+        if (!settings.id) {
+            const reqData = convertKeysCase(formValues, 'snake');
+            createUserSettingsAct(reqData);
+        } else {
+            let reqData = convertKeysCase(formValues, 'snake');
+            reqData.id = settings.id;
+            reqData.user_id = settings.userId;
+            updateUserSettingsAct(reqData);
+        }
     };
 
     return (
@@ -53,42 +77,44 @@ const Settings = props => {
                 <TextField
                     name="name"
                     type="text"
-                    value={formValues.name}
+                    value={formValues.name != null ? formValues.name : ''}
                     label="Name"
                     onChange={handleChange}
                 />
                 <TextField
                     name="email"
                     type="text"
-                    value={formValues.email}
+                    value={formValues.email != null ? formValues.email : ''}
                     label="name@business.com"
                     onChange={handleChange}
                 />
                 <TextField
                     name="street"
                     type="text"
-                    value={formValues.street}
+                    value={formValues.street != null ? formValues.street : ''}
                     label="Street"
                     onChange={handleChange}
                 />
                 <TextField
                     name="cityState"
                     type="text"
-                    value={formValues.cityState}
+                    value={
+                        formValues.cityState != null ? formValues.cityState : ''
+                    }
                     label="City, State"
                     onChange={handleChange}
                 />
                 <TextField
                     name="zip"
                     type="text"
-                    value={formValues.zip}
+                    value={formValues.zip != null ? formValues.zip : ''}
                     label="Zip Code"
                     onChange={handleChange}
                 />
                 <TextField
                     name="phone"
                     type="text"
-                    value={formValues.phone}
+                    value={formValues.phone != null ? formValues.phone : ''}
                     label="123-456-7890"
                     onChange={handleChange}
                 />
@@ -104,4 +130,15 @@ const Settings = props => {
     );
 };
 
-export default Settings;
+const mapStateToProps = state => {
+    return {
+        settings: state.user.settings,
+        status: state.user.status,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getUserSettingsAct,
+    createUserSettingsAct,
+    updateUserSettingsAct,
+})(Settings);
