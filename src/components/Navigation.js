@@ -171,6 +171,7 @@ const mapStateToProps = state => {
         error: state.user.error,
     };
 };
+
 export default connect(mapStateToProps, {
     getUserInfoAct,
 })(Navigation);
