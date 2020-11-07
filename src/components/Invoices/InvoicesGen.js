@@ -51,6 +51,7 @@ const InvoicesGen = props => {
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
+                        path={'/invoices'}
                     />
                 )}
                 <Button variant="outlined" onClick={goBack}>
