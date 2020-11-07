@@ -52,9 +52,9 @@ const TableComponent = props => {
 
     const handleSelectAllClick = event => {
         if (event.target.checked) {
-            const newSelectedList = rows.map(
-                (row, index) => `${row.title}${index}`,
-            );
+            const newSelectedList = rows.map((row, index) => {
+                return `${dataType}${index}-row${index}`;
+            });
             setSelected(newSelectedList);
             return;
         }
