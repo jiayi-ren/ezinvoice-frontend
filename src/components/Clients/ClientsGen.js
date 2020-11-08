@@ -23,7 +23,7 @@ const InitialForm = {
 const ClientsGen = props => {
     const { clients, createClientAct, updateClientByIdAct } = props;
     const history = useHistory();
-    let { slug } = useParams();
+    const { slug } = useParams();
     const { isAuthenticated } = useAuth0();
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);

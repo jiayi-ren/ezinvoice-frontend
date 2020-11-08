@@ -48,21 +48,21 @@ const Settings = props => {
     useEffect(() => {
         if (isAuthenticated) {
             getUserSettingsAct();
+            if (Object.keys(settings).length !== 0) {
+                setFormValues(settings);
+            }
         } else {
             let localSettings = JSON.parse(
                 window.localStorage.getItem('settings'),
             );
-            if (Object.keys(localSettings).length !== 0) {
+            if (
+                localSettings !== null &&
+                Object.keys(localSettings).length !== 0
+            ) {
                 setFormValues(localSettings);
             }
         }
-    }, [isAuthenticated, getUserSettingsAct]);
-
-    useEffect(() => {
-        if (Object.keys(settings).length !== 0) {
-            setFormValues(settings);
-        }
-    }, [settings]);
+    }, [isAuthenticated, getUserSettingsAct, settings]);
 
     const handleChange = event => {
         const name = event.target.name;
