@@ -42,7 +42,7 @@ function App() {
             <Route exact path="/clients">
                 <ClientsDash />
             </Route>
-            <Route exact path="/clients/new">
+            <Route exact path="/clients/:slug">
                 <ClientsGen />
             </Route>
 
