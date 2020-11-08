@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -10,25 +10,10 @@ const useStyles = makeStyles({
     },
 });
 
-const InitialForm = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
 const ClientsTemplate = props => {
     const classes = useStyles();
 
-    const { setData } = props;
-
-    const [template, setTemplate] = useState(InitialForm);
-
-    useEffect(() => {
-        setData(template);
-    }, [template, setData]);
+    const { template, setTemplate } = props;
 
     const handleChange = event => {
         const value = event.target.value;
