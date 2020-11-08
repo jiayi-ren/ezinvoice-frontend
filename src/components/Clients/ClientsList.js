@@ -26,12 +26,9 @@ const ClientsList = props => {
             setClientsList(localClients);
         } else {
             getClientsAct();
+            setClientsList(clients);
         }
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        setClientsList(clients);
-    }, [clients]);
+    }, [isAuthenticated, clients]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
