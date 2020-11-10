@@ -12,7 +12,7 @@ import { convertKeysCase } from '../../utils/caseConversion';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const ItemsGen = props => {
-    const { items, status, createItemAct, updateItemByIdAct } = props;
+    const { items, createItemAct, updateItemByIdAct } = props;
     const history = useHistory();
     const { slug } = useParams();
     const { isAuthenticated } = useAuth0();
