@@ -58,16 +58,17 @@ const ClientsGen = props => {
         setSaveAlertOpen(false);
     };
 
-    const saveClient = event => {
-        event.preventDefault();
+    const saveClient = () => {
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createClientAct(reqData);
+            setIsSaved(true);
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
             updateClientByIdAct(reqData, reqData.id);
+            setIsSaved(true);
         }
     };
 
