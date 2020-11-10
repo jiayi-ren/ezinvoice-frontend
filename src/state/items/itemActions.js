@@ -34,7 +34,6 @@ export const CREATE_ITEM_FAILURE = 'CREATE_ITEM_FAILURE';
 export const createItemAct = item => {
     return async dispatch => {
         dispatch({ type: CREATE_ITEM_REQUEST });
-        console.log('ACITON');
         try {
             const res = await createItem(item);
             dispatch({
