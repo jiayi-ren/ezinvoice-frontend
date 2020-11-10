@@ -50,7 +50,7 @@ function App() {
             <Route exact path="/items">
                 <ItemsDash />
             </Route>
-            <Route exact path="/items/new">
+            <Route exact path="/items/:slug">
                 <ItemsGen />
             </Route>
 
