@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import SaveAlert from '../Common/SaveAlert';
@@ -9,6 +9,7 @@ import {
     updateUserSettingsAct,
 } from '../../state/user/userActions';
 import { useAuth0 } from '@auth0/auth0-react';
+import isEqual from 'lodash.isequal';
 
 const useStyles = makeStyles({
     form: {
@@ -39,30 +40,35 @@ const Settings = props => {
         updateUserSettingsAct,
     } = props;
 
-    const { isAuthenticated } = useAuth0;
+    const { isAuthenticated } = useAuth0();
     const classes = useStyles();
     const [formValues, setFormValues] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            getUserSettingsAct();
-            if (Object.keys(settings).length !== 0) {
-                setFormValues(settings);
-            }
-        } else {
+    const getSettings = useCallback(async () => {
+        if (!isAuthenticated) {
             let localSettings = JSON.parse(
                 window.localStorage.getItem('settings'),
             );
             if (
                 localSettings !== null &&
-                Object.keys(localSettings).length !== 0
+                Object.keys(localSettings).length !== 0 &&
+                !isEqual(localSettings, formValues)
             ) {
                 setFormValues(localSettings);
             }
+        } else {
+            if (!isEqual(settings, formValues)) {
+                getUserSettingsAct();
+                setFormValues(settings);
+            }
         }
-    }, [isAuthenticated, getUserSettingsAct, settings]);
+    }, [isAuthenticated, getUserSettingsAct, settings, formValues]);
+
+    useEffect(() => {
+        getSettings();
+    }, [getSettings]);
 
     const handleChange = event => {
         const name = event.target.name;
@@ -87,8 +93,7 @@ const Settings = props => {
         setSaveAlertOpen(false);
     };
 
-    const saveSettings = event => {
-        event.preventDefault();
+    const saveSettings = () => {
         if (!settings.id) {
             const reqData = convertKeysCase(formValues, 'snake');
             createUserSettingsAct(reqData);
