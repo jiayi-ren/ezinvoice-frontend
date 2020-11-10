@@ -116,7 +116,11 @@ const TableRowComponent = props => {
                 key={index}
                 selected={isItemSelected}
             >
-                <TableExpandCell expand={expand} setExpand={setExpand} />
+                {dataType === 'Invoice' || dataType === 'Estimate' ? (
+                    <TableExpandCell expand={expand} setExpand={setExpand} />
+                ) : (
+                    <TableCell></TableCell>
+                )}
                 <TableCheckBoxCell
                     isItemSelected={isItemSelected}
                     labelId={labelId}

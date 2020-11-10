@@ -51,14 +51,14 @@ const Navigation = props => {
     const getToken = useCallback(async () => {
         const token = await getIdTokenClaims();
         window.sessionStorage.setItem('___t', token.__raw);
-    }, [getIdTokenClaims]);
+        getUserInfoAct();
+    }, [getIdTokenClaims, getUserInfoAct]);
 
     useEffect(() => {
         if (isAuthenticated) {
             getToken();
-            getUserInfoAct();
         }
-    }, [isAuthenticated, getToken, getUserInfoAct]);
+    }, [isAuthenticated, getToken]);
 
     const languageChange = event => {
         setLanguage(event.target.value);

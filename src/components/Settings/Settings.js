@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, makeStyles, TextField } from '@material-ui/core';
+import SaveAlert from '../Common/SaveAlert';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     getUserSettingsAct,
     createUserSettingsAct,
     updateUserSettingsAct,
 } from '../../state/user/userActions';
+import { useAuth0 } from '@auth0/auth0-react';
+import isEqual from 'lodash.isequal';
 
 const useStyles = makeStyles({
     form: {
@@ -37,16 +40,35 @@ const Settings = props => {
         updateUserSettingsAct,
     } = props;
 
+    const { isAuthenticated } = useAuth0();
     const classes = useStyles();
     const [formValues, setFormValues] = useState(InitialForm);
+    const [isSaved, setIsSaved] = useState(false);
+    const [saveAlertOpen, setSaveAlertOpen] = useState(false);
+
+    const getSettings = useCallback(async () => {
+        if (!isAuthenticated) {
+            let localSettings = JSON.parse(
+                window.localStorage.getItem('settings'),
+            );
+            if (
+                localSettings !== null &&
+                Object.keys(localSettings).length !== 0 &&
+                !isEqual(localSettings, formValues)
+            ) {
+                setFormValues(localSettings);
+            }
+        } else {
+            if (!isEqual(settings, formValues)) {
+                getUserSettingsAct();
+                setFormValues(settings);
+            }
+        }
+    }, [isAuthenticated, getUserSettingsAct, settings, formValues]);
 
     useEffect(() => {
-        getUserSettingsAct();
-    }, [getUserSettingsAct]);
-
-    useEffect(() => {
-        setFormValues(settings);
-    }, [settings]);
+        getSettings();
+    }, [getSettings]);
 
     const handleChange = event => {
         const name = event.target.name;
@@ -58,8 +80,20 @@ const Settings = props => {
         });
     };
 
-    const saveSettings = event => {
-        event.preventDefault();
+    const saveToLocal = () => {
+        if (window.localStorage.getItem('settings') === null) {
+            window.localStorage.setItem('settings', JSON.stringify({}));
+        }
+
+        // if save button has not been clicked in the same session
+        if (isSaved === false) {
+            setIsSaved(true);
+        }
+        window.localStorage.setItem('settings', JSON.stringify(formValues));
+        setSaveAlertOpen(false);
+    };
+
+    const saveSettings = () => {
         if (!settings.id) {
             const reqData = convertKeysCase(formValues, 'snake');
             createUserSettingsAct(reqData);
@@ -73,6 +107,26 @@ const Settings = props => {
 
     return (
         <div className="settings">
+            {saveAlertOpen && (
+                <SaveAlert
+                    saveAlertOpen={saveAlertOpen}
+                    setSaveAlertOpen={setSaveAlertOpen}
+                    isSaved={isSaved}
+                />
+            )}
+            <Button
+                variant="contained"
+                className={classes.button}
+                onClick={() => {
+                    if (isAuthenticated) {
+                        saveSettings();
+                    } else {
+                        saveToLocal();
+                    }
+                }}
+            >
+                Save
+            </Button>
             <form className={classes.form}>
                 <TextField
                     name="name"
@@ -119,13 +173,6 @@ const Settings = props => {
                     onChange={handleChange}
                 />
             </form>
-            <Button
-                variant="contained"
-                className={classes.button}
-                onClick={saveSettings}
-            >
-                Save
-            </Button>
         </div>
     );
 };

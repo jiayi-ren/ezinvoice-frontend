@@ -1,4 +1,4 @@
-import { axiosWithAuth } from './axiosWithAuth';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const getUserInfo = () => {
     return axiosWithAuth().get('/users');

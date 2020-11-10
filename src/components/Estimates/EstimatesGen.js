@@ -51,6 +51,7 @@ const EstimatesGen = props => {
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
+                        path={'/estimates'}
                     />
                 )}
                 <Button variant="outlined" onClick={goBack}>

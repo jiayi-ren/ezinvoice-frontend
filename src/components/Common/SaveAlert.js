@@ -3,7 +3,7 @@ import { Button, Collapse } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 const SaveAlert = props => {
-    const { history, saveAlertOpen, setSaveAlertOpen, isSaved } = props;
+    const { history, saveAlertOpen, setSaveAlertOpen, isSaved, path } = props;
 
     return (
         <Collapse in={saveAlertOpen}>
@@ -19,7 +19,7 @@ const SaveAlert = props => {
                                 color="inherit"
                                 size="small"
                                 onClick={() => {
-                                    history.push(`/estimates`);
+                                    history.push(`${path}`);
                                 }}
                             >
                                 Yes

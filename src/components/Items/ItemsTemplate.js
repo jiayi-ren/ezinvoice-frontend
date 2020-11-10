@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 
 const InitialForm = {
     description: '',
-    amount: '',
+    rate: '',
 };
 
 const ItemsTemplate = props => {
@@ -35,9 +35,9 @@ const ItemsTemplate = props => {
                     onChange={handleChange}
                 />
                 <TextField
-                    name="amount"
+                    name="rate"
                     type="text"
-                    value={template.amount}
+                    value={template.rate}
                     label="0.00"
                     onChange={handleChange}
                 />

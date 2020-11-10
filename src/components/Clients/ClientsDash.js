@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
+import ClientsList from './ClientsList';
 
 const useStyles = makeStyles({
     button: {
@@ -26,8 +27,7 @@ const ClientsDash = props => {
                     New
                 </Button>
             </div>
-            <div>{/* list header */}</div>
-            <div>{/* list body */}</div>
+            <ClientsList />
         </div>
     );
 };
