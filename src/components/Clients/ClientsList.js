@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { getClientsAct } from '../../state/clients/clientActions';
+import isEqual from 'lodash.isequal';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -13,22 +14,29 @@ const headCells = [
 ];
 
 const ClientsList = props => {
-    const { clients } = props;
-    const { isAuthenticated } = useAuth0;
+    const { clients, getClientsAct } = props;
+    const { isAuthenticated } = useAuth0();
     const [clientsList, setClientsList] = useState([]);
     const [dense, setDense] = useState(false);
+
+    useEffect(() => {
+        getClientsAct();
+    }, [getClientsAct]);
 
     useEffect(() => {
         if (!isAuthenticated) {
             const localClients = JSON.parse(
                 window.localStorage.getItem('clients'),
             );
-            setClientsList(localClients);
+            if (!isEqual(localClients, clientsList)) {
+                setClientsList(localClients);
+            }
         } else {
-            getClientsAct();
-            setClientsList(clients);
+            if (!isEqual(clients, clientsList)) {
+                setClientsList(clients);
+            }
         }
-    }, [isAuthenticated, clients]);
+    }, [isAuthenticated, clients, clientsList, getClientsAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
