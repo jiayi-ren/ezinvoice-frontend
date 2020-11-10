@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import Table from '../Common/Table/Table';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
+import { getItemsAct } from '../../state/items/itemActions';
+import isEqual from 'lodash.isequal';
 
 const headCells = [
     {
@@ -10,25 +13,31 @@ const headCells = [
         disablePadding: true,
         label: 'Description',
     },
-    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
+    { id: 'rate', numeric: true, disablePadding: false, label: 'Rate' },
 ];
 
 const ItemsList = props => {
-    const { isAuthenticated } = useAuth0;
-    const [items, setItems] = useState([]);
+    const { items, getItemsAct } = props;
+    const { isAuthenticated } = useAuth0();
+    const [itemsList, setItemsList] = useState([]);
     const [dense, setDense] = useState(false);
+
+    useEffect(() => {
+        getItemsAct();
+    }, [getItemsAct]);
 
     useEffect(() => {
         if (!isAuthenticated) {
             const localItems = JSON.parse(window.localStorage.getItem('items'));
-            setItems(localItems);
+            if (!isEqual(localItems, itemsList)) {
+                setItemsList(localItems);
+            }
+        } else {
+            if (!isEqual(items, itemsList)) {
+                setItemsList(items);
+            }
         }
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        const localItems = JSON.parse(window.localStorage.getItem('items'));
-        setItems(localItems);
-    }, []);
+    }, [isAuthenticated, items, itemsList, getItemsAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -43,7 +52,7 @@ const ItemsList = props => {
                 label="Dense padding"
             />
             <Table
-                data={items}
+                data={itemsList}
                 dataType={'Item'}
                 dense={dense}
                 headCells={headCells}
@@ -52,4 +61,12 @@ const ItemsList = props => {
     );
 };
 
-export default ItemsList;
+const mapStateToProps = state => {
+    return {
+        items: state.items.items,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getItemsAct,
+})(ItemsList);
