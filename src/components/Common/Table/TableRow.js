@@ -61,7 +61,7 @@ const TableCustomRow = props => {
                 <TableCell>{row && row.amount}</TableCell>
             </>
         );
-    } else if (dataType === 'Client' && row) {
+    } else if ((dataType === 'Client' || dataType === 'Business') && row) {
         return (
             <>
                 <TableCell>{row && row.name}</TableCell>

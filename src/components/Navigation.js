@@ -98,6 +98,15 @@ const Navigation = props => {
                     </Button>
                     <Button>
                         <NavLink
+                            to="/businesses"
+                            activeClassName={classes.selected}
+                            className={classes.navLink}
+                        >
+                            Businesses
+                        </NavLink>
+                    </Button>
+                    <Button>
+                        <NavLink
                             to="/items"
                             activeClassName={classes.selected}
                             className={classes.navLink}

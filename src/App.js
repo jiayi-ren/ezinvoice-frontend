@@ -8,6 +8,8 @@ import EstimatesGen from './components/Estimates/EstimatesGen';
 import EstimatesDash from './components/Estimates/EstimatesDash';
 import ClientsDash from './components/Clients/ClientsDash';
 import ClientsGen from './components/Clients/ClientsGen';
+import Businesses from './pages/Businesses/Businesses';
+import BusinessesGen from './components/Businesses/BusinessesGen';
 import Settings from './components/Settings/Settings';
 import ItemsDash from './components/Items/ItemsDash';
 import ItemsGen from './components/Items/ItemsGen';
@@ -26,7 +28,7 @@ function App() {
             <Route exact path="/invoices">
                 <InvoicesDash />
             </Route>
-            <Route exact path="/invoices/new">
+            <Route exact path="/invoices/:slug">
                 <InvoicesGen />
             </Route>
 
@@ -44,6 +46,14 @@ function App() {
             </Route>
             <Route exact path="/clients/:slug">
                 <ClientsGen />
+            </Route>
+
+            {/* Businesses Routes */}
+            <Route exact path="/businesses">
+                <Businesses />
+            </Route>
+            <Route exact path="/businesses/:slug">
+                <BusinessesGen />
             </Route>
 
             {/* Items Routes */}
