@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ItemsTemplate from './ItemsTemplate';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
@@ -9,13 +8,12 @@ import {
     updateItemByIdAct,
 } from '../../state/items/itemActions';
 import { convertKeysCase } from '../../utils/caseConversion';
-import { useAuth0 } from '@auth0/auth0-react';
+import ItemsTemplate from './ItemsTemplate';
 
 const ItemsGen = props => {
-    const { items, createItemAct, updateItemByIdAct } = props;
+    const { items, isLoggedIn, createItemAct, updateItemByIdAct } = props;
     const history = useHistory();
     const { slug } = useParams();
-    const { isAuthenticated } = useAuth0();
     const [data, setData] = useState({});
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -23,7 +21,7 @@ const ItemsGen = props => {
     useEffect(() => {
         if (slug !== 'new') {
             const itemIdx = slug.split('_')[1];
-            if (isAuthenticated) {
+            if (isLoggedIn) {
                 return setData(items[itemIdx]);
             }
             const localClients = JSON.parse(
@@ -31,7 +29,7 @@ const ItemsGen = props => {
             );
             setData(localClients[itemIdx]);
         }
-    }, [items, slug, isAuthenticated]);
+    }, [items, slug, isLoggedIn]);
 
     const saveToLocal = () => {
         if (window.localStorage.getItem('items') === null) {
@@ -90,7 +88,7 @@ const ItemsGen = props => {
             <Button
                 variant="contained"
                 onClick={() => {
-                    if (isAuthenticated) {
+                    if (isLoggedIn) {
                         saveItem();
                     } else {
                         saveToLocal();
@@ -109,6 +107,7 @@ const mapStateToProps = state => {
     return {
         items: state.items.items,
         status: state.items.status,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

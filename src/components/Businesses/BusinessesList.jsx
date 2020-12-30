@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Table from '../Common/Table/Table';
-import { useAuth0 } from '@auth0/auth0-react';
-import { FormControlLabel, Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { FormControlLabel, Switch } from '@material-ui/core';
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import isEqual from 'lodash.isequal';
+import Table from '../Common/Table/Table';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -14,8 +13,7 @@ const headCells = [
 ];
 
 const BusinessesList = props => {
-    const { businesses, getBusinessesAct } = props;
-    const { isAuthenticated } = useAuth0();
+    const { businesses, isLoggedIn, getBusinessesAct } = props;
     const [businessesList, setBusinessesList] = useState([]);
     const [dense, setDense] = useState(false);
 
@@ -24,7 +22,7 @@ const BusinessesList = props => {
     }, [getBusinessesAct]);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             const localBusinesses = JSON.parse(
                 window.localStorage.getItem('businesses'),
             );
@@ -36,7 +34,7 @@ const BusinessesList = props => {
                 setBusinessesList(businesses);
             }
         }
-    }, [isAuthenticated, businesses, businessesList, getBusinessesAct]);
+    }, [isLoggedIn, businesses, businessesList, getBusinessesAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -63,6 +61,7 @@ const BusinessesList = props => {
 const mapStateToProps = state => {
     return {
         businesses: state.businesses.businesses,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 
