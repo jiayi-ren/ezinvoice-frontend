@@ -11,7 +11,7 @@ import {
     Toolbar,
 } from '@material-ui/core';
 import TranslateIcon from '@material-ui/icons/Translate';
-import { getUserInfoAct } from '../state/user/userActions';
+import { getUserInfoAct, loginAct, logoutAct } from '../state/user/userActions';
 
 const useStyles = makeStyles({
     nav: {
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 });
 
 const Navigation = props => {
-    const { account, status, error, getUserInfoAct } = props;
+    const { account, isLoggedIn, getUserInfoAct, loginAct, logoutAct } = props;
 
     const {
         isAuthenticated,
@@ -50,15 +50,23 @@ const Navigation = props => {
 
     const getToken = useCallback(async () => {
         const token = await getIdTokenClaims();
-        window.sessionStorage.setItem('___t', token.__raw);
-        getUserInfoAct();
-    }, [getIdTokenClaims, getUserInfoAct]);
+        if (token) {
+            window.sessionStorage.setItem('___t', token.__raw);
+            loginAct();
+        }
+    }, [getIdTokenClaims, loginAct]);
 
     useEffect(() => {
         if (isAuthenticated) {
             getToken();
         }
     }, [isAuthenticated, getToken]);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            getUserInfoAct();
+        }
+    }, [isLoggedIn, getUserInfoAct]);
 
     const languageChange = event => {
         setLanguage(event.target.value);
@@ -140,6 +148,7 @@ const Navigation = props => {
                                 to="/login"
                                 onClick={() => {
                                     loginWithRedirect();
+                                    getToken();
                                 }}
                                 className={classes.navLink}
                             >
@@ -151,6 +160,8 @@ const Navigation = props => {
                                 to="/"
                                 onClick={() => {
                                     logout();
+                                    window.sessionStorage.clear();
+                                    logoutAct();
                                 }}
                                 className={classes.navLink}
                             >
@@ -158,14 +169,12 @@ const Navigation = props => {
                             </NavLink>
                         )}
                     </Button>
-                    {status === 'succeeded' && error === '' && (
-                        <Button>
-                            <img
-                                src={account.picture}
-                                alt={'profile'}
-                                width={'40px'}
-                            ></img>
-                        </Button>
+                    {isAuthenticated && account && (
+                        <img
+                            src={account.picture}
+                            alt={'profile'}
+                            width={'40px'}
+                        ></img>
                     )}
                 </Toolbar>
             </AppBar>
@@ -176,11 +185,12 @@ const Navigation = props => {
 const mapStateToProps = state => {
     return {
         account: state.user.account,
-        status: state.user.status,
-        error: state.user.error,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 
 export default connect(mapStateToProps, {
     getUserInfoAct,
+    loginAct,
+    logoutAct,
 })(Navigation);
