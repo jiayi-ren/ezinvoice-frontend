@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Checkbox, IconButton, TableCell, TableRow } from '@material-ui/core';
+import {
+    Button,
+    Checkbox,
+    IconButton,
+    TableCell,
+    TableRow,
+} from '@material-ui/core';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import TableRowExpand from './TableRowExpand';
+import { Link } from 'react-router-dom';
 
 const TableExpandCell = props => {
     const { expand, setExpand } = props;
@@ -27,6 +34,7 @@ const TableCheckBoxCell = props => {
         index,
         handleCheckBoxClick,
         dataType,
+        row,
     } = props;
 
     return (
@@ -37,7 +45,7 @@ const TableCheckBoxCell = props => {
                 onClick={event =>
                     handleCheckBoxClick(
                         event,
-                        `${dataType}${index}-row${index}`,
+                        `${dataType}${row.id}-row${index}`,
                     )
                 }
             />
@@ -46,9 +54,8 @@ const TableCheckBoxCell = props => {
 };
 
 const TableCustomRow = props => {
-    const { dataType, row } = props;
-
-    if ((dataType === 'Invoice' || dataType === 'Estimate') && row) {
+    const { dataType, row, index } = props;
+    if ((dataType === 'invoices' || dataType === 'Estimate') && row) {
         return (
             <>
                 <TableCell scope="row">{row && row.title}</TableCell>
@@ -59,6 +66,16 @@ const TableCustomRow = props => {
                 </TableCell>
                 <TableCell>{row && row.date}</TableCell>
                 <TableCell>{row && row.amount}</TableCell>
+                <TableCell>
+                    <Button>
+                        <Link
+                            style={{ textDecoration: 'none' }}
+                            to={`/invoices/inv=${index}&id=${row.id}`}
+                        >
+                            Edit
+                        </Link>
+                    </Button>
+                </TableCell>
             </>
         );
     } else if ((dataType === 'Client' || dataType === 'Business') && row) {
@@ -98,7 +115,7 @@ const TableRowComponent = props => {
     const [expand, setExpand] = useState(false);
 
     const total =
-        (dataType === 'Invoice' || dataType === 'Estimate') &&
+        (dataType === 'invoices' || dataType === 'Estimate') &&
         row.items
             .map(item => parseInt(item.qty) * parseFloat(item.rate))
             .reduce(
@@ -116,7 +133,7 @@ const TableRowComponent = props => {
                 key={index}
                 selected={isItemSelected}
             >
-                {dataType === 'Invoice' || dataType === 'Estimate' ? (
+                {dataType === 'invoices' || dataType === 'Estimate' ? (
                     <TableExpandCell expand={expand} setExpand={setExpand} />
                 ) : (
                     <TableCell></TableCell>
@@ -127,10 +144,11 @@ const TableRowComponent = props => {
                     index={index}
                     handleCheckBoxClick={handleCheckBoxClick}
                     dataType={dataType}
+                    row={row}
                 />
-                <TableCustomRow dataType={dataType} row={row} />
+                <TableCustomRow dataType={dataType} row={row} index={index} />
             </TableRow>
-            {(dataType === 'Invoice' || dataType === 'Estimate') && (
+            {(dataType === 'invoices' || dataType === 'Estimate') && (
                 <TableRowExpand
                     row={row}
                     index={index}
