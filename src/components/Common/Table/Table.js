@@ -30,11 +30,10 @@ function stableSort(array, comparator) {
 }
 
 const TableComponent = props => {
-    const { data, dataType, dense, headCells } = props;
+    const { data, dataType, dense, headCells, selected, setSelected } = props;
     const [rows, setRows] = useState([]);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
-    const [selected, setSelected] = useState([]);
 
     useEffect(() => {
         if (data) {
@@ -53,7 +52,7 @@ const TableComponent = props => {
     const handleSelectAllClick = event => {
         if (event.target.checked) {
             const newSelectedList = rows.map((row, index) => {
-                return `${dataType}${index}-row${index}`;
+                return `${dataType}${row.id}-row${index}`;
             });
             setSelected(newSelectedList);
             return;
@@ -62,7 +61,7 @@ const TableComponent = props => {
     };
 
     const handleCheckBoxClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+        const selectedIndex = selected && selected.indexOf(name);
         let newSelected = [];
 
         if (selectedIndex === -1) {
@@ -81,7 +80,7 @@ const TableComponent = props => {
         setSelected(newSelected);
     };
 
-    const isSelected = name => selected.indexOf(name) !== -1;
+    const isSelected = name => selected && selected.indexOf(name) !== -1;
 
     const createSortHandler = property => event => {
         handleRequestSort(event, property);
@@ -105,7 +104,7 @@ const TableComponent = props => {
                             stableSort(rows, getComparator(order, orderBy)).map(
                                 (row, index) => {
                                     const isItemSelected = isSelected(
-                                        `${dataType}${index}-row${index}`,
+                                        `${dataType}${row.id}-row${index}`,
                                     );
                                     const labelId = `checkbox-${index}`;
 
