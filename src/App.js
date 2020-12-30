@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { auth0Config } from './utils/auth0Config';
 import './App.css';
 import Navigation from './components/Navigation';
 import InvoicesDash from './components/Invoices/InvoicesDash';
@@ -13,8 +15,6 @@ import BusinessesGen from './components/Businesses/BusinessesGen';
 import Settings from './components/Settings/Settings';
 import ItemsDash from './components/Items/ItemsDash';
 import ItemsGen from './components/Items/ItemsGen';
-import { Auth0Provider } from '@auth0/auth0-react';
-import { auth0Config } from './utils/auth0Config';
 
 function App() {
     return (
