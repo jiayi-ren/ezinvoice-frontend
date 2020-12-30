@@ -1,111 +1,104 @@
 import {
-    GET_USER_REQUEST,
-    GET_USER_SUCCESS,
-    GET_USER_FAILURE,
-    GET_USER_SETTINGS_REQUEST,
-    GET_USER_SETTINGS_SUCCESS,
-    GET_USER_SETTINGS_FAILURE,
-    CREATE_USER_SETTINGS_REQUEST,
-    CREATE_USER_SETTINGS_SUCCESS,
-    CREATE_USER_SETTINGS_FAILURE,
-    UPDATE_USER_SETTINGS_REQUEST,
-    UPDATE_USER_SETTINGS_SUCCESS,
-    UPDATE_USER_SETTINGS_FAILURE,
-    LOGIN,
-    LOGOUT,
-} from './userActions';
+    GET_INVOICES_REQUEST,
+    GET_INVOICES_SUCCESS,
+    GET_INVOICES_FAILURE,
+    CREATE_INVOICE_REQUEST,
+    CREATE_INVOICE_SUCCESS,
+    CREATE_INVOICE_FAILURE,
+    UPDATE_INVOICE_REQUEST,
+    UPDATE_INVOICE_SUCCESS,
+    UPDATE_INVOICE_FAILURE,
+    DELETE_INVOICE_REQUEST,
+    DELETE_INVOICE_SUCCESS,
+    DELETE_INVOICE_FAILURE,
+} from './invoiceActions';
+import { arrToObj } from '../../utils/arrToObj';
 
 const initState = {
-    account: {},
-    settings: {},
+    invoices: {},
     status: 'idle',
     error: '',
-    isLoggedIn: false,
 };
 
-export const userReducer = (state = initState, action) => {
+export const invoiceReducer = (state = initState, action) => {
     switch (action.type) {
-        case GET_USER_REQUEST:
+        case GET_INVOICES_REQUEST:
             return {
                 ...state,
                 status: 'loading',
                 error: '',
             };
-        case GET_USER_SUCCESS:
+        case GET_INVOICES_SUCCESS:
             return {
                 ...state,
-                account: action.payload,
+                invoices: arrToObj(action.payload, 'id'),
                 status: 'succeeded',
             };
-        case GET_USER_FAILURE:
+        case GET_INVOICES_FAILURE:
             return {
                 ...state,
                 status: 'failed',
                 error: action.payload,
             };
-        case GET_USER_SETTINGS_REQUEST:
+        case CREATE_INVOICE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
                 error: '',
             };
-        case GET_USER_SETTINGS_SUCCESS:
+        case CREATE_INVOICE_SUCCESS:
+            let { id, ...newInvoice } = action.payload;
             return {
                 ...state,
-                settings: action.payload,
+                invoices: { ...state.invoices, id: newInvoice },
                 status: 'succeeded',
             };
-        case GET_USER_SETTINGS_FAILURE:
+        case CREATE_INVOICE_FAILURE:
             return {
                 ...state,
                 status: 'failed',
                 error: action.payload,
             };
-        case CREATE_USER_SETTINGS_REQUEST:
+        case UPDATE_INVOICE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
                 error: '',
             };
-        case CREATE_USER_SETTINGS_SUCCESS:
+        case UPDATE_INVOICE_SUCCESS:
             return {
                 ...state,
-                settings: action.payload,
+                invoices: {
+                    ...state.invoices,
+                    [action.payload.id]: action.payload,
+                },
                 status: 'succeeded',
             };
-        case CREATE_USER_SETTINGS_FAILURE:
+        case UPDATE_INVOICE_FAILURE:
             return {
                 ...state,
                 status: 'failed',
                 error: action.payload,
             };
-        case UPDATE_USER_SETTINGS_REQUEST:
+        case DELETE_INVOICE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
                 error: '',
             };
-        case UPDATE_USER_SETTINGS_SUCCESS:
+        case DELETE_INVOICE_SUCCESS:
+            let invoicesList =
+                action.payload.length > 0 ? arrToObj(action.payload, 'id') : {};
             return {
                 ...state,
-                settings: action.payload,
+                invoices: invoicesList,
                 status: 'succeeded',
             };
-        case UPDATE_USER_SETTINGS_FAILURE:
+        case DELETE_INVOICE_FAILURE:
             return {
                 ...state,
                 status: 'failed',
                 error: action.payload,
-            };
-        case LOGIN:
-            return {
-                ...state,
-                isLoggedIn: true,
-            };
-        case LOGOUT:
-            return {
-                ...state,
-                isLoggedIn: false,
             };
         default:
             return {

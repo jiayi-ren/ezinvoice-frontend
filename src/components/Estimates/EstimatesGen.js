@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { PDF } from '../Common/PDF';
 import EstimatesTemplate from './EstimatesTemplate';
-import SaveAlert from '../Common/SaveAlert';
+import { SaveAlert } from '../Common/Alerts';
 
 const EstimatesGen = props => {
     const history = useHistory();

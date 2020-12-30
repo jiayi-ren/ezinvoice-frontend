@@ -25,10 +25,14 @@ const TableHeadComponent = props => {
                 <TableCell padding="checkbox">
                     <Checkbox
                         indeterminate={
-                            selected.length > 0 && selected.length < rows.length
+                            selected &&
+                            selected.length > 0 &&
+                            selected.length < rows.length
                         }
                         checked={
-                            rows.length > 0 && selected.length === rows.length
+                            rows.length > 0 &&
+                            selected &&
+                            selected.length === rows.length
                         }
                         onChange={handleSelectAllClick}
                         inputProps={{ 'aria-label': 'select all' }}

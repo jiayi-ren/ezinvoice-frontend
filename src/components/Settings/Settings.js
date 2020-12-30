@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, makeStyles, TextField } from '@material-ui/core';
-import SaveAlert from '../Common/SaveAlert';
+import { SaveAlert } from '../Common/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     getUserSettingsAct,

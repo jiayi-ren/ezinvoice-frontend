@@ -1,16 +1,120 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import SaveAlert from '../Common/SaveAlert';
+import { SaveAlert } from '../Common/Alerts';
 import { PDF } from '../Common/PDF';
 import InvoicesTemplate from './InvoicesTemplate';
+import {
+    getInvoicesAct,
+    createInvoiceAct,
+    updateInvoiceByIdAct,
+} from '../../state/invoices/invoiceActions';
+import { getBusinessesAct } from '../../state/businesses/businessActions';
+import { getClientsAct } from '../../state/clients/clientActions';
+import { convertKeysCase } from '../../utils/caseConversion';
+import { useAuth0 } from '@auth0/auth0-react';
+import { arrToObj } from '../../utils/arrToObj';
+
+const fromInit = {
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
+};
+
+const toInit = {
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
+};
+
+const item = {
+    description: '',
+    quantity: '',
+    rate: '',
+};
+
+const itemInit = [JSON.parse(JSON.stringify(item))];
+
+const InitialForm = {
+    title: 'Invoice',
+    date: new Date().toJSON().slice(0, 10),
+    business: fromInit,
+    client: toInit,
+    items: itemInit,
+};
 
 const InvoicesGen = props => {
+    const {
+        invoices,
+        businesses,
+        clients,
+        status,
+        getInvoicesAct,
+        createInvoiceAct,
+        updateInvoiceByIdAct,
+        getBusinessesAct,
+        getClientsAct,
+    } = props;
     const history = useHistory();
+    const { slug } = useParams();
+    const { isAuthenticated } = useAuth0();
     const [isPreviewing, setIsPreviewing] = useState(false);
-    const [data, setData] = useState({});
+    const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
+    const businessesById = useMemo(() => arrToObj(businesses, 'id'), [
+        businesses,
+    ]);
+    const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
+
+    // generate complete invoice using business id and client id
+    const compInvoice = (invoice, businessKey, clientKey) => {
+        let cloneInvoice = invoice && Object.assign(invoice);
+        if (cloneInvoice) {
+            cloneInvoice.business =
+                cloneInvoice && businessKey[cloneInvoice.businessId];
+            cloneInvoice.client =
+                cloneInvoice && clientKey[cloneInvoice.clientId];
+        }
+        return cloneInvoice;
+    };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            getInvoicesAct();
+            getBusinessesAct();
+            getClientsAct();
+        }
+    }, [isAuthenticated, getInvoicesAct, getBusinessesAct, getClientsAct]);
+
+    useEffect(() => {
+        if (slug !== 'new') {
+            const slugs = slug.split('&');
+            const invoiceIdx = parseInt(slugs[0].split('=')[1]);
+            const invoiceId = parseInt(slugs[1].split('=')[1]);
+            if (isAuthenticated) {
+                return setData(
+                    compInvoice(
+                        invoices[invoiceId],
+                        businessesById,
+                        clientsById,
+                    ),
+                );
+            }
+            const localInvoices = JSON.parse(
+                window.localStorage.getItem('invoices'),
+            );
+            setData(localInvoices[invoiceIdx]);
+        }
+    }, [invoices, slug, isAuthenticated, businessesById, clientsById]);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
@@ -22,24 +126,39 @@ const InvoicesGen = props => {
         }
 
         let newInvoices = JSON.parse(window.localStorage.getItem('invoices'));
-        // if save button has not been clicked in the same session
-        if (isSaved === false) {
-            setIsSaved(true);
+        if (slug === 'new') {
+            isModified && isSaved === false
+                ? setIsSaved(true)
+                : newInvoices.pop();
+            newInvoices.push(data);
         } else {
-            // pop the last saved copy
-            newInvoices.pop();
+            const slugs = slug.split('&');
+            const invoiceIdx = parseInt(slugs[0].split('=')[1]);
+            newInvoices.splice(invoiceIdx, 1, data);
         }
-        newInvoices.push(data);
         window.localStorage.setItem('invoices', JSON.stringify(newInvoices));
+        setIsSaved(true);
         setSaveAlertOpen(false);
     };
 
-    const goBack = () => {
-        if (isSaved) {
-            history.push(`/invoices`);
+    const saveInvoice = () => {
+        if (slug === 'new') {
+            const reqData = convertKeysCase(data, 'snake');
+            createInvoiceAct(reqData);
         } else {
-            setSaveAlertOpen(true);
+            let reqData = convertKeysCase(data, 'snake');
+            reqData.id = data.id;
+            reqData.user_id = data.userId;
+            updateInvoiceByIdAct(reqData, reqData.id);
         }
+        setIsSaved(true);
+    };
+
+    const goBack = () => {
+        if (!isModified || isSaved) {
+            history.push(`/invoices`);
+        }
+        setSaveAlertOpen(true);
     };
 
     return (
@@ -47,11 +166,13 @@ const InvoicesGen = props => {
             <div>
                 {saveAlertOpen && (
                     <SaveAlert
+                        isAuthenticated={isAuthenticated}
                         history={history}
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
                         path={'/invoices'}
+                        status={status}
                     />
                 )}
                 <Button variant="outlined" onClick={goBack}>
@@ -64,7 +185,11 @@ const InvoicesGen = props => {
                 <Button
                     variant="outlined"
                     onClick={() => {
-                        saveToLocal();
+                        if (isAuthenticated) {
+                            saveInvoice();
+                        } else {
+                            saveToLocal();
+                        }
                         setSaveAlertOpen(true);
                     }}
                 >
@@ -75,10 +200,29 @@ const InvoicesGen = props => {
             {isPreviewing ? (
                 <PDF data={data} />
             ) : (
-                <InvoicesTemplate setData={setData} />
+                <InvoicesTemplate
+                    data={data}
+                    setData={setData}
+                    setIsModified={setIsModified}
+                />
             )}
         </div>
     );
 };
 
-export default InvoicesGen;
+const mapStateToProps = state => {
+    return {
+        invoices: state.invoices.invoices,
+        businesses: state.businesses.businesses,
+        clients: state.clients.clients,
+        status: state.invoices.status,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getInvoicesAct,
+    createInvoiceAct,
+    updateInvoiceByIdAct,
+    getBusinessesAct,
+    getClientsAct,
+})(InvoicesGen);
