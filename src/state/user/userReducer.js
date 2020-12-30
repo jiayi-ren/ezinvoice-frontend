@@ -11,6 +11,8 @@ import {
     UPDATE_USER_SETTINGS_REQUEST,
     UPDATE_USER_SETTINGS_SUCCESS,
     UPDATE_USER_SETTINGS_FAILURE,
+    LOGIN,
+    LOGOUT,
 } from './userActions';
 
 const initState = {
@@ -18,6 +20,7 @@ const initState = {
     settings: {},
     status: 'idle',
     error: '',
+    isLoggedIn: false,
 };
 
 export const userReducer = (state = initState, action) => {
@@ -93,6 +96,16 @@ export const userReducer = (state = initState, action) => {
                 ...state,
                 status: 'failed',
                 error: action.payload,
+            };
+        case LOGIN:
+            return {
+                ...state,
+                isLoggedIn: true,
+            };
+        case LOGOUT:
+            return {
+                ...state,
+                isLoggedIn: false,
             };
         default:
             return {

@@ -83,3 +83,18 @@ export const updateUserSettingsAct = settings => {
         }
     };
 };
+
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
+
+export const loginAct = () => {
+    return dispatch => {
+        dispatch({ type: LOGIN });
+    };
+};
+
+export const logoutAct = () => {
+    return dispatch => {
+        dispatch({ type: LOGOUT });
+    };
+};
