@@ -55,9 +55,10 @@ const TableRow = props => {
                                 : parseFloat(item.rate).toFixed(2)}
                         </Rate>
                         <Amount>
-                            {item.amount === ''
-                                ? ' '
-                                : parseFloat(item.amount).toFixed(2)}
+                            {item.qty && item.rate
+                                ? parseInt(item.qty) *
+                                  parseFloat(item.rate).toFixed(2)
+                                : ' '}
                         </Amount>
                     </TableRowContainer>
                 ))}
