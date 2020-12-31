@@ -35,9 +35,14 @@ const TableRowExpand = props => {
                                                     {item.description}
                                                 </TableCell>
                                                 <TableCell align="right">
-                                                    {item.amount
-                                                        ? Number.parseFloat(
-                                                              item.amount,
+                                                    {item.rate && item.quantity
+                                                        ? (
+                                                              parseFloat(
+                                                                  item.rate,
+                                                              ) *
+                                                              parseInt(
+                                                                  item.quantity,
+                                                              )
                                                           ).toFixed(2)
                                                         : '0.00'}
                                                 </TableCell>

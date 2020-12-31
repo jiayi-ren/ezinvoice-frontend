@@ -48,15 +48,19 @@ const TableRow = props => {
                 items.map((item, index) => (
                     <TableRowContainer key={`item ${index}`}>
                         <Description>{item.description}</Description>
-                        <Qty>{item.qty === '' ? ' ' : parseInt(item.qty)}</Qty>
+                        <Qty>
+                            {item.quantity === ''
+                                ? ' '
+                                : parseInt(item.quantity)}
+                        </Qty>
                         <Rate>
                             {item.rate === ''
                                 ? ' '
                                 : parseFloat(item.rate).toFixed(2)}
                         </Rate>
                         <Amount>
-                            {item.qty && item.rate
-                                ? parseInt(item.qty) *
+                            {item.quantity && item.rate
+                                ? parseInt(item.quantity) *
                                   parseFloat(item.rate).toFixed(2)
                                 : ' '}
                         </Amount>

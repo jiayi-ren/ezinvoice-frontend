@@ -82,7 +82,7 @@ const toInit = {
 
 const item = {
     description: '',
-    qty: '',
+    quantity: '',
     rate: '',
     amount: '',
 };
@@ -326,9 +326,9 @@ const EstimatesTemplate = props => {
                                         align="right"
                                     >
                                         <TextField
-                                            name={`items-${id}-qty`}
+                                            name={`items-${id}-quantity`}
                                             type="text"
-                                            value={item.qty}
+                                            value={item.quantity}
                                             label="Qty"
                                             onChange={handleChange}
                                             fullWidth
