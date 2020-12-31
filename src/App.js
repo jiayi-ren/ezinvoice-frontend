@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { auth0Config } from './utils/auth0Config';
 import './App.css';
-import Navigation from './components/Navigation';
+import Navigation from './components/Navigation.jsx';
 import { InvoicesDash, InvoicesGen } from './pages/Invoices/index';
 import { EstimatesDash, EstimatesGen } from './pages/Estimates/index';
 import { ClientsDash, ClientsGen } from './pages/Clients/index';

@@ -1,1 +1,1 @@
-export { default as PDF } from './PDF';
+export { default as PDF } from './PDF.jsx';

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
-import Table from '../../components/Table/Table';
+import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -48,7 +48,7 @@ const ClientsList = props => {
                 }
                 label="Dense padding"
             />
-            <Table
+            <TableComponent
                 data={clientsList}
                 dataType="Client"
                 dense={dense}

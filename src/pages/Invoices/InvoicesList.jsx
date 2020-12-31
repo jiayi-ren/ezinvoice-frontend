@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormControlLabel, Switch } from '@material-ui/core';
-import Table from '../../components/Table/Table';
+import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
@@ -27,7 +27,7 @@ const InvoicesList = props => {
                 }
                 label="Dense padding"
             />
-            <Table
+            <TableComponent
                 data={invoicesList}
                 dataType="invoices"
                 dense={dense}

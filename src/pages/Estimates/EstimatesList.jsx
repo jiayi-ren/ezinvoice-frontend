@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
-import Table from '../../components/Table/Table';
+import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
@@ -44,7 +44,7 @@ const EstimatesList = () => {
                 }
                 label="Dense padding"
             />
-            <Table
+            <TableComponent
                 data={estimates}
                 dataType="Estimate"
                 dense={dense}
