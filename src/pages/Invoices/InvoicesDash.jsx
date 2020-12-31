@@ -2,8 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, makeStyles, Tab, Tabs } from '@material-ui/core';
-import { DeleteAlert } from '../Common/Alerts';
-import InvoicesList from './InvoicesList';
 import {
     getInvoicesAct,
     deleteInvoicesAct,
@@ -11,6 +9,8 @@ import {
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { arrToObj } from '../../utils/arrToObj';
+import { DeleteAlert } from '../../components/Alerts';
+import InvoicesList from './InvoicesList';
 
 const useStyles = makeStyles({
     button: {

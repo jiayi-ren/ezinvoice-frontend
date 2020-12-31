@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Table from '../Common/Table/Table';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { getItemsAct } from '../../state/items/itemActions';
 import isEqual from 'lodash.isequal';
+import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
     {
@@ -49,7 +49,7 @@ const ItemsList = props => {
                 }
                 label="Dense padding"
             />
-            <Table
+            <TableComponent
                 data={itemsList}
                 dataType={'Item'}
                 dense={dense}

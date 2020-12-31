@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import BusinessesTemplate from './BusinessesTemplate';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { SaveAlert } from '../Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     createBusinessAct,
     updateBusinessByIdAct,
 } from '../../state/businesses/businessActions';
+import BusinessesTemplate from './BusinessesTemplate';
 
 const InitialForm = {
     name: '',

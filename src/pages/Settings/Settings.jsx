@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button, makeStyles, TextField } from '@material-ui/core';
-import { SaveAlert } from '../Common/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     getUserSettingsAct,
@@ -9,6 +8,7 @@ import {
     updateUserSettingsAct,
 } from '../../state/user/userActions';
 import isEqual from 'lodash.isequal';
+import { SaveAlert } from '../../components/Alerts';
 
 const useStyles = makeStyles({
     form: {

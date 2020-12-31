@@ -1,78 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { SaveAlert } from '../Common/Alerts';
-import { convertKeysCase } from '../../utils/caseConversion';
 import {
-    createClientAct,
-    updateClientByIdAct,
-} from '../../state/clients/clientActions';
-import ClientsTemplate from './ClientsTemplate';
+    createItemAct,
+    updateItemByIdAct,
+} from '../../state/items/itemActions';
+import { convertKeysCase } from '../../utils/caseConversion';
+import { SaveAlert } from '../../components/Alerts';
+import ItemsTemplate from './ItemsTemplate';
 
-const InitialForm = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
-const ClientsGen = props => {
-    const { clients, isLoggedIn, createClientAct, updateClientByIdAct } = props;
+const ItemsGen = props => {
+    const { items, isLoggedIn, createItemAct, updateItemByIdAct } = props;
     const history = useHistory();
     const { slug } = useParams();
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState({});
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
         if (slug !== 'new') {
-            const clientIdx = slug.split('_')[1];
+            const itemIdx = slug.split('_')[1];
             if (isLoggedIn) {
-                return setData(clients[clientIdx]);
+                return setData(items[itemIdx]);
             }
             const localClients = JSON.parse(
-                window.localStorage.getItem('clients'),
+                window.localStorage.getItem('items'),
             );
-            setData(localClients[clientIdx]);
+            setData(localClients[itemIdx]);
         }
-    }, [clients, slug, isLoggedIn]);
+    }, [items, slug, isLoggedIn]);
 
     const saveToLocal = () => {
-        if (window.localStorage.getItem('clients') === null) {
-            window.localStorage.setItem('clients', JSON.stringify([]));
+        if (window.localStorage.getItem('items') === null) {
+            window.localStorage.setItem('items', JSON.stringify([]));
         }
-        let newClients = JSON.parse(window.localStorage.getItem('clients'));
-        if (slug === 'new') {
-            isSaved === false ? setIsSaved(true) : newClients.pop();
-            newClients.push(data);
-        } else {
-            newClients.splice(slug.split('_')[1], 1, data);
+
+        let newItems = JSON.parse(window.localStorage.getItem('items'));
+        // if save button has not been clicked in the same session
+        if (isSaved === false) {
             setIsSaved(true);
+        } else {
+            // pop the last saved copy
+            newItems.pop();
         }
-        window.localStorage.setItem('clients', JSON.stringify(newClients));
+        newItems.push(data);
+        window.localStorage.setItem('items', JSON.stringify(newItems));
         setSaveAlertOpen(false);
     };
 
-    const saveClient = () => {
+    const saveItem = () => {
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createClientAct(reqData);
+            createItemAct(reqData);
             setIsSaved(true);
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateClientByIdAct(reqData, reqData.id);
+            updateItemByIdAct(reqData, reqData.id);
             setIsSaved(true);
         }
     };
 
     const goBack = () => {
         if (isSaved) {
-            history.push(`/clients`);
+            history.push(`/items`);
         } else {
             setSaveAlertOpen(true);
         }
@@ -86,17 +79,17 @@ const ClientsGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
-                    path={'/clients'}
+                    path="/items"
                 />
             )}
             <Button variant="contained" onClick={goBack}>
-                Back
+                Close
             </Button>
             <Button
                 variant="contained"
                 onClick={() => {
                     if (isLoggedIn) {
-                        saveClient();
+                        saveItem();
                     } else {
                         saveToLocal();
                     }
@@ -105,19 +98,20 @@ const ClientsGen = props => {
             >
                 Save
             </Button>
-            <ClientsTemplate template={data} setTemplate={setData} />
+            <ItemsTemplate setData={setData} />
         </div>
     );
 };
 
 const mapStateToProps = state => {
     return {
-        clients: state.clients.clients,
+        items: state.items.items,
+        status: state.items.status,
         isLoggedIn: state.user.isLoggedIn,
     };
 };
 
 export default connect(mapStateToProps, {
-    createClientAct,
-    updateClientByIdAct,
-})(ClientsGen);
+    createItemAct,
+    updateItemByIdAct,
+})(ItemsGen);

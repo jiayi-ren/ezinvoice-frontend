@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { FormControlLabel, Switch } from '@material-ui/core';
-import { getBusinessesAct } from '../../state/businesses/businessActions';
+import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
-import Table from '../Common/Table/Table';
+import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -12,29 +12,29 @@ const headCells = [
     { id: 'phone', numeric: false, disablePadding: false, label: 'Phone' },
 ];
 
-const BusinessesList = props => {
-    const { businesses, isLoggedIn, getBusinessesAct } = props;
-    const [businessesList, setBusinessesList] = useState([]);
+const ClientsList = props => {
+    const { clients, isLoggedIn, getClientsAct } = props;
+    const [clientsList, setClientsList] = useState([]);
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
-        getBusinessesAct();
-    }, [getBusinessesAct]);
+        getClientsAct();
+    }, [getClientsAct]);
 
     useEffect(() => {
         if (!isLoggedIn) {
-            const localBusinesses = JSON.parse(
-                window.localStorage.getItem('businesses'),
+            const localClients = JSON.parse(
+                window.localStorage.getItem('clients'),
             );
-            if (!isEqual(localBusinesses, businessesList)) {
-                setBusinessesList(localBusinesses);
+            if (!isEqual(localClients, clientsList)) {
+                setClientsList(localClients);
             }
         } else {
-            if (!isEqual(businesses, businessesList)) {
-                setBusinessesList(businesses);
+            if (!isEqual(clients, clientsList)) {
+                setClientsList(clients);
             }
         }
-    }, [isLoggedIn, businesses, businessesList, getBusinessesAct]);
+    }, [isLoggedIn, clients, clientsList, getClientsAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -48,9 +48,9 @@ const BusinessesList = props => {
                 }
                 label="Dense padding"
             />
-            <Table
-                data={businessesList}
-                dataType="Business"
+            <TableComponent
+                data={clientsList}
+                dataType="Client"
                 dense={dense}
                 headCells={headCells}
             />
@@ -60,11 +60,11 @@ const BusinessesList = props => {
 
 const mapStateToProps = state => {
     return {
-        businesses: state.businesses.businesses,
+        clients: state.clients.clients,
         isLoggedIn: state.user.isLoggedIn,
     };
 };
 
 export default connect(mapStateToProps, {
-    getBusinessesAct,
-})(BusinessesList);
+    getClientsAct,
+})(ClientsList);

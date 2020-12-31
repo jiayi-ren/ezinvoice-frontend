@@ -3,18 +3,13 @@ import { Route, Redirect } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { auth0Config } from './utils/auth0Config';
 import './App.css';
-import Navigation from './components/Navigation';
-import InvoicesDash from './components/Invoices/InvoicesDash';
-import InvoicesGen from './components/Invoices/InvoicesGen';
-import EstimatesGen from './components/Estimates/EstimatesGen';
-import EstimatesDash from './components/Estimates/EstimatesDash';
-import ClientsDash from './components/Clients/ClientsDash';
-import ClientsGen from './components/Clients/ClientsGen';
-import Businesses from './pages/Businesses/Businesses';
-import BusinessesGen from './components/Businesses/BusinessesGen';
-import Settings from './components/Settings/Settings';
-import ItemsDash from './components/Items/ItemsDash';
-import ItemsGen from './components/Items/ItemsGen';
+import Navigation from './components/Navigation.jsx';
+import { InvoicesDash, InvoicesGen } from './pages/Invoices/index';
+import { EstimatesDash, EstimatesGen } from './pages/Estimates/index';
+import { ClientsDash, ClientsGen } from './pages/Clients/index';
+import { BusinessesDash, BusinessesGen } from './pages/Businesses/index';
+import { Settings } from './pages/Settings/index';
+import { ItemsDash, ItemsGen } from './pages/Items/index';
 
 function App() {
     return (
@@ -50,7 +45,7 @@ function App() {
 
             {/* Businesses Routes */}
             <Route exact path="/businesses">
-                <Businesses />
+                <BusinessesDash />
             </Route>
             <Route exact path="/businesses/:slug">
                 <BusinessesGen />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
-import BusinessesList from '../../components/Businesses/BusinessesList';
+import BusinessesList from './BusinessesList';
 
 const useStyles = makeStyles({
     button: {
@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     },
 });
 
-const Businesses = props => {
+const BusinessesDash = props => {
     const history = useHistory();
     const classes = useStyles();
 
@@ -32,4 +32,4 @@ const Businesses = props => {
     );
 };
 
-export default Businesses;
+export default BusinessesDash;
