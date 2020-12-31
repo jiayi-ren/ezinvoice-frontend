@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { PDF } from '../Common/PDF';
+import { PDF } from '../../components/Common/PDF';
+import { SaveAlert } from '../../components/Common/Alerts';
 import EstimatesTemplate from './EstimatesTemplate';
-import { SaveAlert } from '../Common/Alerts';
 
 const EstimatesGen = props => {
     const history = useHistory();
