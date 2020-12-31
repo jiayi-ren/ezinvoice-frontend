@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Table from '../Common/Table/Table';
-import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { getItemsAct } from '../../state/items/itemActions';
 import isEqual from 'lodash.isequal';
@@ -17,8 +16,7 @@ const headCells = [
 ];
 
 const ItemsList = props => {
-    const { items, getItemsAct } = props;
-    const { isAuthenticated } = useAuth0();
+    const { items, isLoggedIn, getItemsAct } = props;
     const [itemsList, setItemsList] = useState([]);
     const [dense, setDense] = useState(false);
 
@@ -27,7 +25,7 @@ const ItemsList = props => {
     }, [getItemsAct]);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             const localItems = JSON.parse(window.localStorage.getItem('items'));
             if (!isEqual(localItems, itemsList)) {
                 setItemsList(localItems);
@@ -37,7 +35,7 @@ const ItemsList = props => {
                 setItemsList(items);
             }
         }
-    }, [isAuthenticated, items, itemsList, getItemsAct]);
+    }, [isLoggedIn, items, itemsList, getItemsAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -64,6 +62,7 @@ const ItemsList = props => {
 const mapStateToProps = state => {
     return {
         items: state.items.items,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

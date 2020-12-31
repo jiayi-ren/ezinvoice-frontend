@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { connect } from 'react-redux';
 import BusinessesTemplate from './BusinessesTemplate';
 import { useHistory, useParams } from 'react-router-dom';
@@ -21,10 +20,14 @@ const InitialForm = {
 };
 
 const BusinessesGen = props => {
-    const { businesses, createBusinessAct, updateBusinessByIdAct } = props;
+    const {
+        businesses,
+        isLoggedIn,
+        createBusinessAct,
+        updateBusinessByIdAct,
+    } = props;
     const history = useHistory();
     const { slug } = useParams();
-    const { isAuthenticated } = useAuth0();
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -32,7 +35,7 @@ const BusinessesGen = props => {
     useEffect(() => {
         if (slug !== 'new') {
             const businessIdx = slug.split('_')[1];
-            if (isAuthenticated) {
+            if (isLoggedIn) {
                 return setData(businesses[businessIdx]);
             }
             const localBusinesses = JSON.parse(
@@ -40,7 +43,7 @@ const BusinessesGen = props => {
             );
             setData(localBusinesses[businessIdx]);
         }
-    }, [businesses, slug, isAuthenticated]);
+    }, [businesses, slug, isLoggedIn]);
 
     const saveToLocal = () => {
         if (window.localStorage.getItem('businesses') === null) {
@@ -102,7 +105,7 @@ const BusinessesGen = props => {
             <Button
                 variant="contained"
                 onClick={() => {
-                    if (isAuthenticated) {
+                    if (isLoggedIn) {
                         saveBusiness();
                     } else {
                         saveToLocal();
@@ -120,6 +123,7 @@ const BusinessesGen = props => {
 const mapStateToProps = state => {
     return {
         businesses: state.businesses.businesses,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

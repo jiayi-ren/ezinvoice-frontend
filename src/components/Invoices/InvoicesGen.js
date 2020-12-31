@@ -2,9 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { SaveAlert } from '../Common/Alerts';
-import { PDF } from '../Common/PDF';
-import InvoicesTemplate from './InvoicesTemplate';
 import {
     getInvoicesAct,
     createInvoiceAct,
@@ -13,8 +10,10 @@ import {
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { convertKeysCase } from '../../utils/caseConversion';
-import { useAuth0 } from '@auth0/auth0-react';
 import { arrToObj } from '../../utils/arrToObj';
+import { SaveAlert } from '../Common/Alerts';
+import { PDF } from '../Common/PDF';
+import InvoicesTemplate from './InvoicesTemplate';
 
 const fromInit = {
     name: '',
@@ -56,6 +55,7 @@ const InvoicesGen = props => {
         businesses,
         clients,
         status,
+        isLoggedIn,
         getInvoicesAct,
         createInvoiceAct,
         updateInvoiceByIdAct,
@@ -64,7 +64,6 @@ const InvoicesGen = props => {
     } = props;
     const history = useHistory();
     const { slug } = useParams();
-    const { isAuthenticated } = useAuth0();
     const [isPreviewing, setIsPreviewing] = useState(false);
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
@@ -88,19 +87,19 @@ const InvoicesGen = props => {
     };
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isLoggedIn) {
             getInvoicesAct();
             getBusinessesAct();
             getClientsAct();
         }
-    }, [isAuthenticated, getInvoicesAct, getBusinessesAct, getClientsAct]);
+    }, [isLoggedIn, getInvoicesAct, getBusinessesAct, getClientsAct]);
 
     useEffect(() => {
         if (slug !== 'new') {
             const slugs = slug.split('&');
             const invoiceIdx = parseInt(slugs[0].split('=')[1]);
             const invoiceId = parseInt(slugs[1].split('=')[1]);
-            if (isAuthenticated) {
+            if (isLoggedIn) {
                 return setData(
                     compInvoice(
                         invoices[invoiceId],
@@ -114,7 +113,7 @@ const InvoicesGen = props => {
             );
             setData(localInvoices[invoiceIdx]);
         }
-    }, [invoices, slug, isAuthenticated, businessesById, clientsById]);
+    }, [invoices, slug, isLoggedIn, businessesById, clientsById]);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
@@ -166,7 +165,7 @@ const InvoicesGen = props => {
             <div>
                 {saveAlertOpen && (
                     <SaveAlert
-                        isAuthenticated={isAuthenticated}
+                        isAuthenticated={isLoggedIn}
                         history={history}
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
@@ -185,7 +184,7 @@ const InvoicesGen = props => {
                 <Button
                     variant="outlined"
                     onClick={() => {
-                        if (isAuthenticated) {
+                        if (isLoggedIn) {
                             saveInvoice();
                         } else {
                             saveToLocal();
@@ -216,6 +215,7 @@ const mapStateToProps = state => {
         businesses: state.businesses.businesses,
         clients: state.clients.clients,
         status: state.invoices.status,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

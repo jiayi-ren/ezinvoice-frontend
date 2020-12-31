@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { connect } from 'react-redux';
-import ClientsTemplate from './ClientsTemplate';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { SaveAlert } from '../Common/Alerts';
@@ -10,6 +8,7 @@ import {
     createClientAct,
     updateClientByIdAct,
 } from '../../state/clients/clientActions';
+import ClientsTemplate from './ClientsTemplate';
 
 const InitialForm = {
     name: '',
@@ -21,10 +20,9 @@ const InitialForm = {
 };
 
 const ClientsGen = props => {
-    const { clients, createClientAct, updateClientByIdAct } = props;
+    const { clients, isLoggedIn, createClientAct, updateClientByIdAct } = props;
     const history = useHistory();
     const { slug } = useParams();
-    const { isAuthenticated } = useAuth0();
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -32,7 +30,7 @@ const ClientsGen = props => {
     useEffect(() => {
         if (slug !== 'new') {
             const clientIdx = slug.split('_')[1];
-            if (isAuthenticated) {
+            if (isLoggedIn) {
                 return setData(clients[clientIdx]);
             }
             const localClients = JSON.parse(
@@ -40,7 +38,7 @@ const ClientsGen = props => {
             );
             setData(localClients[clientIdx]);
         }
-    }, [clients, slug, isAuthenticated]);
+    }, [clients, slug, isLoggedIn]);
 
     const saveToLocal = () => {
         if (window.localStorage.getItem('clients') === null) {
@@ -97,7 +95,7 @@ const ClientsGen = props => {
             <Button
                 variant="contained"
                 onClick={() => {
-                    if (isAuthenticated) {
+                    if (isLoggedIn) {
                         saveClient();
                     } else {
                         saveToLocal();
@@ -115,6 +113,7 @@ const ClientsGen = props => {
 const mapStateToProps = state => {
     return {
         clients: state.clients.clients,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

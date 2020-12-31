@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Table from '../Common/Table/Table';
-import { useAuth0 } from '@auth0/auth0-react';
-import { FormControlLabel, Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { FormControlLabel, Switch } from '@material-ui/core';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
+import Table from '../Common/Table/Table';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -14,8 +13,7 @@ const headCells = [
 ];
 
 const ClientsList = props => {
-    const { clients, getClientsAct } = props;
-    const { isAuthenticated } = useAuth0();
+    const { clients, isLoggedIn, getClientsAct } = props;
     const [clientsList, setClientsList] = useState([]);
     const [dense, setDense] = useState(false);
 
@@ -24,7 +22,7 @@ const ClientsList = props => {
     }, [getClientsAct]);
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             const localClients = JSON.parse(
                 window.localStorage.getItem('clients'),
             );
@@ -36,7 +34,7 @@ const ClientsList = props => {
                 setClientsList(clients);
             }
         }
-    }, [isAuthenticated, clients, clientsList, getClientsAct]);
+    }, [isLoggedIn, clients, clientsList, getClientsAct]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -63,6 +61,7 @@ const ClientsList = props => {
 const mapStateToProps = state => {
     return {
         clients: state.clients.clients,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 

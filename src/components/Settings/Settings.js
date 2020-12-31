@@ -8,7 +8,6 @@ import {
     createUserSettingsAct,
     updateUserSettingsAct,
 } from '../../state/user/userActions';
-import { useAuth0 } from '@auth0/auth0-react';
 import isEqual from 'lodash.isequal';
 
 const useStyles = makeStyles({
@@ -35,19 +34,19 @@ const InitialForm = {
 const Settings = props => {
     const {
         settings,
+        isLoggedIn,
         getUserSettingsAct,
         createUserSettingsAct,
         updateUserSettingsAct,
     } = props;
 
-    const { isAuthenticated } = useAuth0();
     const classes = useStyles();
     const [formValues, setFormValues] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     const getSettings = useCallback(async () => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             let localSettings = JSON.parse(
                 window.localStorage.getItem('settings'),
             );
@@ -64,7 +63,7 @@ const Settings = props => {
                 setFormValues(settings);
             }
         }
-    }, [isAuthenticated, getUserSettingsAct, settings, formValues]);
+    }, [isLoggedIn, getUserSettingsAct, settings, formValues]);
 
     useEffect(() => {
         getSettings();
@@ -118,7 +117,7 @@ const Settings = props => {
                 variant="contained"
                 className={classes.button}
                 onClick={() => {
-                    if (isAuthenticated) {
+                    if (isLoggedIn) {
                         saveSettings();
                     } else {
                         saveToLocal();
@@ -181,6 +180,7 @@ const mapStateToProps = state => {
     return {
         settings: state.user.settings,
         status: state.user.status,
+        isLoggedIn: state.user.isLoggedIn,
     };
 };
 
