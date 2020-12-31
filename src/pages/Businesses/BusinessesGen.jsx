@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { SaveAlert } from '../../components/Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     createBusinessAct,

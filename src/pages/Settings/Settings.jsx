@@ -8,7 +8,7 @@ import {
     updateUserSettingsAct,
 } from '../../state/user/userActions';
 import isEqual from 'lodash.isequal';
-import { SaveAlert } from '../../components/Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 
 const useStyles = makeStyles({
     form: {

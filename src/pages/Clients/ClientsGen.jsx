@@ -7,7 +7,7 @@ import {
     createClientAct,
     updateClientByIdAct,
 } from '../../state/clients/clientActions';
-import { SaveAlert } from '../../components/Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 import ClientsTemplate from './ClientsTemplate';
 
 const InitialForm = {

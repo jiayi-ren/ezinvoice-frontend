@@ -11,7 +11,7 @@ import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { convertKeysCase } from '../../utils/caseConversion';
 import { arrToObj } from '../../utils/arrToObj';
-import { SaveAlert } from '../../components/Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/Common/PDF';
 import InvoicesTemplate from './InvoicesTemplate';
 

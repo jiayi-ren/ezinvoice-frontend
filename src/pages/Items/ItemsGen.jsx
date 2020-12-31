@@ -7,7 +7,7 @@ import {
     updateItemByIdAct,
 } from '../../state/items/itemActions';
 import { convertKeysCase } from '../../utils/caseConversion';
-import { SaveAlert } from '../../components/Common/Alerts';
+import { SaveAlert } from '../../components/Alerts';
 import ItemsTemplate from './ItemsTemplate';
 
 const ItemsGen = props => {

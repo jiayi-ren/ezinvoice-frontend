@@ -9,7 +9,7 @@ import {
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { arrToObj } from '../../utils/arrToObj';
-import { DeleteAlert } from '../../components/Common/Alerts';
+import { DeleteAlert } from '../../components/Alerts';
 import InvoicesList from './InvoicesList';
 
 const useStyles = makeStyles({
