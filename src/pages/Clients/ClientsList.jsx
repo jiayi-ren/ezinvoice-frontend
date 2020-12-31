@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
-import Table from '../../components/Common/Table/Table';
+import Table from '../../components/Table/Table';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },

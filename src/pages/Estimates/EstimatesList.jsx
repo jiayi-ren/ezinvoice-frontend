@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FormControlLabel, Switch } from '@material-ui/core';
-import Table from '../../components/Common/Table/Table';
+import Table from '../../components/Table/Table';
 
 const headCells = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Name' },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormControlLabel, Switch } from '@material-ui/core';
-import Table from '../../components/Common/Table/Table';
+import Table from '../../components/Table/Table';
 
 const headCells = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
