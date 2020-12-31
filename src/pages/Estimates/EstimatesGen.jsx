@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { PDF } from '../../components/Common/PDF';
+import { PDF } from '../../components/PDF/index';
 import { SaveAlert } from '../../components/Alerts';
 import EstimatesTemplate from './EstimatesTemplate';
 

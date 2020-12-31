@@ -12,7 +12,7 @@ import { getClientsAct } from '../../state/clients/clientActions';
 import { convertKeysCase } from '../../utils/caseConversion';
 import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
-import { PDF } from '../../components/Common/PDF';
+import { PDF } from '../../components/PDF/index';
 import InvoicesTemplate from './InvoicesTemplate';
 
 const fromInit = {
