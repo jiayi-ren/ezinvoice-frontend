@@ -124,7 +124,7 @@ const EstimatesDash = props => {
             let deleteEstimatesList = [];
             for (let i = 0; i < selected.length; i++) {
                 const label = selected[i].split('-')[0];
-                deleteEstimatesList.push(label.substring(8));
+                deleteEstimatesList.push(label.substring(9));
             }
             deleteEstimatesAct(deleteEstimatesList);
         }
