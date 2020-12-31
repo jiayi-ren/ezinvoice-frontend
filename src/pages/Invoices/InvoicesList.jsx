@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { TableComponent } from '../../components/Table/index';
 
 const headCells = [

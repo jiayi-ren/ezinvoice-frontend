@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import {
+    FormControlLabel,
+    Switch,
+    Button,
+    makeStyles,
+} from '@material-ui/core';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
-import { Button, makeStyles } from '@material-ui/core';
 import ClientsList from './ClientsList';
 
 const useStyles = makeStyles({
