@@ -24,7 +24,7 @@ const PDF = props => {
     }, [data]);
 
     return (
-        <PDFViewer width="1000" height="600">
+        <PDFViewer style={{ width: '80vw', height: '1200px' }}>
             <Document title="pdf">
                 <StyledPage size="LETTER">
                     <Header
