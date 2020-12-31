@@ -9,8 +9,7 @@ import { EstimatesDash, EstimatesGen } from './pages/Estimates/index';
 import { ClientsDash, ClientsGen } from './pages/Clients/index';
 import { BusinessesDash, BusinessesGen } from './pages/Businesses/index';
 import { Settings } from './pages/Settings/index';
-import ItemsDash from './components/Items/ItemsDash';
-import ItemsGen from './components/Items/ItemsGen';
+import { ItemsDash, ItemsGen } from './pages/Items/index';
 
 function App() {
     return (

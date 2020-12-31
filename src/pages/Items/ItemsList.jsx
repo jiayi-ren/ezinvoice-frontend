@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Table from '../Common/Table/Table';
 import { FormControlLabel, Switch } from '@material-ui/core';
 import { getItemsAct } from '../../state/items/itemActions';
 import isEqual from 'lodash.isequal';
+import Table from '../../components/Common/Table/Table';
 
 const headCells = [
     {
