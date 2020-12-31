@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
@@ -9,6 +9,20 @@ import {
     updateBusinessByIdAct,
 } from '../../state/businesses/businessActions';
 import BusinessesTemplate from './BusinessesTemplate';
+
+const useStyles = makeStyles({
+    button: {
+        margin: '5px',
+    },
+    container: {
+        margin: '30px auto',
+    },
+    options: {
+        width: '500px',
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+});
 
 const InitialForm = {
     name: '',
@@ -27,6 +41,7 @@ const BusinessesGen = props => {
         updateBusinessByIdAct,
     } = props;
     const history = useHistory();
+    const classes = useStyles();
     const { slug } = useParams();
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
@@ -89,7 +104,7 @@ const BusinessesGen = props => {
     };
 
     return (
-        <div>
+        <div className={classes.container}>
             {saveAlertOpen && (
                 <SaveAlert
                     history={history}
@@ -99,22 +114,29 @@ const BusinessesGen = props => {
                     path={'/businesses'}
                 />
             )}
-            <Button variant="contained" onClick={goBack}>
-                Back
-            </Button>
-            <Button
-                variant="contained"
-                onClick={() => {
-                    if (isLoggedIn) {
-                        saveBusiness();
-                    } else {
-                        saveToLocal();
-                    }
-                    setSaveAlertOpen(true);
-                }}
-            >
-                Save
-            </Button>
+            <div className={`${classes.container} ${classes.options}`}>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={goBack}
+                >
+                    Back
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => {
+                        if (isLoggedIn) {
+                            saveBusiness();
+                        } else {
+                            saveToLocal();
+                        }
+                        setSaveAlertOpen(true);
+                    }}
+                >
+                    Save
+                </Button>
+            </div>
             <BusinessesTemplate template={data} setTemplate={setData} />
         </div>
     );

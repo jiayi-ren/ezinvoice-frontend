@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import {
     createItemAct,
     updateItemByIdAct,
@@ -10,9 +10,24 @@ import { convertKeysCase } from '../../utils/caseConversion';
 import { SaveAlert } from '../../components/Alerts';
 import ItemsTemplate from './ItemsTemplate';
 
+const useStyles = makeStyles({
+    button: {
+        margin: '5px',
+    },
+    container: {
+        margin: '30px auto',
+    },
+    options: {
+        width: '500px',
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+});
+
 const ItemsGen = props => {
     const { items, isLoggedIn, createItemAct, updateItemByIdAct } = props;
     const history = useHistory();
+    const classes = useStyles();
     const { slug } = useParams();
     const [data, setData] = useState({});
     const [isSaved, setIsSaved] = useState(false);
@@ -72,7 +87,7 @@ const ItemsGen = props => {
     };
 
     return (
-        <div>
+        <div className={classes.container}>
             {saveAlertOpen && (
                 <SaveAlert
                     history={history}
@@ -82,22 +97,29 @@ const ItemsGen = props => {
                     path="/items"
                 />
             )}
-            <Button variant="contained" onClick={goBack}>
-                Close
-            </Button>
-            <Button
-                variant="contained"
-                onClick={() => {
-                    if (isLoggedIn) {
-                        saveItem();
-                    } else {
-                        saveToLocal();
-                    }
-                    setSaveAlertOpen(true);
-                }}
-            >
-                Save
-            </Button>
+            <div className={`${classes.container} ${classes.options}`}>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={goBack}
+                >
+                    Close
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => {
+                        if (isLoggedIn) {
+                            saveItem();
+                        } else {
+                            saveToLocal();
+                        }
+                        setSaveAlertOpen(true);
+                    }}
+                >
+                    Save
+                </Button>
+            </div>
             <ItemsTemplate setData={setData} />
         </div>
     );
