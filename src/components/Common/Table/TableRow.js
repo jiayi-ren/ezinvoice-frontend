@@ -65,7 +65,7 @@ const TableCustomRow = props => {
                         `${row.client.street}, ${row.client.cityState} ${row.client.zip}`}
                 </TableCell>
                 <TableCell>{row && row.date}</TableCell>
-                <TableCell>{row && row.amount}</TableCell>
+                <TableCell>{row && row.rate}</TableCell>
                 <TableCell>
                     <Button>
                         <Link
@@ -94,8 +94,8 @@ const TableCustomRow = props => {
             <>
                 <TableCell>{row && row.description}</TableCell>
                 <TableCell align="right">
-                    {row && row.amount
-                        ? Number.parseFloat(row.amount).toFixed(2)
+                    {row && row.rate
+                        ? Number.parseFloat(row.rate).toFixed(2)
                         : '0.00'}
                 </TableCell>
             </>
@@ -117,7 +117,10 @@ const TableRowComponent = props => {
     const total =
         (dataType === 'invoices' || dataType === 'Estimate') &&
         row.items
-            .map(item => parseInt(item.qty) * parseFloat(item.rate))
+            .map(
+                item =>
+                    parseInt(item.quantity) * parseFloat(item.rate).toFixed(2),
+            )
             .reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 0,
