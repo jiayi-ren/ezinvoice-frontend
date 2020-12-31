@@ -87,7 +87,7 @@ const TableComponent = props => {
     };
 
     return (
-        <Paper style={{ maxWidth: '70%' }}>
+        <Paper>
             <TableContainer>
                 <Table size={dense ? 'small' : 'medium'}>
                     <TableHeadComponent
