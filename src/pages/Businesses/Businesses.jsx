@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
-import BusinessesList from '../../components/Businesses/BusinessesList';
+import BusinessesList from './BusinessesList';
 
 const useStyles = makeStyles({
     button: {

@@ -11,7 +11,7 @@ import EstimatesDash from './components/Estimates/EstimatesDash';
 import ClientsDash from './components/Clients/ClientsDash';
 import ClientsGen from './components/Clients/ClientsGen';
 import Businesses from './pages/Businesses/Businesses';
-import BusinessesGen from './components/Businesses/BusinessesGen';
+import BusinessesGen from './pages/Businesses/BusinessesGen';
 import Settings from './components/Settings/Settings';
 import ItemsDash from './components/Items/ItemsDash';
 import ItemsGen from './components/Items/ItemsGen';
