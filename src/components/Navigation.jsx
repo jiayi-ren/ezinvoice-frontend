@@ -74,108 +74,126 @@ const Navigation = props => {
 
     return (
         <>
-            <AppBar position="static" className={classes.nav}>
+            <AppBar position="fixed" className={classes.nav}>
                 <Toolbar>
-                    <h2>ezInvoice</h2>
-                    <Button>
-                        <NavLink
-                            to="/invoices"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Invoices
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <NavLink
-                            to="/estimates"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Estimates
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <NavLink
-                            to="/clients"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Clients
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <NavLink
-                            to="/businesses"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Businesses
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <NavLink
-                            to="/items"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Items
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <NavLink
-                            to="/settings"
-                            activeClassName={classes.selected}
-                            className={classes.navLink}
-                        >
-                            Settings
-                        </NavLink>
-                    </Button>
-                    <Button>
-                        <TranslateIcon></TranslateIcon>
-                        <Select
-                            value={language}
-                            onChange={languageChange}
-                            disableUnderline={true}
-                        >
-                            <MenuItem value="english">English</MenuItem>
-                            <MenuItem value="chinese">中文</MenuItem>
-                        </Select>
-                    </Button>
-                    <Button>
-                        {!isAuthenticated && (
+                    <h2
+                        style={{
+                            margin: 'auto 40px',
+                            width: '25%',
+                        }}
+                    >
+                        ezInvoice
+                    </h2>
+                    <div
+                        style={{
+                            width: '70%',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
+                        <Button>
                             <NavLink
-                                to="/login"
-                                onClick={() => {
-                                    loginWithRedirect();
-                                    getToken();
-                                }}
+                                to="/invoices"
+                                activeClassName={classes.selected}
                                 className={classes.navLink}
                             >
-                                Login
+                                Invoices
                             </NavLink>
-                        )}
-                        {isAuthenticated && (
+                        </Button>
+                        <Button>
                             <NavLink
-                                to="/"
-                                onClick={() => {
-                                    logout();
-                                    window.sessionStorage.clear();
-                                    logoutAct();
-                                }}
+                                to="/estimates"
+                                activeClassName={classes.selected}
                                 className={classes.navLink}
                             >
-                                Logout
+                                Estimates
                             </NavLink>
+                        </Button>
+                        <Button>
+                            <NavLink
+                                to="/clients"
+                                activeClassName={classes.selected}
+                                className={classes.navLink}
+                            >
+                                Clients
+                            </NavLink>
+                        </Button>
+                        <Button>
+                            <NavLink
+                                to="/businesses"
+                                activeClassName={classes.selected}
+                                className={classes.navLink}
+                            >
+                                Businesses
+                            </NavLink>
+                        </Button>
+                        <Button>
+                            <NavLink
+                                to="/items"
+                                activeClassName={classes.selected}
+                                className={classes.navLink}
+                            >
+                                Items
+                            </NavLink>
+                        </Button>
+                        <Button>
+                            <NavLink
+                                to="/settings"
+                                activeClassName={classes.selected}
+                                className={classes.navLink}
+                            >
+                                Settings
+                            </NavLink>
+                        </Button>
+                        <Button>
+                            <TranslateIcon></TranslateIcon>
+                            <Select
+                                value={language}
+                                onChange={languageChange}
+                                disableUnderline={true}
+                            >
+                                <MenuItem value="english">English</MenuItem>
+                                <MenuItem value="chinese">中文</MenuItem>
+                            </Select>
+                        </Button>
+                        <Button>
+                            {!isAuthenticated && (
+                                <NavLink
+                                    to="/login"
+                                    onClick={() => {
+                                        loginWithRedirect();
+                                        getToken();
+                                    }}
+                                    className={classes.navLink}
+                                >
+                                    Login
+                                </NavLink>
+                            )}
+                            {isAuthenticated && (
+                                <NavLink
+                                    to="/"
+                                    onClick={() => {
+                                        logout();
+                                        window.sessionStorage.clear();
+                                        logoutAct();
+                                    }}
+                                    className={classes.navLink}
+                                >
+                                    Logout
+                                </NavLink>
+                            )}
+                        </Button>
+                        {isAuthenticated && account && (
+                            <img
+                                src={account.picture}
+                                alt={'profile'}
+                                width={'40px'}
+                                style={{
+                                    margin: 'auto 0',
+                                }}
+                            ></img>
                         )}
-                    </Button>
-                    {isAuthenticated && account && (
-                        <img
-                            src={account.picture}
-                            alt={'profile'}
-                            width={'40px'}
-                        ></img>
-                    )}
+                    </div>
                 </Toolbar>
             </AppBar>
         </>
