@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import React from 'react';
 import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
@@ -9,48 +7,21 @@ const headCells = [
     { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
     { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
     { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
+    { id: 'edit', numeric: false, disablePadding: false, label: '' },
 ];
 
-const EstimatesList = () => {
-    const { isAuthenticated } = useAuth0;
-    const [estimates, setEstimates] = useState([]);
-    const [dense, setDense] = useState(false);
-
-    useEffect(() => {
-        if (!isAuthenticated) {
-            const localEstimates = JSON.parse(
-                window.localStorage.getItem('estimates'),
-            );
-            setEstimates(localEstimates);
-        }
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        const localEstimates = JSON.parse(
-            window.localStorage.getItem('estimates'),
-        );
-        setEstimates(localEstimates);
-    }, []);
-
-    const handleChangeDense = event => {
-        setDense(event.target.checked);
-    };
+const EstimatesList = props => {
+    const { estimatesList, selected, setSelected, dense } = props;
 
     return (
-        <>
-            <FormControlLabel
-                control={
-                    <Switch checked={dense} onChange={handleChangeDense} />
-                }
-                label="Dense padding"
-            />
-            <TableComponent
-                data={estimates}
-                dataType="Estimate"
-                dense={dense}
-                headCells={headCells}
-            />
-        </>
+        <TableComponent
+            data={estimatesList}
+            dataType="estimates"
+            dense={dense}
+            headCells={headCells}
+            selected={selected}
+            setSelected={setSelected}
+        />
     );
 };
 
