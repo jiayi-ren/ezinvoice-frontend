@@ -13,8 +13,7 @@ import {
 const useStyles = makeStyles({
     form: {
         border: '2px black solid',
-        margin: '50px',
-        maxWidth: '70%',
+        margin: '50px auto',
     },
     templateHeader: {
         display: 'flex',
@@ -46,7 +45,6 @@ const useStyles = makeStyles({
         maxWidth: '80%',
     },
     templateTableHeader: {
-        border: '1px black solid',
         backgroundColor: 'lightgrey',
     },
     templateTableBody: {
@@ -55,10 +53,35 @@ const useStyles = makeStyles({
     templateTableRow: {
         width: '70%',
     },
-    templateTableCol: {},
-    templateTableDel: {},
+    templateTableCol: {
+        padding: '10px 10px 0',
+    },
+    templateTableDel: {
+        padding: '0',
+    },
+    description: {
+        width: '60%',
+    },
+    number: {
+        width: '12%',
+    },
+    deleteButton: {
+        padding: 0,
+        minWidth: '30px',
+        maxWidth: '30px',
+        maxHeight: '30px',
+        fontSize: '30px',
+        fontWeight: '300',
+    },
     addButton: {
-        margin: '1% 10% 5%',
+        padding: 0,
+        minWidth: '30px',
+        maxWidth: '30px',
+        maxHeight: '30px',
+        margin: '10px auto 10%',
+        left: '10%',
+        fontSize: '35px',
+        fontWeight: '300',
     },
 });
 
@@ -256,31 +279,31 @@ const Template = props => {
                                         className={classes.templateTableRow}
                                     >
                                         <TableCell
-                                            className={classes.templateTableDel}
+                                            className={`${classes.templateTableCol} ${classes.templateTableDel}`}
                                         >
                                             <Button
                                                 variant="outlined"
+                                                className={classes.deleteButton}
                                                 name={id}
                                                 onClick={handleItemDelete}
                                             >
-                                                X
+                                                —
                                             </Button>
                                         </TableCell>
                                         <TableCell
-                                            className={classes.templateTableCol}
+                                            className={`${classes.templateTableCol} ${classes.description}`}
                                             align="right"
                                         >
                                             <TextField
                                                 name={`items-${id}-description`}
                                                 type="text"
                                                 value={item.description}
-                                                label="Description"
                                                 onChange={handleChange}
                                                 fullWidth
                                             />
                                         </TableCell>
                                         <TableCell
-                                            className={classes.templateTableCol}
+                                            className={`${classes.templateTableCol} ${classes.number}`}
                                             align="right"
                                         >
                                             <TextField
@@ -293,13 +316,12 @@ const Template = props => {
                                                           )
                                                         : ''
                                                 }
-                                                label="Qty"
                                                 onChange={handleChange}
                                                 fullWidth
                                             />
                                         </TableCell>
                                         <TableCell
-                                            className={classes.templateTableCol}
+                                            className={`${classes.templateTableCol} ${classes.number}`}
                                             align="right"
                                         >
                                             <TextField
@@ -310,13 +332,12 @@ const Template = props => {
                                                         ? parseFloat(item.rate)
                                                         : ''
                                                 }
-                                                label="Rate"
                                                 onChange={handleChange}
                                                 fullWidth
                                             />
                                         </TableCell>
                                         <TableCell
-                                            className={classes.templateTableCol}
+                                            className={`${classes.templateTableCol} ${classes.number}`}
                                             align="right"
                                         >
                                             <TextField
@@ -330,7 +351,6 @@ const Template = props => {
                                                             item.rate,
                                                         ).toFixed(2)
                                                 }
-                                                label="Amount"
                                                 onChange={handleChange}
                                                 width="10%"
                                                 disabled

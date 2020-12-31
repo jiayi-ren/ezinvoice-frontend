@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import {
     getInvoicesAct,
     createInvoiceAct,
@@ -14,6 +14,23 @@ import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/PDF/index';
 import Template from '../../components/Template.jsx';
+
+const useStyles = makeStyles({
+    button: {
+        margin: '5px',
+    },
+    container: {
+        margin: '30px auto',
+    },
+    options: {
+        width: '80vw',
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    doc: {
+        width: '80vw',
+    },
+});
 
 const fromInit = {
     name: '',
@@ -63,6 +80,7 @@ const InvoicesGen = props => {
         getClientsAct,
     } = props;
     const history = useHistory();
+    const classes = useStyles();
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
     const [data, setData] = useState(InitialForm);
@@ -161,7 +179,7 @@ const InvoicesGen = props => {
     };
 
     return (
-        <div>
+        <div className={classes.container}>
             <div>
                 {saveAlertOpen && (
                     <SaveAlert
@@ -174,37 +192,56 @@ const InvoicesGen = props => {
                         status={status}
                     />
                 )}
-                <Button variant="outlined" onClick={goBack}>
-                    Back
-                </Button>
-                <Button variant="outlined" onClick={togglePreview}>
-                    {isPreviewing ? 'Edit' : 'Preview'}
-                </Button>
-                <Button variant="outlined">Email</Button>
-                <Button
-                    variant="outlined"
-                    onClick={() => {
-                        if (isLoggedIn) {
-                            saveInvoice();
-                        } else {
-                            saveToLocal();
-                        }
-                        setSaveAlertOpen(true);
-                    }}
-                >
-                    Save
-                </Button>
-                <Button variant="outlined">Print</Button>
+                <div className={`${classes.container} ${classes.options}`}>
+                    <Button
+                        variant="outlined"
+                        className={classes.button}
+                        onClick={goBack}
+                    >
+                        Back
+                    </Button>
+                    <div>
+                        <Button
+                            variant="outlined"
+                            className={classes.button}
+                            onClick={togglePreview}
+                        >
+                            {isPreviewing ? 'Edit' : 'Preview'}
+                        </Button>
+                        <Button variant="outlined" className={classes.button}>
+                            Email
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            className={classes.button}
+                            onClick={() => {
+                                if (isLoggedIn) {
+                                    saveInvoice();
+                                } else {
+                                    saveToLocal();
+                                }
+                                setSaveAlertOpen(true);
+                            }}
+                        >
+                            Save
+                        </Button>
+                        <Button variant="outlined" className={classes.button}>
+                            Print
+                        </Button>
+                    </div>
+                </div>
             </div>
-            {isPreviewing ? (
-                <PDF data={data} />
-            ) : (
-                <Template
-                    data={data}
-                    setData={setData}
-                    setIsModified={setIsModified}
-                />
-            )}
+            <div className={`${classes.container} ${classes.doc}`}>
+                {isPreviewing ? (
+                    <PDF data={data} />
+                ) : (
+                    <Template
+                        data={data}
+                        setData={setData}
+                        setIsModified={setIsModified}
+                    />
+                )}
+            </div>
         </div>
     );
 };

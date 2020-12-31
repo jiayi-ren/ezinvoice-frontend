@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { convertKeysCase } from '../../utils/caseConversion';
 import {
     createClientAct,
@@ -9,6 +9,20 @@ import {
 } from '../../state/clients/clientActions';
 import { SaveAlert } from '../../components/Alerts';
 import ClientsTemplate from './ClientsTemplate';
+
+const useStyles = makeStyles({
+    button: {
+        margin: '5px',
+    },
+    container: {
+        margin: '30px auto',
+    },
+    options: {
+        width: '500px',
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+});
 
 const InitialForm = {
     name: '',
@@ -22,6 +36,7 @@ const InitialForm = {
 const ClientsGen = props => {
     const { clients, isLoggedIn, createClientAct, updateClientByIdAct } = props;
     const history = useHistory();
+    const classes = useStyles();
     const { slug } = useParams();
     const [data, setData] = useState(InitialForm);
     const [isSaved, setIsSaved] = useState(false);
@@ -79,7 +94,7 @@ const ClientsGen = props => {
     };
 
     return (
-        <div>
+        <div className={classes.container}>
             {saveAlertOpen && (
                 <SaveAlert
                     history={history}
@@ -89,22 +104,29 @@ const ClientsGen = props => {
                     path={'/clients'}
                 />
             )}
-            <Button variant="contained" onClick={goBack}>
-                Back
-            </Button>
-            <Button
-                variant="contained"
-                onClick={() => {
-                    if (isLoggedIn) {
-                        saveClient();
-                    } else {
-                        saveToLocal();
-                    }
-                    setSaveAlertOpen(true);
-                }}
-            >
-                Save
-            </Button>
+            <div className={`${classes.container} ${classes.options}`}>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={goBack}
+                >
+                    Back
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => {
+                        if (isLoggedIn) {
+                            saveClient();
+                        } else {
+                            saveToLocal();
+                        }
+                        setSaveAlertOpen(true);
+                    }}
+                >
+                    Save
+                </Button>
+            </div>
             <ClientsTemplate template={data} setTemplate={setData} />
         </div>
     );

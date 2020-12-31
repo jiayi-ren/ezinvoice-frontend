@@ -21,7 +21,7 @@ import InvoicesList from './InvoicesList';
 
 const useStyles = makeStyles({
     button: {
-        margin: '10px',
+        margin: '5px',
     },
     container: {
         margin: '30px auto',

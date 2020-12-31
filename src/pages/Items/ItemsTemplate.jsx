@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles({
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '500px',
+        margin: 'auto',
+    },
+});
 
 const InitialForm = {
     description: '',
@@ -8,6 +17,7 @@ const InitialForm = {
 
 const ItemsTemplate = props => {
     const { setData } = props;
+    const classes = useStyles();
     const [template, setTemplate] = useState(InitialForm);
 
     useEffect(() => {
@@ -26,7 +36,7 @@ const ItemsTemplate = props => {
 
     return (
         <div className="items-template">
-            <form>
+            <form className={classes.form}>
                 <TextField
                     name="description"
                     type="text"
@@ -36,9 +46,9 @@ const ItemsTemplate = props => {
                 />
                 <TextField
                     name="rate"
-                    type="text"
+                    type="number"
                     value={template.rate}
-                    label="0.00"
+                    label="Rate"
                     onChange={handleChange}
                 />
             </form>
