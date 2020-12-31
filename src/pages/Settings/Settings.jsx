@@ -15,10 +15,11 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         width: '500px',
-        margin: 'auto',
+        margin: '30px auto',
     },
-    button: {
-        margin: '10px',
+    container: {
+        margin: 'auto',
+        width: 'fit-content',
     },
 });
 
@@ -113,19 +114,6 @@ const Settings = props => {
                     isSaved={isSaved}
                 />
             )}
-            <Button
-                variant="contained"
-                className={classes.button}
-                onClick={() => {
-                    if (isLoggedIn) {
-                        saveSettings();
-                    } else {
-                        saveToLocal();
-                    }
-                }}
-            >
-                Save
-            </Button>
             <form className={classes.form}>
                 <TextField
                     name="name"
@@ -172,6 +160,20 @@ const Settings = props => {
                     onChange={handleChange}
                 />
             </form>
+            <div className={`${classes.container}`}>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        if (isLoggedIn) {
+                            saveSettings();
+                        } else {
+                            saveToLocal();
+                        }
+                    }}
+                >
+                    Save
+                </Button>
+            </div>
         </div>
     );
 };
