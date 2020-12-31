@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import React from 'react';
+
 import { TableComponent } from '../../components/Table/index';
 
 const headCells = [
@@ -12,30 +12,17 @@ const headCells = [
 ];
 
 const InvoicesList = props => {
-    const { invoicesList, selected, setSelected } = props;
-    const [dense, setDense] = useState(false);
-
-    const handleChangeDense = event => {
-        setDense(event.target.checked);
-    };
+    const { invoicesList, selected, setSelected, dense } = props;
 
     return (
-        <>
-            <FormControlLabel
-                control={
-                    <Switch checked={dense} onChange={handleChangeDense} />
-                }
-                label="Dense padding"
-            />
-            <TableComponent
-                data={invoicesList}
-                dataType="invoices"
-                dense={dense}
-                headCells={headCells}
-                selected={selected}
-                setSelected={setSelected}
-            />
-        </>
+        <TableComponent
+            data={invoicesList}
+            dataType="invoices"
+            dense={dense}
+            headCells={headCells}
+            selected={selected}
+            setSelected={setSelected}
+        />
     );
 };
 
