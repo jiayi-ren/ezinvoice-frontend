@@ -74,7 +74,7 @@ const Navigation = props => {
 
     return (
         <>
-            <AppBar position="fixed" className={classes.nav}>
+            <AppBar position="sticky" className={classes.nav}>
                 <Toolbar>
                     <h2
                         style={{
