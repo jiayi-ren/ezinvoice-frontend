@@ -8,7 +8,7 @@ import { InvoicesDash, InvoicesGen } from './pages/Invoices/index';
 import { EstimatesDash, EstimatesGen } from './pages/Estimates/index';
 import { ClientsDash, ClientsGen } from './pages/Clients/index';
 import { BusinessesDash, BusinessesGen } from './pages/Businesses/index';
-import Settings from './components/Settings/Settings';
+import { Settings } from './pages/Settings/index';
 import ItemsDash from './components/Items/ItemsDash';
 import ItemsGen from './components/Items/ItemsGen';
 
