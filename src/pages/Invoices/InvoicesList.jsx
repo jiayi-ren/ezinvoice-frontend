@@ -7,7 +7,7 @@ const headCells = [
     { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
     { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
     { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
-    { id: 'edit', numeric: true, disablePadding: false, label: '' },
+    { id: 'edit', numeric: false, disablePadding: false, label: '' },
 ];
 
 const InvoicesList = props => {

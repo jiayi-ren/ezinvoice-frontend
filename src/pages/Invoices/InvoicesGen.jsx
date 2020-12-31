@@ -13,7 +13,7 @@ import { convertKeysCase } from '../../utils/caseConversion';
 import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/PDF/index';
-import InvoicesTemplate from './InvoicesTemplate';
+import Template from '../../components/Template.jsx';
 
 const fromInit = {
     name: '',
@@ -199,7 +199,7 @@ const InvoicesGen = props => {
             {isPreviewing ? (
                 <PDF data={data} />
             ) : (
-                <InvoicesTemplate
+                <Template
                     data={data}
                     setData={setData}
                     setIsModified={setIsModified}
