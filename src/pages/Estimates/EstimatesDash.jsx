@@ -4,8 +4,6 @@ import { useHistory } from 'react-router-dom';
 import {
     Button,
     makeStyles,
-    Tab,
-    Tabs,
     FormControlLabel,
     Switch,
 } from '@material-ui/core';
@@ -57,7 +55,6 @@ const EstimatesDash = props => {
     } = props;
     const history = useHistory();
     const [estimatesList, setEstimatesList] = useState([]);
-    const [tab, setTab] = useState('all');
     const [selected, setSelected] = useState([]);
     const [isDeleted, setIsDeleted] = useState(false);
     const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
