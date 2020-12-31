@@ -55,7 +55,7 @@ const TableCheckBoxCell = props => {
 
 const TableCustomRow = props => {
     const { dataType, row, index } = props;
-    if ((dataType === 'invoices' || dataType === 'Estimate') && row) {
+    if ((dataType === 'invoices' || dataType === 'estimates') && row) {
         return (
             <>
                 <TableCell scope="row">{row && row.title}</TableCell>
@@ -70,7 +70,10 @@ const TableCustomRow = props => {
                     <Button>
                         <Link
                             style={{ textDecoration: 'none' }}
-                            to={`/invoices/inv=${index}&id=${row.id}`}
+                            to={`/${dataType}/${dataType.substring(
+                                0,
+                                3,
+                            )}=${index}&id=${row.id}`}
                         >
                             Edit
                         </Link>
@@ -115,7 +118,7 @@ const TableRowComponent = props => {
     const [expand, setExpand] = useState(false);
 
     const total =
-        (dataType === 'invoices' || dataType === 'Estimate') &&
+        (dataType === 'invoices' || dataType === 'estimates') &&
         row.items
             .map(
                 item =>
@@ -136,7 +139,7 @@ const TableRowComponent = props => {
                 key={index}
                 selected={isItemSelected}
             >
-                {dataType === 'invoices' || dataType === 'Estimate' ? (
+                {dataType === 'invoices' || dataType === 'estimates' ? (
                     <TableExpandCell expand={expand} setExpand={setExpand} />
                 ) : (
                     <TableCell></TableCell>
@@ -151,7 +154,7 @@ const TableRowComponent = props => {
                 />
                 <TableCustomRow dataType={dataType} row={row} index={index} />
             </TableRow>
-            {(dataType === 'invoices' || dataType === 'Estimate') && (
+            {(dataType === 'invoices' || dataType === 'estimates') && (
                 <TableRowExpand
                     row={row}
                     index={index}

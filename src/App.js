@@ -31,7 +31,7 @@ function App() {
             <Route exact path="/estimates">
                 <EstimatesDash />
             </Route>
-            <Route exact path="/estimates/new">
+            <Route exact path="/estimates/:slug">
                 <EstimatesGen />
             </Route>
 

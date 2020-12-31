@@ -7,6 +7,7 @@ import { clientReducer as clients } from './clients/clientReducer';
 import { businessReducer as businesses } from './businesses/businessReducer';
 import { itemReducer as items } from './items/itemReducer';
 import { invoiceReducer as invoices } from './invoices/invoiceReducer';
+import { estimateReducer as estimates } from './estimates/estimateReducer';
 
 const rootReducer = combineReducers({
     user,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     businesses,
     items,
     invoices,
+    estimates,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));
