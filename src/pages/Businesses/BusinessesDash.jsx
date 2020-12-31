@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     },
 });
 
-const Businesses = props => {
+const BusinessesDash = props => {
     const history = useHistory();
     const classes = useStyles();
 
@@ -32,4 +32,4 @@ const Businesses = props => {
     );
 };
 
-export default Businesses;
+export default BusinessesDash;

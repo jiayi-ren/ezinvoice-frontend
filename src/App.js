@@ -8,10 +8,8 @@ import InvoicesDash from './components/Invoices/InvoicesDash';
 import InvoicesGen from './components/Invoices/InvoicesGen';
 import EstimatesGen from './components/Estimates/EstimatesGen';
 import EstimatesDash from './components/Estimates/EstimatesDash';
-import ClientsDash from './components/Clients/ClientsDash';
-import ClientsGen from './components/Clients/ClientsGen';
-import Businesses from './pages/Businesses/Businesses';
-import BusinessesGen from './pages/Businesses/BusinessesGen';
+import { ClientsDash, ClientsGen } from './pages/Clients/index';
+import { BusinessesDash, BusinessesGen } from './pages/Businesses/index';
 import Settings from './components/Settings/Settings';
 import ItemsDash from './components/Items/ItemsDash';
 import ItemsGen from './components/Items/ItemsGen';
@@ -50,7 +48,7 @@ function App() {
 
             {/* Businesses Routes */}
             <Route exact path="/businesses">
-                <Businesses />
+                <BusinessesDash />
             </Route>
             <Route exact path="/businesses/:slug">
                 <BusinessesGen />
