@@ -60,7 +60,11 @@ const itemInit = [JSON.parse(JSON.stringify(item))];
 
 const InitialForm = {
     title: 'Invoice',
-    date: new Date().toJSON().slice(0, 10),
+    date: new Date(
+        new Date().getTime() - new Date().getTimezoneOffset() * 60000,
+    )
+        .toJSON()
+        .slice(0, 10),
     business: fromInit,
     client: toInit,
     items: itemInit,
@@ -83,7 +87,7 @@ const InvoicesGen = props => {
     const classes = useStyles();
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
