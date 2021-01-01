@@ -60,7 +60,11 @@ const itemInit = [JSON.parse(JSON.stringify(item))];
 
 const InitialForm = {
     title: 'Invoice',
-    date: new Date().toJSON().slice(0, 10),
+    date: new Date(
+        new Date().getTime() - new Date().getTimezoneOffset() * 60000,
+    )
+        .toJSON()
+        .slice(0, 10),
     business: fromInit,
     client: toInit,
     items: itemInit,
