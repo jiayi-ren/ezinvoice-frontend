@@ -70,6 +70,14 @@ const InitialForm = {
     items: itemInit,
 };
 
+const InitialErrors = {
+    title: '',
+    date: '',
+    business: fromInit,
+    client: toInit,
+    items: itemInit,
+};
+
 const InvoicesGen = props => {
     const {
         invoices,
@@ -88,6 +96,9 @@ const InvoicesGen = props => {
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
     const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
+    const [errors, setErrors] = useState(
+        JSON.parse(JSON.stringify(InitialErrors)),
+    );
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -243,6 +254,8 @@ const InvoicesGen = props => {
                         data={data}
                         setData={setData}
                         setIsModified={setIsModified}
+                        errors={errors}
+                        setErrors={setErrors}
                     />
                 )}
             </div>
