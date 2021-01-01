@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Button,
     makeStyles,
@@ -99,38 +99,10 @@ const useStyles = makeStyles({
     },
 });
 
-const fromInit = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
-const toInit = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
 const item = {
     description: '',
     quantity: '',
     rate: '',
-};
-
-const itemInit = [JSON.parse(JSON.stringify(item))];
-
-const InitialErrors = {
-    title: '',
-    date: '',
-    business: fromInit,
-    client: toInit,
-    items: itemInit,
 };
 
 const phoneRegex = RegExp(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/);
@@ -188,8 +160,7 @@ const formSchema = Yup.object().shape({
 
 const Template = props => {
     const classes = useStyles();
-    const { data, setData, setIsModified } = props;
-    const [errors, setErrors] = useState(InitialErrors);
+    const { data, setData, setIsModified, errors, setErrors } = props;
 
     const total = data.items
         .map(item => parseInt(item.quantity) * parseFloat(item.rate).toFixed(2))
@@ -213,7 +184,6 @@ const Template = props => {
                 });
             })
             .catch(err => {
-                console.log(err);
                 const info = name.split('.');
                 const nextState = Object.assign(errors);
                 if (name.includes('business') || name.includes('client')) {
