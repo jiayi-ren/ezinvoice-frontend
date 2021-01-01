@@ -87,7 +87,7 @@ const InvoicesGen = props => {
     const classes = useStyles();
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
