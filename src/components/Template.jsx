@@ -136,53 +136,53 @@ const InitialErrors = {
 const phoneRegex = RegExp(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/);
 
 const formSchema = Yup.object().shape({
-    title: Yup.string().max(30, 'Title is limited to 30 characters max.'),
-    date: Yup.string().typeError("That doesn't look like a date"),
+    title: Yup.string()
+        .max(30, 'Title is limited to 30 characters max.')
+        .notRequired(),
+    date: Yup.string().typeError("That doesn't look like a date").notRequired(),
     business: Yup.object().shape({
-        name: Yup.string().max(
-            50,
-            'Business name is limited to 50 characters max.',
-        ),
-        email: Yup.string().email("That doesn't look like an email address"),
-        street: Yup.string().max(
-            200,
-            'Street address is limited to 200 characters max.',
-        ),
-        cityState: Yup.string().max(
-            100,
-            'City and State are limited to 100 characters max.',
-        ),
-        zip: Yup.string().matches(
-            /^[0-9]{5}$/,
-            "That doesn't look like a zip code",
-        ),
-        phone: Yup.string().matches(
-            phoneRegex,
-            "That doesn't look like an invalid phone",
-        ),
+        name: Yup.string()
+            .max(50, 'Business name is limited to 50 characters max.')
+            .notRequired(),
+        email: Yup.string()
+            .email("That doesn't look like an email address")
+            .notRequired(),
+        street: Yup.string()
+            .max(200, 'Street address is limited to 200 characters max.')
+            .notRequired(),
+        cityState: Yup.string()
+            .max(100, 'City and State are limited to 100 characters max.')
+            .notRequired(),
+        zip: Yup.string().matches(/^[0-9]{5}$/, {
+            message: "That doesn't look like a zip code",
+            excludeEmptyString: true,
+        }),
+        phone: Yup.string().matches(phoneRegex, {
+            message: "That doesn't look like an invalid phone",
+            excludeEmptyString: true,
+        }),
     }),
     client: Yup.object().shape({
-        name: Yup.string().max(
-            50,
-            'Business name is limited to 50 characters max.',
-        ),
-        email: Yup.string().email("That doesn't look like an email address"),
-        street: Yup.string().max(
-            200,
-            'Street address is limited to 200 characters max.',
-        ),
-        cityState: Yup.string().max(
-            100,
-            'City and State are limited to 100 characters max.',
-        ),
-        zip: Yup.string().matches(
-            /^[0-9]{5}$/,
-            "That doesn't look like a zip code",
-        ),
-        phone: Yup.string().matches(
-            phoneRegex,
-            "That doesn't look like an invalid phone",
-        ),
+        name: Yup.string()
+            .max(50, 'Business name is limited to 50 characters max.')
+            .notRequired(),
+        email: Yup.string()
+            .email("That doesn't look like an email address")
+            .notRequired(),
+        street: Yup.string()
+            .max(200, 'Street address is limited to 200 characters max.')
+            .notRequired(),
+        cityState: Yup.string()
+            .max(100, 'City and State are limited to 100 characters max.')
+            .notRequired(),
+        zip: Yup.string().matches(/^[0-9]{5}$/, {
+            message: "That doesn't look like a zip code",
+            excludeEmptyString: true,
+        }),
+        phone: Yup.string().matches(phoneRegex, {
+            message: "That doesn't look like an invalid phone",
+            excludeEmptyString: true,
+        }),
     }),
 });
 
@@ -200,13 +200,20 @@ const Template = props => {
         Yup.reach(formSchema, name)
             .validate(value)
             .then(valid => {
-                console.log(valid);
+                const info = name.split('.');
+                const nextState = Object.assign(errors);
+                if (name.includes('business') || name.includes('client')) {
+                    nextState[`${info[0]}`][`${info[1]}`] = '';
+                } else {
+                    nextState[`${info[0]}`] = '';
+                }
+
                 setErrors({
-                    ...errors,
-                    [name]: '',
+                    ...nextState,
                 });
             })
             .catch(err => {
+                console.log(err);
                 const info = name.split('.');
                 const nextState = Object.assign(errors);
                 if (name.includes('business') || name.includes('client')) {
@@ -282,6 +289,7 @@ const Template = props => {
                             label="Title"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.title !== ''}
                             inputProps={{ style: { fontSize: 30 } }}
                         />
                         {errors.title && (
@@ -296,6 +304,7 @@ const Template = props => {
                             label="Date"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.date !== ''}
                         />
                         {errors.date && (
                             <p className={classes.error}>{errors.date}</p>
@@ -311,6 +320,7 @@ const Template = props => {
                             placeholder="Business Name"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.name !== ''}
                         />
                         {errors.business.name ? (
                             <p className={classes.error}>
@@ -326,6 +336,7 @@ const Template = props => {
                             placeholder="Business Email"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.email !== ''}
                         />
                         {errors.business.email ? (
                             <p className={classes.error}>
@@ -341,6 +352,7 @@ const Template = props => {
                             placeholder="Street"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.street !== ''}
                         />
                         {errors.business.street ? (
                             <p className={classes.error}>
@@ -356,6 +368,7 @@ const Template = props => {
                             placeholder="City, State"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.cityState !== ''}
                         />
                         {errors.business.cityState ? (
                             <p className={classes.error}>
@@ -371,6 +384,7 @@ const Template = props => {
                             placeholder="Zip Code"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.zip !== ''}
                         />
                         {errors.business.zip ? (
                             <p className={classes.error}>
@@ -386,6 +400,7 @@ const Template = props => {
                             placeholder="Phone (e.g.123-456-7890)"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.business.phone !== ''}
                         />
                         {errors.business.phone ? (
                             <p className={classes.error}>
@@ -403,6 +418,7 @@ const Template = props => {
                             placeholder="Client Name"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.name !== ''}
                         />
                         {errors.client.name ? (
                             <p className={classes.error}>
@@ -418,6 +434,7 @@ const Template = props => {
                             placeholder="Client Email"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.email !== ''}
                         />
                         {errors.client.email ? (
                             <p className={classes.error}>
@@ -433,6 +450,7 @@ const Template = props => {
                             placeholder="Street"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.street !== ''}
                         />
                         {errors.client.street ? (
                             <p className={classes.error}>
@@ -448,6 +466,7 @@ const Template = props => {
                             placeholder="City, State"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.cityState !== ''}
                         />
                         {errors.client.cityState ? (
                             <p className={classes.error}>
@@ -463,6 +482,7 @@ const Template = props => {
                             placeholder="Zip Code"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.zip !== ''}
                         />
                         {errors.client.zip ? (
                             <p className={classes.error}>{errors.client.zip}</p>
@@ -476,6 +496,7 @@ const Template = props => {
                             placeholder="Phone (e.g.123-456-7890)"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            error={errors.client.phone !== ''}
                         />
                         {errors.client.phone ? (
                             <p className={classes.error}>
@@ -576,7 +597,7 @@ const Template = props => {
                                                         ).toFixed(2)
                                                 }
                                                 onChange={handleChange}
-                                                placeholder={0.0}
+                                                placeholder={'0.00'}
                                                 width="10%"
                                                 disabled
                                             />
