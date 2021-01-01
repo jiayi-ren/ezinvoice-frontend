@@ -32,6 +32,8 @@ const useStyles = makeStyles({
     },
     tabHeader: {
         width: '40vw',
+        display: 'flex',
+        justifyContent: 'center',
     },
     options: {
         width: '80vw',
