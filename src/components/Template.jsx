@@ -75,7 +75,7 @@ const useStyles = makeStyles({
         minWidth: '30px',
         maxWidth: '30px',
         maxHeight: '30px',
-        margin: '10px auto 10%',
+        margin: '10px auto 0',
         left: '10%',
         fontSize: '35px',
         fontWeight: '300',
@@ -85,6 +85,17 @@ const useStyles = makeStyles({
         margin: 0,
         height: '12px',
         fontSize: '12px',
+    },
+    totalContainer: {
+        position: 'relative',
+        left: '70%',
+        maxWidth: '20%',
+        margin: '0 0 10%',
+        fontSize: '30px',
+    },
+    total: {
+        display: 'inline',
+        direction: 'RTL',
     },
 });
 
@@ -179,6 +190,10 @@ const Template = props => {
     const classes = useStyles();
     const { data, setData, setIsModified } = props;
     const [errors, setErrors] = useState(InitialErrors);
+
+    const total = data.items
+        .map(item => parseInt(item.quantity) * parseFloat(item.rate).toFixed(2))
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     const handleBlur = event => {
         const { name, value } = event.target;
@@ -505,7 +520,6 @@ const Template = props => {
                                         </TableCell>
                                         <TableCell
                                             className={`${classes.templateTableCol} ${classes.description}`}
-                                            align="right"
                                         >
                                             <TextField
                                                 name={`items.${id}.description`}
@@ -517,7 +531,6 @@ const Template = props => {
                                         </TableCell>
                                         <TableCell
                                             className={`${classes.templateTableCol} ${classes.number}`}
-                                            align="right"
                                         >
                                             <TextField
                                                 name={`items.${id}.quantity`}
@@ -535,7 +548,6 @@ const Template = props => {
                                         </TableCell>
                                         <TableCell
                                             className={`${classes.templateTableCol} ${classes.number}`}
-                                            align="right"
                                         >
                                             <TextField
                                                 name={`items.${id}.rate`}
@@ -551,7 +563,6 @@ const Template = props => {
                                         </TableCell>
                                         <TableCell
                                             className={`${classes.templateTableCol} ${classes.number}`}
-                                            align="right"
                                         >
                                             <TextField
                                                 name={`items.${id}.amount`}
@@ -565,6 +576,7 @@ const Template = props => {
                                                         ).toFixed(2)
                                                 }
                                                 onChange={handleChange}
+                                                placeholder={0.0}
                                                 width="10%"
                                                 disabled
                                             />
@@ -581,6 +593,12 @@ const Template = props => {
                 >
                     +
                 </Button>
+                <div className={classes.totalContainer}>
+                    Total: &nbsp; $
+                    <div className={classes.total}>
+                        {total ? total.toFixed(2) : `0.00`}
+                    </div>
+                </div>
             </form>
         </div>
     );
