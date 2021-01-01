@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
 import { convertKeysCase } from '../../utils/caseConversion';
+import isEqual from 'lodash.isequal';
 import {
     createClientAct,
     updateClientByIdAct,
@@ -51,6 +52,7 @@ const ClientsGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -69,6 +71,10 @@ const ClientsGen = props => {
     }, [clients, slug, isLoggedIn]);
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('clients') === null) {
             window.localStorage.setItem('clients', JSON.stringify([]));
         }
@@ -82,9 +88,14 @@ const ClientsGen = props => {
         }
         window.localStorage.setItem('clients', JSON.stringify(newClients));
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveClient = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createClientAct(reqData);
@@ -95,6 +106,7 @@ const ClientsGen = props => {
             updateClientByIdAct(reqData, reqData.id);
         }
         setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
@@ -112,6 +124,7 @@ const ClientsGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isValidated={isValidated}
                     path={'/clients'}
                 />
             )}

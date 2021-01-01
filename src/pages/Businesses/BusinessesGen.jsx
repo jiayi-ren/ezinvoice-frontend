@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
 import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
+import isEqual from 'lodash.isequal';
 import {
     createBusinessAct,
     updateBusinessByIdAct,
@@ -56,6 +57,7 @@ const BusinessesGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -74,6 +76,10 @@ const BusinessesGen = props => {
     }, [businesses, slug, isLoggedIn]);
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('businesses') === null) {
             window.localStorage.setItem('businesses', JSON.stringify([]));
         }
@@ -92,9 +98,14 @@ const BusinessesGen = props => {
             JSON.stringify(newBusinesses),
         );
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveBusiness = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createBusinessAct(reqData);
@@ -105,6 +116,7 @@ const BusinessesGen = props => {
             updateBusinessByIdAct(reqData, reqData.id);
         }
         setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
@@ -122,6 +134,7 @@ const BusinessesGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isValidated={isValidated}
                     path={'/businesses'}
                 />
             )}

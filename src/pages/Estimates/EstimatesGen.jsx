@@ -10,6 +10,7 @@ import {
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { convertKeysCase } from '../../utils/caseConversion';
+import isEqual from 'lodash.isequal';
 import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/PDF/index';
@@ -66,6 +67,14 @@ const InitialForm = {
     items: itemInit,
 };
 
+const InitialErrors = {
+    title: '',
+    date: '',
+    business: fromInit,
+    client: toInit,
+    items: itemInit,
+};
+
 const EstimatesGen = props => {
     const {
         estimates,
@@ -84,6 +93,10 @@ const EstimatesGen = props => {
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
     const [data, setData] = useState(InitialForm);
+    const [errors, setErrors] = useState(
+        JSON.parse(JSON.stringify(InitialErrors)),
+    );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -138,6 +151,10 @@ const EstimatesGen = props => {
     };
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('estimates') === null) {
             window.localStorage.setItem('estimates', JSON.stringify([]));
         }
@@ -159,6 +176,10 @@ const EstimatesGen = props => {
     };
 
     const saveEstimate = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createEstimateAct(reqData);
@@ -169,6 +190,7 @@ const EstimatesGen = props => {
             updateEstimateByIdAct(reqData, reqData.id);
         }
         setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
@@ -176,6 +198,7 @@ const EstimatesGen = props => {
             history.push(`/estimates`);
         }
         setSaveAlertOpen(true);
+        setIsValidated(true);
     };
 
     return (
@@ -188,6 +211,7 @@ const EstimatesGen = props => {
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
+                        isValidated={isValidated}
                         path={'/estimates'}
                         status={status}
                     />
@@ -239,6 +263,8 @@ const EstimatesGen = props => {
                         data={data}
                         setData={setData}
                         setIsModified={setIsModified}
+                        errors={errors}
+                        setErrors={setErrors}
                     />
                 )}
             </div>

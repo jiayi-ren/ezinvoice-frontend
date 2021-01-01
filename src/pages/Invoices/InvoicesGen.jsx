@@ -9,6 +9,7 @@ import {
 } from '../../state/invoices/invoiceActions';
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
+import isEqual from 'lodash.isequal';
 import { convertKeysCase } from '../../utils/caseConversion';
 import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
@@ -99,6 +100,7 @@ const InvoicesGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
@@ -153,6 +155,10 @@ const InvoicesGen = props => {
     };
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('invoices') === null) {
             window.localStorage.setItem('invoices', JSON.stringify([]));
         }
@@ -171,9 +177,14 @@ const InvoicesGen = props => {
         window.localStorage.setItem('invoices', JSON.stringify(newInvoices));
         setIsSaved(true);
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveInvoice = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createInvoiceAct(reqData);
@@ -184,6 +195,7 @@ const InvoicesGen = props => {
             updateInvoiceByIdAct(reqData, reqData.id);
         }
         setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
@@ -203,6 +215,7 @@ const InvoicesGen = props => {
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
+                        isValidated={isValidated}
                         path={'/invoices'}
                         status={status}
                     />
