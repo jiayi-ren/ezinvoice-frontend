@@ -41,8 +41,10 @@ const ClientsDash = props => {
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
-        getClientsAct();
-    }, [getClientsAct]);
+        if (isLoggedIn) {
+            getClientsAct();
+        }
+    }, [isLoggedIn, getClientsAct]);
 
     useEffect(() => {
         if (!isLoggedIn) {

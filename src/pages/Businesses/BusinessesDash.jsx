@@ -41,8 +41,10 @@ const BusinessesDash = props => {
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
-        getBusinessesAct();
-    }, [getBusinessesAct]);
+        if (isLoggedIn) {
+            getBusinessesAct();
+        }
+    }, [isLoggedIn, getBusinessesAct]);
 
     useEffect(() => {
         if (!isLoggedIn) {
