@@ -162,9 +162,18 @@ const Template = props => {
     const classes = useStyles();
     const { data, setData, setIsModified, errors, setErrors } = props;
 
-    const total = data.items
-        .map(item => parseInt(item.quantity) * parseFloat(item.rate).toFixed(2))
-        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const total =
+        data &&
+        data.items
+            .map(item =>
+                item.quantity && item.rate
+                    ? parseInt(item.quantity) * parseFloat(item.rate).toFixed(2)
+                    : 0,
+            )
+            .reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0,
+            );
 
     const handleBlur = event => {
         const { name, value } = event.target;
