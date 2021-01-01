@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
-import ClientsList from './ClientsList';
+import ContactList from '../../components/ContactList';
 
 const useStyles = makeStyles({
     button: {
@@ -41,8 +41,10 @@ const ClientsDash = props => {
     const [dense, setDense] = useState(false);
 
     useEffect(() => {
-        getClientsAct();
-    }, [getClientsAct]);
+        if (isLoggedIn) {
+            getClientsAct();
+        }
+    }, [isLoggedIn, getClientsAct]);
 
     useEffect(() => {
         if (!isLoggedIn) {
@@ -85,11 +87,12 @@ const ClientsDash = props => {
                 />
             </div>
             <div className={`${classes.container} ${classes.list}`}>
-                <ClientsList
-                    clientsList={clientsList}
+                <ContactList
+                    contactList={clientsList}
                     selected={selected}
                     setSelected={setSelected}
                     dense={dense}
+                    dataType="clients"
                 />
             </div>
         </div>

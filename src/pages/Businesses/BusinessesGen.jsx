@@ -4,11 +4,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
 import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
+import isEqual from 'lodash.isequal';
 import {
     createBusinessAct,
     updateBusinessByIdAct,
 } from '../../state/businesses/businessActions';
-import BusinessesTemplate from './BusinessesTemplate';
+import ContactTemplate from '../../components/ContactTemplate';
 
 const useStyles = makeStyles({
     button: {
@@ -33,6 +34,15 @@ const InitialForm = {
     phone: '',
 };
 
+const InitialErrors = {
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
+};
+
 const BusinessesGen = props => {
     const {
         businesses,
@@ -43,8 +53,13 @@ const BusinessesGen = props => {
     const history = useHistory();
     const classes = useStyles();
     const { slug } = useParams();
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
+    const [errors, setErrors] = useState(
+        JSON.parse(JSON.stringify(InitialErrors)),
+    );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
@@ -61,6 +76,10 @@ const BusinessesGen = props => {
     }, [businesses, slug, isLoggedIn]);
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('businesses') === null) {
             window.localStorage.setItem('businesses', JSON.stringify([]));
         }
@@ -79,28 +98,32 @@ const BusinessesGen = props => {
             JSON.stringify(newBusinesses),
         );
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveBusiness = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createBusinessAct(reqData);
-            setIsSaved(true);
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
             updateBusinessByIdAct(reqData, reqData.id);
-            setIsSaved(true);
         }
+        setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
-        if (isSaved) {
+        if (!isModified || isSaved) {
             history.push(`/businesses`);
-        } else {
-            setSaveAlertOpen(true);
         }
+        setSaveAlertOpen(true);
     };
 
     return (
@@ -111,6 +134,7 @@ const BusinessesGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isValidated={isValidated}
                     path={'/businesses'}
                 />
             )}
@@ -137,7 +161,14 @@ const BusinessesGen = props => {
                     Save
                 </Button>
             </div>
-            <BusinessesTemplate template={data} setTemplate={setData} />
+            <ContactTemplate
+                data={data}
+                setData={setData}
+                dataType={'businesses'}
+                setIsModified={setIsModified}
+                errors={errors}
+                setErrors={setErrors}
+            />
         </div>
     );
 };

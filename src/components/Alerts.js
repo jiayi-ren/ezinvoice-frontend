@@ -9,36 +9,20 @@ export const SaveAlert = props => {
         saveAlertOpen,
         setSaveAlertOpen,
         isSaved,
+        isValidated,
         path,
         status,
     } = props;
 
     return (
         <Collapse in={saveAlertOpen}>
-            {status === 'loading' && (
-                <Alert
-                    severity="info"
-                    icon={
-                        <CircularProgress
-                            style={{
-                                width: '20px',
-                                height: '20px',
-                            }}
-                        />
-                    }
-                >
-                    Saving
+            {!isValidated && (
+                <Alert severity="error">
+                    There are some errors. Please fix the red fields before
+                    saving.
                 </Alert>
             )}
-            {isSaved &&
-                ((isAuthenticated && status === 'succeeded') ||
-                    !isAuthenticated) && (
-                    <Alert severity="success">Saved Successfully</Alert>
-                )}
-            {isAuthenticated && status === 'failed' && (
-                <Alert severity="error">Failed to save</Alert>
-            )}
-            {!isSaved && (
+            {isValidated && !isSaved && (
                 <Alert
                     severity="warning"
                     action={
@@ -67,6 +51,31 @@ export const SaveAlert = props => {
                     }
                 >
                     Your work has not been saved. Do you still want to leave?
+                </Alert>
+            )}
+            {status === 'loading' && (
+                <Alert
+                    severity="info"
+                    icon={
+                        <CircularProgress
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                            }}
+                        />
+                    }
+                >
+                    Saving
+                </Alert>
+            )}
+            {isSaved &&
+                ((isAuthenticated && status === 'succeeded') ||
+                    !isAuthenticated) && (
+                    <Alert severity="success">Saved Successfully</Alert>
+                )}
+            {isAuthenticated && status === 'failed' && (
+                <Alert severity="error">
+                    Something went wrong, Failed to save
                 </Alert>
             )}
         </Collapse>

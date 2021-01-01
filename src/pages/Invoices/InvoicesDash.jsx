@@ -17,7 +17,7 @@ import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { arrToObj } from '../../utils/arrToObj';
 import { DeleteAlert } from '../../components/Alerts';
-import InvoicesList from './InvoicesList';
+import List from '../../components/List';
 
 const useStyles = makeStyles({
     button: {
@@ -198,11 +198,12 @@ const InvoicesDash = props => {
                 />
             </div>
             <div className={`${classes.container} ${classes.list}`}>
-                <InvoicesList
-                    invoicesList={invoicesList}
+                <List
+                    list={invoicesList}
                     selected={selected}
                     setSelected={setSelected}
                     dense={dense}
+                    dataType="invoices"
                 />
             </div>
         </div>

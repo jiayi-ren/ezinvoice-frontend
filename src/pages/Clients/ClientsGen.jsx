@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
 import { convertKeysCase } from '../../utils/caseConversion';
+import isEqual from 'lodash.isequal';
 import {
     createClientAct,
     updateClientByIdAct,
 } from '../../state/clients/clientActions';
 import { SaveAlert } from '../../components/Alerts';
-import ClientsTemplate from './ClientsTemplate';
+import ContactTemplate from '../../components/ContactTemplate';
 
 const useStyles = makeStyles({
     button: {
@@ -33,13 +34,27 @@ const InitialForm = {
     phone: '',
 };
 
+const InitialErrors = {
+    name: '',
+    email: '',
+    street: '',
+    cityState: '',
+    zip: '',
+    phone: '',
+};
+
 const ClientsGen = props => {
     const { clients, isLoggedIn, createClientAct, updateClientByIdAct } = props;
     const history = useHistory();
     const classes = useStyles();
     const { slug } = useParams();
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
+    const [errors, setErrors] = useState(
+        JSON.parse(JSON.stringify(InitialErrors)),
+    );
+    const [isValidated, setIsValidated] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
@@ -56,6 +71,10 @@ const ClientsGen = props => {
     }, [clients, slug, isLoggedIn]);
 
     const saveToLocal = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (window.localStorage.getItem('clients') === null) {
             window.localStorage.setItem('clients', JSON.stringify([]));
         }
@@ -69,28 +88,32 @@ const ClientsGen = props => {
         }
         window.localStorage.setItem('clients', JSON.stringify(newClients));
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveClient = () => {
+        if (!isEqual(errors, InitialErrors)) {
+            return setIsValidated(false);
+        }
+
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
             createClientAct(reqData);
-            setIsSaved(true);
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
             updateClientByIdAct(reqData, reqData.id);
-            setIsSaved(true);
         }
+        setIsSaved(true);
+        setIsValidated(true);
     };
 
     const goBack = () => {
-        if (isSaved) {
+        if (!isModified || isSaved) {
             history.push(`/clients`);
-        } else {
-            setSaveAlertOpen(true);
         }
+        setSaveAlertOpen(true);
     };
 
     return (
@@ -101,6 +124,7 @@ const ClientsGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isValidated={isValidated}
                     path={'/clients'}
                 />
             )}
@@ -127,7 +151,14 @@ const ClientsGen = props => {
                     Save
                 </Button>
             </div>
-            <ClientsTemplate template={data} setTemplate={setData} />
+            <ContactTemplate
+                data={data}
+                setData={setData}
+                dataType={'clients'}
+                setIsModified={setIsModified}
+                errors={errors}
+                setErrors={setErrors}
+            />
         </div>
     );
 };
