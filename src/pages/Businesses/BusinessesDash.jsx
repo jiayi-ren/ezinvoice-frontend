@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import isEqual from 'lodash.isequal';
-import BusinessesList from './BusinessesList';
+import ContactList from '../../components/ContactList';
 
 const useStyles = makeStyles({
     button: {
@@ -86,11 +86,12 @@ const BusinessesDash = props => {
                 />
             </div>
             <div className={`${classes.container} ${classes.list}`}>
-                <BusinessesList
-                    businessesList={businessesList}
+                <ContactList
+                    contactList={businessesList}
                     selected={selected}
                     setSelected={setSelected}
                     dense={dense}
+                    dataType="businesses"
                 />
             </div>
         </div>

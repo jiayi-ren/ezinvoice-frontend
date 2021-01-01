@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableComponent } from '../../components/Table/index';
+import { TableComponent } from './Table/index';
 
 const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -8,13 +8,13 @@ const headCells = [
     { id: 'phone', numeric: false, disablePadding: false, label: 'Phone' },
 ];
 
-const BusinessesList = props => {
-    const { businessesList, selected, setSelected, dense } = props;
+const ContactList = props => {
+    const { contactList, selected, setSelected, dense, dataType } = props;
 
     return (
         <TableComponent
-            data={businessesList}
-            dataType="Business"
+            data={contactList}
+            dataType={dataType}
             dense={dense}
             headCells={headCells}
             selected={selected}
@@ -23,4 +23,4 @@ const BusinessesList = props => {
     );
 };
 
-export default BusinessesList;
+export default ContactList;
