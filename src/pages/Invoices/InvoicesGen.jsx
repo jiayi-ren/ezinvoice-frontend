@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,7 +12,6 @@ import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import isEqual from 'lodash.isequal';
 import { convertKeysCase } from '../../utils/caseConversion';
-import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/PDF/index';
 import Template from '../../components/Template.jsx';
@@ -92,12 +91,10 @@ const InvoicesGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
-    const [isValidated, setIsValidated] = useState(false);
+    const [isValidated, setIsValidated] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
-
-    const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
 
     // generate complete invoice using business id and client id
     const compInvoice = (invoice, businessKey, clientKey) => {
@@ -126,7 +123,7 @@ const InvoicesGen = props => {
             const invoiceId = parseInt(slugs[1].split('=')[1]);
             if (isLoggedIn) {
                 return setData(
-                    compInvoice(invoices[invoiceId], businesses, clientsById),
+                    compInvoice(invoices[invoiceId], businesses, clients),
                 );
             }
             const localInvoices = JSON.parse(
@@ -134,7 +131,7 @@ const InvoicesGen = props => {
             );
             setData(localInvoices[invoiceIdx]);
         }
-    }, [invoices, slug, isLoggedIn, businesses, clientsById]);
+    }, [invoices, slug, isLoggedIn, businesses, clients]);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
@@ -262,19 +259,6 @@ const InvoicesGen = props => {
     );
 };
 
-InvoicesGen.propTypes = {
-    invoices: PropTypes.object.isRequired,
-    businesses: PropTypes.array.isRequired,
-    clients: PropTypes.array.isRequired,
-    status: PropTypes.string.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    getInvoicesAct: PropTypes.func.isRequired,
-    createInvoiceAct: PropTypes.func.isRequired,
-    updateInvoiceByIdAct: PropTypes.func.isRequired,
-    getBusinessesAct: PropTypes.func.isRequired,
-    getClientsAct: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => {
     return {
         invoices: state.invoices.invoices,
@@ -283,6 +267,19 @@ const mapStateToProps = state => {
         status: state.invoices.status,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+InvoicesGen.propTypes = {
+    invoices: PropTypes.object.isRequired,
+    businesses: PropTypes.object.isRequired,
+    clients: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getInvoicesAct: PropTypes.func.isRequired,
+    createInvoiceAct: PropTypes.func.isRequired,
+    updateInvoiceByIdAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {

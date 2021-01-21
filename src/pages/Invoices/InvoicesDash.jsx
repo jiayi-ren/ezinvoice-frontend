@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -16,7 +16,6 @@ import {
 } from '../../state/invoices/invoiceActions';
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
-import { arrToObj } from '../../utils/arrToObj';
 import { DeleteAlert } from '../../components/Alerts';
 import List from '../../components/List';
 
@@ -67,8 +66,6 @@ const InvoicesDash = props => {
     const [dense, setDense] = useState(false);
     const classes = useStyles();
 
-    const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
-
     const compInvoicesList = (invoiceList, businessKey, clientKey) => {
         for (let i = 0; i < invoiceList.length; i++) {
             invoiceList[i].business = businessKey[invoiceList[i].businessId];
@@ -93,14 +90,10 @@ const InvoicesDash = props => {
             setInvoicesList(localInvoices);
         } else {
             setInvoicesList(
-                compInvoicesList(
-                    Object.values(invoices),
-                    businesses,
-                    clientsById,
-                ),
+                compInvoicesList(Object.values(invoices), businesses, clients),
             );
         }
-    }, [isLoggedIn, invoices, businesses, clients, clientsById]);
+    }, [isLoggedIn, invoices, businesses, clients]);
 
     const tabChange = (event, newValue) => {
         setTab(newValue);
@@ -205,18 +198,6 @@ const InvoicesDash = props => {
     );
 };
 
-InvoicesDash.propTypes = {
-    invoices: PropTypes.object.isRequired,
-    businesses: PropTypes.object.isRequired,
-    clients: PropTypes.array.isRequired,
-    status: PropTypes.string.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    getInvoicesAct: PropTypes.func.isRequired,
-    deleteInvoicesAct: PropTypes.func.isRequired,
-    getBusinessesAct: PropTypes.func.isRequired,
-    getClientsAct: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => {
     return {
         invoices: state.invoices.invoices,
@@ -225,6 +206,18 @@ const mapStateToProps = state => {
         status: state.invoices.status,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+InvoicesDash.propTypes = {
+    invoices: PropTypes.object.isRequired,
+    businesses: PropTypes.object.isRequired,
+    clients: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getInvoicesAct: PropTypes.func.isRequired,
+    deleteInvoicesAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
