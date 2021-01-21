@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
@@ -65,9 +66,7 @@ const InvoicesDash = props => {
     const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [dense, setDense] = useState(false);
     const classes = useStyles();
-    const businessesById = useMemo(() => arrToObj(businesses, 'id'), [
-        businesses,
-    ]);
+
     const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
 
     const compInvoicesList = (invoiceList, businessKey, clientKey) => {
@@ -96,19 +95,12 @@ const InvoicesDash = props => {
             setInvoicesList(
                 compInvoicesList(
                     Object.values(invoices),
-                    businessesById,
+                    businesses,
                     clientsById,
                 ),
             );
         }
-    }, [
-        isLoggedIn,
-        invoices,
-        businesses,
-        clients,
-        businessesById,
-        clientsById,
-    ]);
+    }, [isLoggedIn, invoices, businesses, clients, clientsById]);
 
     const tabChange = (event, newValue) => {
         setTab(newValue);
@@ -126,7 +118,10 @@ const InvoicesDash = props => {
                 deleteInvoicesList.splice(label, 1);
             }
             deleteInvoicesList.length > 0
-                ? window.localStorage.setItem('invoices', deleteInvoicesList)
+                ? window.localStorage.setItem(
+                      'invoices',
+                      JSON.stringify(deleteInvoicesList),
+                  )
                 : window.localStorage.setItem('invoices', JSON.stringify([]));
             setInvoicesList(deleteInvoicesList);
         } else {
@@ -208,6 +203,18 @@ const InvoicesDash = props => {
             </div>
         </div>
     );
+};
+
+InvoicesDash.propTypes = {
+    invoices: PropTypes.object.isRequired,
+    businesses: PropTypes.object.isRequired,
+    clients: PropTypes.array.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getInvoicesAct: PropTypes.func.isRequired,
+    deleteInvoicesAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
