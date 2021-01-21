@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
@@ -13,7 +14,6 @@ import {
 } from '../../state/estimates/estimateActions';
 import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
-import { arrToObj } from '../../utils/arrToObj';
 import { DeleteAlert } from '../../components/Alerts';
 import List from '../../components/List';
 
@@ -60,10 +60,6 @@ const EstimatesDash = props => {
     const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [dense, setDense] = useState(false);
     const classes = useStyles();
-    const businessesById = useMemo(() => arrToObj(businesses, 'id'), [
-        businesses,
-    ]);
-    const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
 
     const compEstimatesList = (estimateList, businessKey, clientKey) => {
         for (let i = 0; i < estimateList.length; i++) {
@@ -91,19 +87,12 @@ const EstimatesDash = props => {
             setEstimatesList(
                 compEstimatesList(
                     Object.values(estimates),
-                    businessesById,
-                    clientsById,
+                    businesses,
+                    clients,
                 ),
             );
         }
-    }, [
-        isLoggedIn,
-        estimates,
-        businesses,
-        clients,
-        businessesById,
-        clientsById,
-    ]);
+    }, [isLoggedIn, estimates, businesses, clients]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -202,6 +191,18 @@ const mapStateToProps = state => {
         status: state.estimates.status,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+EstimatesDash.propTypes = {
+    estimates: PropTypes.object.isRequired,
+    businesses: PropTypes.object.isRequired,
+    clients: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getEstimatesAct: PropTypes.func.isRequired,
+    deleteEstimatesAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {

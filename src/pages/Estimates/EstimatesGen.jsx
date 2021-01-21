@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, makeStyles } from '@material-ui/core';
@@ -11,7 +12,6 @@ import { getBusinessesAct } from '../../state/businesses/businessActions';
 import { getClientsAct } from '../../state/clients/clientActions';
 import { convertKeysCase } from '../../utils/caseConversion';
 import isEqual from 'lodash.isequal';
-import { arrToObj } from '../../utils/arrToObj';
 import { SaveAlert } from '../../components/Alerts';
 import { PDF } from '../../components/PDF/index';
 import Template from '../../components/Template.jsx';
@@ -33,16 +33,7 @@ const useStyles = makeStyles({
     },
 });
 
-const fromInit = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
-const toInit = {
+const contactInit = {
     name: '',
     email: '',
     street: '',
@@ -62,16 +53,16 @@ const itemInit = [JSON.parse(JSON.stringify(item))];
 const InitialForm = {
     title: 'Estimate',
     date: new Date().toJSON().slice(0, 10),
-    business: fromInit,
-    client: toInit,
+    business: contactInit,
+    client: contactInit,
     items: itemInit,
 };
 
 const InitialErrors = {
     title: '',
     date: '',
-    business: fromInit,
-    client: toInit,
+    business: contactInit,
+    client: contactInit,
     items: itemInit,
 };
 
@@ -92,18 +83,14 @@ const EstimatesGen = props => {
     const classes = useStyles();
     const { slug } = useParams();
     const [isPreviewing, setIsPreviewing] = useState(false);
-    const [data, setData] = useState(InitialForm);
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
-    const [isValidated, setIsValidated] = useState(false);
+    const [isValidated, setIsValidated] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
-    const businessesById = useMemo(() => arrToObj(businesses, 'id'), [
-        businesses,
-    ]);
-    const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
 
     // generate complete estimate using business id and client id
     const compEstimate = (estimate, businessKey, clientKey) => {
@@ -132,11 +119,7 @@ const EstimatesGen = props => {
             const estimateId = parseInt(slugs[1].split('=')[1]);
             if (isLoggedIn) {
                 return setData(
-                    compEstimate(
-                        estimates[estimateId],
-                        businessesById,
-                        clientsById,
-                    ),
+                    compEstimate(estimates[estimateId], businesses, clients),
                 );
             }
             const localEstimates = JSON.parse(
@@ -144,7 +127,7 @@ const EstimatesGen = props => {
             );
             setData(localEstimates[estimateIdx]);
         }
-    }, [estimates, slug, isLoggedIn, businessesById, clientsById]);
+    }, [estimates, slug, isLoggedIn, businesses, clients]);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
@@ -173,6 +156,7 @@ const EstimatesGen = props => {
         window.localStorage.setItem('estimates', JSON.stringify(newEstimates));
         setIsSaved(true);
         setSaveAlertOpen(false);
+        setIsValidated(true);
     };
 
     const saveEstimate = () => {
@@ -280,6 +264,19 @@ const mapStateToProps = state => {
         status: state.estimates.status,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+EstimatesGen.propTypes = {
+    estimates: PropTypes.object.isRequired,
+    businesses: PropTypes.object.isRequired,
+    clients: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getEstimatesAct: PropTypes.func.isRequired,
+    createEstimateAct: PropTypes.func.isRequired,
+    updateEstimateByIdAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
