@@ -1,4 +1,5 @@
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+import axios from 'axios';
 
 const getClients = () => {
     return axiosWithAuth().get('/clients');
@@ -12,8 +13,12 @@ const updateClientById = client => {
     return axiosWithAuth().put(`/clients/${client.id}`, client);
 };
 
-const deleteClientById = id => {
-    return axiosWithAuth().delete(`/clients/${id}`);
+const deleteClients = ids => {
+    let requests = [];
+    for (let i = 0; i < ids.length; i++) {
+        requests.push(axiosWithAuth().delete(`/clients/${ids[i]}`));
+    }
+    return axios.all(requests);
 };
 
-export { getClients, createClient, updateClientById, deleteClientById };
+export { getClients, createClient, updateClientById, deleteClients };
