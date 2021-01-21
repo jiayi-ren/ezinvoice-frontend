@@ -54,7 +54,7 @@ const TableCheckBoxCell = props => {
 };
 
 const TableCustomRow = props => {
-    const { dataType, row, index } = props;
+    const { dataType, row, index, amount } = props;
     if ((dataType === 'invoices' || dataType === 'estimates') && row) {
         return (
             <>
@@ -65,7 +65,13 @@ const TableCustomRow = props => {
                         `${row.client.street}, ${row.client.cityState} ${row.client.zip}`}
                 </TableCell>
                 <TableCell>{row && row.date}</TableCell>
-                <TableCell>{row && row.rate}</TableCell>
+                <TableCell
+                    style={{
+                        textAlign: 'right',
+                    }}
+                >
+                    {amount ? amount.toFixed(2) : 0.0}
+                </TableCell>
                 <TableCell>
                     <Button>
                         <Link
@@ -90,6 +96,19 @@ const TableCustomRow = props => {
                     {row && `${row.street}, ${row.cityState} ${row.zip}`}
                 </TableCell>
                 <TableCell>{row && row.phone}</TableCell>
+                <TableCell>
+                    <Button>
+                        <Link
+                            style={{ textDecoration: 'none' }}
+                            to={`/${dataType}/${dataType.substring(
+                                0,
+                                3,
+                            )}=${index}&id=${row.id}`}
+                        >
+                            Edit
+                        </Link>
+                    </Button>
+                </TableCell>
             </>
         );
     } else if (dataType === 'Item' && row) {
@@ -152,7 +171,12 @@ const TableRowComponent = props => {
                     dataType={dataType}
                     row={row}
                 />
-                <TableCustomRow dataType={dataType} row={row} index={index} />
+                <TableCustomRow
+                    dataType={dataType}
+                    row={row}
+                    index={index}
+                    amount={total}
+                />
             </TableRow>
             {(dataType === 'invoices' || dataType === 'estimates') && (
                 <TableRowExpand
