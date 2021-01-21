@@ -58,21 +58,23 @@ const BusinessesGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
-    const [isValidated, setIsValidated] = useState(false);
+    const [isValidated, setIsValidated] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
         if (slug !== 'new') {
-            const businessIdx = slug.split('_')[1];
+            const slugs = slug.split('&');
+            const businessLocalId = parseInt(slugs[0].split('=')[1]);
+            const businessId = parseInt(slugs[1].split('=')[1]);
             if (isLoggedIn) {
-                return setData(businesses[businessIdx]);
+                return setData(businesses[businessId]);
             }
             const localBusinesses = JSON.parse(
                 window.localStorage.getItem('businesses'),
             );
-            setData(localBusinesses[businessIdx]);
+            setData(localBusinesses[businessLocalId]);
         }
     }, [businesses, slug, isLoggedIn]);
 
@@ -91,13 +93,15 @@ const BusinessesGen = props => {
             isSaved === false ? setIsSaved(true) : newBusinesses.pop();
             newBusinesses.push(data);
         } else {
-            newBusinesses.splice(slug.split('_')[1], 1, data);
-            setIsSaved(true);
+            const slugs = slug.split('&');
+            const businessIdx = parseInt(slugs[0].split('=')[1]);
+            newBusinesses.splice(businessIdx, 1, data);
         }
         window.localStorage.setItem(
             'businesses',
             JSON.stringify(newBusinesses),
         );
+        setIsSaved(true);
         setSaveAlertOpen(false);
         setIsValidated(true);
     };
@@ -174,18 +178,18 @@ const BusinessesGen = props => {
     );
 };
 
-BusinessesGen.propTypes = {
-    businesses: PropTypes.object.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    createBusinessAct: PropTypes.func.isRequired,
-    updateBusinessByIdAct: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => {
     return {
         businesses: state.businesses.businesses,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+BusinessesGen.propTypes = {
+    businesses: PropTypes.object.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    createBusinessAct: PropTypes.func.isRequired,
+    updateBusinessByIdAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
