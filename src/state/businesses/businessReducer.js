@@ -12,9 +12,10 @@ import {
     DELETE_BUSINESS_SUCCESS,
     DELETE_BUSINESS_FAILURE,
 } from './businessActions';
+import { arrToObj } from '../../utils/arrToObj';
 
 const initState = {
-    businesses: [],
+    businesses: {},
     status: 'idle',
     error: '',
 };
@@ -30,7 +31,7 @@ export const businessReducer = (state = initState, action) => {
         case GET_BUSINESSES_SUCCESS:
             return {
                 ...state,
-                businesses: action.payload,
+                businesses: arrToObj(action.payload, 'id'),
                 status: 'succeeded',
             };
         case GET_BUSINESSES_FAILURE:
@@ -46,9 +47,10 @@ export const businessReducer = (state = initState, action) => {
                 error: '',
             };
         case CREATE_BUSINESS_SUCCESS:
+            let { id, ...newBusiness } = action.payload;
             return {
                 ...state,
-                businesses: [...state.businesses, action.payload],
+                businesses: { ...state.businesses, id: newBusiness },
                 status: 'succeeded',
             };
         case CREATE_BUSINESS_FAILURE:
@@ -66,7 +68,10 @@ export const businessReducer = (state = initState, action) => {
         case UPDATE_BUSINESS_SUCCESS:
             return {
                 ...state,
-                businesses: [...state.businesses, action.payload],
+                businesses: {
+                    ...state.businesses,
+                    [action.payload.id]: action.payload,
+                },
                 status: 'succeeded',
             };
         case UPDATE_BUSINESS_FAILURE:
@@ -82,9 +87,11 @@ export const businessReducer = (state = initState, action) => {
                 error: '',
             };
         case DELETE_BUSINESS_SUCCESS:
+            let businessesList =
+                action.payload.length > 0 ? arrToObj(action.payload, 'id') : {};
             return {
                 ...state,
-                businesses: action.payload,
+                businesses: businessesList,
                 status: 'succeeded',
             };
         case DELETE_BUSINESS_FAILURE:
