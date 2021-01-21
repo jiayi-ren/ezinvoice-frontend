@@ -70,7 +70,7 @@ const TableCustomRow = props => {
                         textAlign: 'right',
                     }}
                 >
-                    {amount ? amount.toFixed(2) : 0.0}
+                    {amount ? amount.toFixed(2) : Number(0).toFixed(2)}
                 </TableCell>
                 <TableCell>
                     <Button>
@@ -91,10 +91,10 @@ const TableCustomRow = props => {
         return (
             <>
                 <TableCell>{row && row.name}</TableCell>
-                <TableCell>{row && row.email}</TableCell>
                 <TableCell>
                     {row && `${row.street}, ${row.cityState} ${row.zip}`}
                 </TableCell>
+                <TableCell>{row && row.email}</TableCell>
                 <TableCell>{row && row.phone}</TableCell>
                 <TableCell>
                     <Button>
