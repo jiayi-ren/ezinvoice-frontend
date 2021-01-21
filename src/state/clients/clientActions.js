@@ -2,7 +2,7 @@ import {
     getClients,
     createClient,
     updateClientById,
-    deleteClientById,
+    deleteClients,
 } from '../../api/clients';
 import { convertKeysCase } from '../../utils/caseConversion';
 
@@ -36,7 +36,7 @@ export const createClientAct = client => {
         dispatch({ type: CREATE_CLIENT_REQUEST });
 
         try {
-            const res = await createClient(client);
+            const res = await createClient(convertKeysCase(client, 'snake'));
             dispatch({
                 type: CREATE_CLIENT_SUCCESS,
                 payload: convertKeysCase(res.data.client, 'camel'),
@@ -73,16 +73,16 @@ export const DELETE_CLIENT_REQUEST = 'DELETE_CLIENT_REQUEST';
 export const DELETE_CLIENT_SUCCESS = 'DELETE_CLIENT_SUCCESS';
 export const DELETE_CLIENT_FAILURE = 'DELETE_CLIENT_FAILURE';
 
-export const deleteClientByIdAct = id => {
+export const deleteClientsAct = ids => {
     return async dispatch => {
         dispatch({ type: DELETE_CLIENT_REQUEST });
 
         try {
-            await deleteClientById(id);
+            await deleteClients(ids);
             const res = await getClients();
             dispatch({
                 type: DELETE_CLIENT_SUCCESS,
-                payload: convertKeysCase(res.data.client, 'camel'),
+                payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
             console.log('FAILED');

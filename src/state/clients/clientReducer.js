@@ -12,9 +12,10 @@ import {
     DELETE_CLIENT_SUCCESS,
     DELETE_CLIENT_FAILURE,
 } from './clientActions';
+import { arrToObj } from '../../utils/arrToObj';
 
 const initState = {
-    clients: [],
+    clients: {},
     status: 'idle',
     error: '',
 };
@@ -46,9 +47,10 @@ export const clientReducer = (state = initState, action) => {
                 error: '',
             };
         case CREATE_CLIENT_SUCCESS:
+            let { id, ...newClient } = action.payload;
             return {
                 ...state,
-                clients: [...state.clients, action.payload],
+                clients: { ...state.clients, id: newClient },
                 status: 'succeeded',
             };
         case CREATE_CLIENT_FAILURE:
@@ -66,7 +68,10 @@ export const clientReducer = (state = initState, action) => {
         case UPDATE_CLIENT_SUCCESS:
             return {
                 ...state,
-                clients: [...state.clients, action.payload],
+                clients: {
+                    ...state.clients,
+                    [action.payload.id]: action.payload,
+                },
                 status: 'succeeded',
             };
         case UPDATE_CLIENT_FAILURE:
@@ -82,9 +87,11 @@ export const clientReducer = (state = initState, action) => {
                 error: '',
             };
         case DELETE_CLIENT_SUCCESS:
+            let clientsList =
+                action.payload.length > 0 ? arrToObj(action.payload, 'id') : {};
             return {
                 ...state,
-                clients: action.payload,
+                clients: clientsList,
                 status: 'succeeded',
             };
         case DELETE_CLIENT_FAILURE:
