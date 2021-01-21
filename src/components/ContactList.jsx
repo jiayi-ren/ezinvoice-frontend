@@ -6,6 +6,7 @@ const headCells = [
     { id: 'address', numeric: false, disablePadding: false, label: 'Address' },
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
     { id: 'phone', numeric: false, disablePadding: false, label: 'Phone' },
+    { id: 'edit', numeric: false, disablePadding: false, label: '' },
 ];
 
 const ContactList = props => {
