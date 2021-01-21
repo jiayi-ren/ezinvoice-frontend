@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
@@ -171,6 +172,13 @@ const BusinessesGen = props => {
             />
         </div>
     );
+};
+
+BusinessesGen.propTypes = {
+    businesses: PropTypes.object.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    createBusinessAct: PropTypes.func.isRequired,
+    updateBusinessByIdAct: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
