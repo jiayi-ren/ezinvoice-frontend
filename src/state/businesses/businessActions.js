@@ -2,7 +2,7 @@ import {
     getBusinesses,
     createBusiness,
     updateBusinessById,
-    deleteBusinessById,
+    deleteBusiness,
 } from '../../api/businesses';
 import { convertKeysCase } from '../../utils/caseConversion';
 
@@ -57,7 +57,9 @@ export const updateBusinessByIdAct = business => {
         dispatch({ type: UPDATE_BUSINESS_REQUEST });
 
         try {
-            const res = await updateBusinessById(business);
+            const res = await updateBusinessById(
+                convertKeysCase(business, 'snake'),
+            );
             dispatch({
                 type: UPDATE_BUSINESS_SUCCESS,
                 payload: convertKeysCase(res.data.business, 'camel'),
@@ -73,16 +75,16 @@ export const DELETE_BUSINESS_REQUEST = 'DELETE_BUSINESS_REQUEST';
 export const DELETE_BUSINESS_SUCCESS = 'DELETE_BUSINESS_SUCCESS';
 export const DELETE_BUSINESS_FAILURE = 'DELETE_BUSINESS_FAILURE';
 
-export const deleteBusinessByIdAct = id => {
+export const deleteBusinessesAct = ids => {
     return async dispatch => {
         dispatch({ type: DELETE_BUSINESS_REQUEST });
 
         try {
-            await deleteBusinessById(id);
+            await deleteBusiness(ids);
             const res = await getBusinesses();
             dispatch({
                 type: DELETE_BUSINESS_SUCCESS,
-                payload: convertKeysCase(res.data.business, 'camel'),
+                payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
             console.log('FAILED');
