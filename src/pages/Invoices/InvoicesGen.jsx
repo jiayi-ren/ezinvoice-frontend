@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, makeStyles } from '@material-ui/core';
@@ -33,16 +34,7 @@ const useStyles = makeStyles({
     },
 });
 
-const fromInit = {
-    name: '',
-    email: '',
-    street: '',
-    cityState: '',
-    zip: '',
-    phone: '',
-};
-
-const toInit = {
+const contactInit = {
     name: '',
     email: '',
     street: '',
@@ -66,16 +58,16 @@ const InitialForm = {
     )
         .toJSON()
         .slice(0, 10),
-    business: fromInit,
-    client: toInit,
+    business: contactInit,
+    client: contactInit,
     items: itemInit,
 };
 
 const InitialErrors = {
     title: '',
     date: '',
-    business: fromInit,
-    client: toInit,
+    business: contactInit,
+    client: contactInit,
     items: itemInit,
 };
 
@@ -104,9 +96,7 @@ const InvoicesGen = props => {
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
-    const businessesById = useMemo(() => arrToObj(businesses, 'id'), [
-        businesses,
-    ]);
+
     const clientsById = useMemo(() => arrToObj(clients, 'id'), [clients]);
 
     // generate complete invoice using business id and client id
@@ -136,11 +126,7 @@ const InvoicesGen = props => {
             const invoiceId = parseInt(slugs[1].split('=')[1]);
             if (isLoggedIn) {
                 return setData(
-                    compInvoice(
-                        invoices[invoiceId],
-                        businessesById,
-                        clientsById,
-                    ),
+                    compInvoice(invoices[invoiceId], businesses, clientsById),
                 );
             }
             const localInvoices = JSON.parse(
@@ -148,7 +134,7 @@ const InvoicesGen = props => {
             );
             setData(localInvoices[invoiceIdx]);
         }
-    }, [invoices, slug, isLoggedIn, businessesById, clientsById]);
+    }, [invoices, slug, isLoggedIn, businesses, clientsById]);
 
     const togglePreview = () => {
         setIsPreviewing(!isPreviewing);
@@ -274,6 +260,19 @@ const InvoicesGen = props => {
             </div>
         </div>
     );
+};
+
+InvoicesGen.propTypes = {
+    invoices: PropTypes.object.isRequired,
+    businesses: PropTypes.array.isRequired,
+    clients: PropTypes.array.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getInvoicesAct: PropTypes.func.isRequired,
+    createInvoiceAct: PropTypes.func.isRequired,
+    updateInvoiceByIdAct: PropTypes.func.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
