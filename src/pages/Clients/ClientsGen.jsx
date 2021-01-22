@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
@@ -52,21 +53,23 @@ const ClientsGen = props => {
     const [errors, setErrors] = useState(
         JSON.parse(JSON.stringify(InitialErrors)),
     );
-    const [isValidated, setIsValidated] = useState(false);
+    const [isValidated, setIsValidated] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
         if (slug !== 'new') {
-            const clientIdx = slug.split('_')[1];
+            const slugs = slug.split('&');
+            const clientLocalId = parseInt(slugs[0].split('=')[1]);
+            const clientId = parseInt(slugs[1].split('=')[1]);
             if (isLoggedIn) {
-                return setData(clients[clientIdx]);
+                return setData(clients[clientId]);
             }
             const localClients = JSON.parse(
                 window.localStorage.getItem('clients'),
             );
-            setData(localClients[clientIdx]);
+            setData(localClients[clientLocalId]);
         }
     }, [clients, slug, isLoggedIn]);
 
@@ -83,10 +86,12 @@ const ClientsGen = props => {
             isSaved === false ? setIsSaved(true) : newClients.pop();
             newClients.push(data);
         } else {
-            newClients.splice(slug.split('_')[1], 1, data);
-            setIsSaved(true);
+            const slugs = slug.split('&');
+            const clientIdx = parseInt(slugs[0].split('=')[1]);
+            newClients.splice(clientIdx, 1, data);
         }
         window.localStorage.setItem('clients', JSON.stringify(newClients));
+        setIsSaved(true);
         setSaveAlertOpen(false);
         setIsValidated(true);
     };
@@ -168,6 +173,13 @@ const mapStateToProps = state => {
         clients: state.clients.clients,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+ClientsGen.propTypes = {
+    clients: PropTypes.object.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    createClientAct: PropTypes.func.isRequired,
+    deleteClientsAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {

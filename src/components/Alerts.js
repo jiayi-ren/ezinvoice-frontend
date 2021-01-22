@@ -68,14 +68,14 @@ export const SaveAlert = props => {
                     Saving
                 </Alert>
             )}
-            {isSaved &&
+            {isValidated &&
                 ((isAuthenticated && status === 'succeeded') ||
-                    !isAuthenticated) && (
+                    (!isAuthenticated && isSaved)) && (
                     <Alert severity="success">Saved Successfully</Alert>
                 )}
             {isAuthenticated && status === 'failed' && (
                 <Alert severity="error">
-                    Something went wrong, Failed to save
+                    Something went wrong. Please try again later.
                 </Alert>
             )}
         </Collapse>

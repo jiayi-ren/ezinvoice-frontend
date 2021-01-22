@@ -159,20 +159,20 @@ const BusinessesDash = props => {
     );
 };
 
-BusinessesDash.propTypes = {
-    businesses: PropTypes.object.isRequired,
-    status: PropTypes.string.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    getBusinessesAct: PropTypes.func.isRequired,
-    deleteBusinessesAct: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => {
     return {
         businesses: state.businesses.businesses,
         status: state.businesses.status,
         isLoggedIn: state.user.isLoggedIn,
     };
+};
+
+BusinessesDash.propTypes = {
+    businesses: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
+    deleteBusinessesAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
