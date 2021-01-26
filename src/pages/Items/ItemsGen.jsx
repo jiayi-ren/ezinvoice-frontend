@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, makeStyles } from '@material-ui/core';
@@ -25,7 +26,14 @@ const useStyles = makeStyles({
 });
 
 const ItemsGen = props => {
-    const { items, isLoggedIn, createItemAct, updateItemByIdAct } = props;
+    const {
+        items,
+        status,
+        isLoggedIn,
+        message,
+        createItemAct,
+        updateItemByIdAct,
+    } = props;
     const history = useHistory();
     const classes = useStyles();
     const { slug } = useParams();
@@ -94,7 +102,10 @@ const ItemsGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
-                    path="/items"
+                    path={'/items'}
+                    isLoggedIn={isLoggedIn}
+                    status={status}
+                    message={message}
                 />
             )}
             <div className={`${classes.container} ${classes.options}`}>
@@ -130,7 +141,17 @@ const mapStateToProps = state => {
         items: state.items.items,
         status: state.items.status,
         isLoggedIn: state.user.isLoggedIn,
+        message: state.items.message,
     };
+};
+
+ItemsGen.propType = {
+    items: PropTypes.array.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+    createItemAct: PropTypes.func.isRequired,
+    updateItemByIdAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {

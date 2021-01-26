@@ -21,8 +21,10 @@ export const getItemsAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: GET_ITEMS_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: GET_ITEMS_FAILURE, payload: errMessage });
         }
     };
 };
@@ -41,8 +43,10 @@ export const createItemAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: CREATE_ITEM_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: CREATE_ITEM_FAILURE, payload: errMessage });
         }
     };
 };
@@ -62,8 +66,10 @@ export const updateItemByIdAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: UPDATE_ITEM_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: UPDATE_ITEM_FAILURE, payload: errMessage });
         }
     };
 };
@@ -84,8 +90,10 @@ export const deleteItemByIdAct = id => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: DELETE_ITEM_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: DELETE_ITEM_FAILURE, payload: errMessage });
         }
     };
 };
