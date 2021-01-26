@@ -61,14 +61,6 @@ const EstimatesDash = props => {
     const [dense, setDense] = useState(false);
     const classes = useStyles();
 
-    const compEstimatesList = (estimateList, businessKey, clientKey) => {
-        for (let i = 0; i < estimateList.length; i++) {
-            estimateList[i].business = businessKey[estimateList[i].businessId];
-            estimateList[i].client = clientKey[estimateList[i].clientId];
-        }
-        return estimateList;
-    };
-
     useEffect(() => {
         if (isLoggedIn) {
             getEstimatesAct();
@@ -84,13 +76,7 @@ const EstimatesDash = props => {
             );
             setEstimatesList(localEstimates);
         } else {
-            setEstimatesList(
-                compEstimatesList(
-                    Object.values(estimates),
-                    businesses,
-                    clients,
-                ),
-            );
+            setEstimatesList(Object.values(estimates));
         }
     }, [isLoggedIn, estimates, businesses, clients]);
 
