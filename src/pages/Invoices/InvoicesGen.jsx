@@ -77,6 +77,7 @@ const InvoicesGen = props => {
         clients,
         status,
         isLoggedIn,
+        message,
         getInvoicesAct,
         createInvoiceAct,
         updateInvoiceByIdAct,
@@ -193,7 +194,6 @@ const InvoicesGen = props => {
             <div>
                 {saveAlertOpen && (
                     <SaveAlert
-                        isAuthenticated={isLoggedIn}
                         history={history}
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
@@ -201,6 +201,8 @@ const InvoicesGen = props => {
                         isValidated={isValidated}
                         path={'/invoices'}
                         status={status}
+                        isLoggedIn={isLoggedIn}
+                        message={message}
                     />
                 )}
                 <div className={`${classes.container} ${classes.options}`}>
@@ -266,6 +268,7 @@ const mapStateToProps = state => {
         clients: state.clients.clients,
         status: state.invoices.status,
         isLoggedIn: state.user.isLoggedIn,
+        message: state.invoices.message,
     };
 };
 
@@ -275,6 +278,7 @@ InvoicesGen.propTypes = {
     clients: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
     getInvoicesAct: PropTypes.func.isRequired,
     createInvoiceAct: PropTypes.func.isRequired,
     updateInvoiceByIdAct: PropTypes.func.isRequired,

@@ -16,7 +16,7 @@ import {
 const initState = {
     items: [],
     status: 'idle',
-    error: '',
+    message: '',
 };
 
 export const itemReducer = (state = initState, action) => {
@@ -25,7 +25,7 @@ export const itemReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case GET_ITEMS_SUCCESS:
             return {
@@ -37,13 +37,13 @@ export const itemReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case CREATE_ITEM_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case CREATE_ITEM_SUCCESS:
             return {
@@ -55,13 +55,13 @@ export const itemReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case UPDATE_ITEM_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case UPDATE_ITEM_SUCCESS:
             return {
@@ -73,13 +73,13 @@ export const itemReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case DELETE_ITEM_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case DELETE_ITEM_SUCCESS:
             return {
@@ -91,13 +91,13 @@ export const itemReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         default:
             return {
                 ...state,
                 status: 'idle',
-                error: '',
+                message: '',
             };
     }
 };

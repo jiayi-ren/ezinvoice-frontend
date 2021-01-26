@@ -17,7 +17,7 @@ import { arrToObj } from '../../utils/arrToObj';
 const initState = {
     businesses: {},
     status: 'idle',
-    error: '',
+    message: '',
 };
 
 export const businessReducer = (state = initState, action) => {
@@ -26,7 +26,7 @@ export const businessReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case GET_BUSINESSES_SUCCESS:
             return {
@@ -38,13 +38,13 @@ export const businessReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case CREATE_BUSINESS_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case CREATE_BUSINESS_SUCCESS:
             let { id, ...newBusiness } = action.payload;
@@ -57,13 +57,13 @@ export const businessReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case UPDATE_BUSINESS_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case UPDATE_BUSINESS_SUCCESS:
             return {
@@ -78,13 +78,13 @@ export const businessReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case DELETE_BUSINESS_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case DELETE_BUSINESS_SUCCESS:
             let businessesList =
@@ -98,13 +98,13 @@ export const businessReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         default:
             return {
                 ...state,
                 status: 'idle',
-                error: '',
+                message: '',
             };
     }
 };

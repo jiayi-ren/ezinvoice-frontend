@@ -73,6 +73,7 @@ const EstimatesGen = props => {
         clients,
         status,
         isLoggedIn,
+        message,
         getEstimatesAct,
         createEstimateAct,
         updateEstimateByIdAct,
@@ -190,7 +191,6 @@ const EstimatesGen = props => {
             <div>
                 {saveAlertOpen && (
                     <SaveAlert
-                        isAuthenticated={isLoggedIn}
                         history={history}
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
@@ -198,6 +198,8 @@ const EstimatesGen = props => {
                         isValidated={isValidated}
                         path={'/estimates'}
                         status={status}
+                        isLoggedIn={isLoggedIn}
+                        message={message}
                     />
                 )}
                 <div className={`${classes.container} ${classes.options}`}>
@@ -263,6 +265,7 @@ const mapStateToProps = state => {
         clients: state.clients.clients,
         status: state.estimates.status,
         isLoggedIn: state.user.isLoggedIn,
+        message: state.estimates.message,
     };
 };
 
@@ -272,6 +275,7 @@ EstimatesGen.propTypes = {
     clients: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
     getEstimatesAct: PropTypes.func.isRequired,
     createEstimateAct: PropTypes.func.isRequired,
     updateEstimateByIdAct: PropTypes.func.isRequired,
