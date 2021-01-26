@@ -17,7 +17,7 @@ import { arrToObj } from '../../utils/arrToObj';
 const initState = {
     clients: {},
     status: 'idle',
-    error: '',
+    message: '',
 };
 
 export const clientReducer = (state = initState, action) => {
@@ -26,44 +26,44 @@ export const clientReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case GET_CLIENTS_SUCCESS:
             return {
                 ...state,
-                clients: action.payload,
+                clients: arrToObj(action.payload, 'id'),
                 status: 'succeeded',
             };
         case GET_CLIENTS_FAILURE:
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case CREATE_CLIENT_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case CREATE_CLIENT_SUCCESS:
             let { id, ...newClient } = action.payload;
             return {
                 ...state,
-                clients: { ...state.clients, id: newClient },
+                clients: { ...state.clients, [action.payload.id]: newClient },
                 status: 'succeeded',
             };
         case CREATE_CLIENT_FAILURE:
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case UPDATE_CLIENT_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case UPDATE_CLIENT_SUCCESS:
             return {
@@ -78,13 +78,13 @@ export const clientReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case DELETE_CLIENT_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case DELETE_CLIENT_SUCCESS:
             let clientsList =
@@ -98,13 +98,13 @@ export const clientReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         default:
             return {
                 ...state,
                 status: 'idle',
-                error: '',
+                message: '',
             };
     }
 };

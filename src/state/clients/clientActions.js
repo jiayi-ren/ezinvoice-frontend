@@ -21,8 +21,10 @@ export const getClientsAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: GET_CLIENTS_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: GET_CLIENTS_FAILURE, payload: errMessage });
         }
     };
 };
@@ -42,8 +44,10 @@ export const createClientAct = client => {
                 payload: convertKeysCase(res.data.client, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: CREATE_CLIENT_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: CREATE_CLIENT_FAILURE, payload: errMessage });
         }
     };
 };
@@ -63,8 +67,10 @@ export const updateClientByIdAct = client => {
                 payload: convertKeysCase(res.data.client, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: UPDATE_CLIENT_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: UPDATE_CLIENT_FAILURE, payload: errMessage });
         }
     };
 };
@@ -85,8 +91,10 @@ export const deleteClientsAct = ids => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: DELETE_CLIENT_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: DELETE_CLIENT_FAILURE, payload: errMessage });
         }
     };
 };

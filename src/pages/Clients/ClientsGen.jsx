@@ -45,7 +45,14 @@ const InitialErrors = {
 };
 
 const ClientsGen = props => {
-    const { clients, isLoggedIn, createClientAct, updateClientByIdAct } = props;
+    const {
+        clients,
+        isLoggedIn,
+        status,
+        message,
+        createClientAct,
+        updateClientByIdAct,
+    } = props;
     const history = useHistory();
     const classes = useStyles();
     const { slug } = useParams();
@@ -131,6 +138,9 @@ const ClientsGen = props => {
                     isSaved={isSaved}
                     isValidated={isValidated}
                     path={'/clients'}
+                    isLoggedIn={isLoggedIn}
+                    status={status}
+                    message={message}
                 />
             )}
             <div className={`${classes.container} ${classes.options}`}>
@@ -172,14 +182,18 @@ const mapStateToProps = state => {
     return {
         clients: state.clients.clients,
         isLoggedIn: state.user.isLoggedIn,
+        status: state.clients.status,
+        message: state.clients.message,
     };
 };
 
 ClientsGen.propTypes = {
     clients: PropTypes.object.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    status: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
     createClientAct: PropTypes.func.isRequired,
-    deleteClientsAct: PropTypes.func.isRequired,
+    updateClientByIdAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
