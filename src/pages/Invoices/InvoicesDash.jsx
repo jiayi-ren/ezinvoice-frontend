@@ -66,14 +66,6 @@ const InvoicesDash = props => {
     const [dense, setDense] = useState(false);
     const classes = useStyles();
 
-    const compInvoicesList = (invoiceList, businessKey, clientKey) => {
-        for (let i = 0; i < invoiceList.length; i++) {
-            invoiceList[i].business = businessKey[invoiceList[i].businessId];
-            invoiceList[i].client = clientKey[invoiceList[i].clientId];
-        }
-        return invoiceList;
-    };
-
     useEffect(() => {
         if (isLoggedIn) {
             getInvoicesAct();
@@ -89,9 +81,7 @@ const InvoicesDash = props => {
             );
             setInvoicesList(localInvoices);
         } else {
-            setInvoicesList(
-                compInvoicesList(Object.values(invoices), businesses, clients),
-            );
+            setInvoicesList(Object.values(invoices));
         }
     }, [isLoggedIn, invoices, businesses, clients]);
 
