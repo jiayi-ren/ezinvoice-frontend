@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TableComponent } from './Table/index';
+
+const filterHelper = (invoices, condition) => {
+    if (condition === 'paid') {
+        return invoices.filter(invoice => invoice.isPaid === true);
+    }
+    if (condition === 'outstanding') {
+        return invoices.filter(invoice => invoice.isPaid === false);
+    }
+};
 
 const headCells = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Name' },
@@ -11,11 +20,30 @@ const headCells = [
 ];
 
 const List = props => {
-    const { list, selected, setSelected, dense, dataType } = props;
+    const {
+        list,
+        selected,
+        setSelected,
+        dense,
+        dataType,
+        invoicesFilter,
+    } = props;
+
+    const [TableData, setTableData] = useState([]);
+
+    useEffect(() => {
+        if (invoicesFilter === 'paid') {
+            setTableData(filterHelper(list, invoicesFilter));
+        } else if (invoicesFilter === 'outstanding') {
+            setTableData(filterHelper(list, invoicesFilter));
+        } else {
+            setTableData(list);
+        }
+    }, [list, invoicesFilter]);
 
     return (
         <TableComponent
-            data={list}
+            data={TableData}
             dataType={dataType}
             dense={dense}
             headCells={headCells}

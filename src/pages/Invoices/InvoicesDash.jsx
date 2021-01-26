@@ -182,6 +182,7 @@ const InvoicesDash = props => {
                     setSelected={setSelected}
                     dense={dense}
                     dataType="invoices"
+                    invoicesFilter={tab}
                 />
             </div>
         </div>
