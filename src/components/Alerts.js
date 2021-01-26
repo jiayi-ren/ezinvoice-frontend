@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Collapse, CircularProgress } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 
 export const SaveAlert = props => {
     const {
-        isAuthenticated,
+        isLoggedIn,
         history,
         saveAlertOpen,
         setSaveAlertOpen,
@@ -12,6 +13,7 @@ export const SaveAlert = props => {
         isValidated,
         path,
         status,
+        message,
     } = props;
 
     return (
@@ -69,17 +71,31 @@ export const SaveAlert = props => {
                 </Alert>
             )}
             {isValidated &&
-                ((isAuthenticated && status === 'succeeded') ||
-                    (!isAuthenticated && isSaved)) && (
-                    <Alert severity="success">Saved Successfully</Alert>
+                ((isLoggedIn && status === 'succeeded') ||
+                    (!isLoggedIn && isSaved)) && (
+                    <Alert severity="success">
+                        Saved Successfully. {message}
+                    </Alert>
                 )}
-            {isAuthenticated && status === 'failed' && (
-                <Alert severity="error">
-                    Something went wrong. Please try again later.
-                </Alert>
+            {isLoggedIn && status === 'failed' && (
+                <Alert severity="error">{message}</Alert>
             )}
         </Collapse>
     );
+};
+
+SaveAlert.propTypes = {
+    isLoggedIn: PropTypes.bool.isRequired,
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired,
+    }).isRequired,
+    saveAlertOpen: PropTypes.func.isRequired,
+    setSaveAlertOpen: PropTypes.func.isRequired,
+    isSaved: PropTypes.bool.isRequired,
+    isValidated: PropTypes.bool.isRequired,
+    path: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
 };
 
 export const DeleteAlert = props => {
@@ -145,4 +161,12 @@ export const DeleteAlert = props => {
             )}
         </Collapse>
     );
+};
+
+DeleteAlert.propTypes = {
+    deleteAlertOpen: PropTypes.bool.isRequired,
+    setDeleteAlertOpen: PropTypes.func.isRequired,
+    isDeleted: PropTypes.bool.isRequired,
+    deleteAction: PropTypes.func.isRequired,
+    status: PropTypes.string.isRequired,
 };
