@@ -17,7 +17,7 @@ import { arrToObj } from '../../utils/arrToObj';
 const initState = {
     estimates: {},
     status: 'idle',
-    error: '',
+    message: '',
 };
 
 export const estimateReducer = (state = initState, action) => {
@@ -26,7 +26,7 @@ export const estimateReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case GET_ESTIMATES_SUCCESS:
             return {
@@ -38,13 +38,13 @@ export const estimateReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case CREATE_ESTIMATE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case CREATE_ESTIMATE_SUCCESS:
             let { id, ...newInvoice } = action.payload;
@@ -57,13 +57,13 @@ export const estimateReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case UPDATE_ESTIMATE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case UPDATE_ESTIMATE_SUCCESS:
             return {
@@ -78,13 +78,13 @@ export const estimateReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         case DELETE_ESTIMATE_REQUEST:
             return {
                 ...state,
                 status: 'loading',
-                error: '',
+                message: '',
             };
         case DELETE_ESTIMATE_SUCCESS:
             let estimatesList =
@@ -98,13 +98,13 @@ export const estimateReducer = (state = initState, action) => {
             return {
                 ...state,
                 status: 'failed',
-                error: action.payload,
+                message: action.payload,
             };
         default:
             return {
                 ...state,
                 status: 'idle',
-                error: '',
+                message: '',
             };
     }
 };

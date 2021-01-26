@@ -21,8 +21,10 @@ export const getEstimatesAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: GET_ESTIMATES_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: GET_ESTIMATES_FAILURE, payload: errMessage });
         }
     };
 };
@@ -44,8 +46,10 @@ export const createEstimateAct = estimate => {
                 payload: convertKeysCase(res.data.estimate, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: CREATE_ESTIMATE_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: CREATE_ESTIMATE_FAILURE, payload: errMessage });
         }
     };
 };
@@ -67,8 +71,10 @@ export const updateEstimateByIdAct = estimate => {
                 payload: convertKeysCase(res.data.estimate, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: UPDATE_ESTIMATE_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: UPDATE_ESTIMATE_FAILURE, payload: errMessage });
         }
     };
 };
@@ -89,8 +95,10 @@ export const deleteEstimatesAct = ids => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            console.log('FAILED');
-            dispatch({ type: DELETE_ESTIMATE_FAILURE, payload: err });
+            const errMessage = err.response.data.message
+                ? err.response.data.message
+                : err.response.statusText;
+            dispatch({ type: DELETE_ESTIMATE_FAILURE, payload: errMessage });
         }
     };
 };
