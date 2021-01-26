@@ -48,6 +48,8 @@ const BusinessesGen = props => {
     const {
         businesses,
         isLoggedIn,
+        status,
+        message,
         createBusinessAct,
         updateBusinessByIdAct,
     } = props;
@@ -140,7 +142,10 @@ const BusinessesGen = props => {
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
                     isValidated={isValidated}
+                    isLoggedIn={isLoggedIn}
                     path={'/businesses'}
+                    status={status}
+                    message={message}
                 />
             )}
             <div className={`${classes.container} ${classes.options}`}>
@@ -182,12 +187,16 @@ const mapStateToProps = state => {
     return {
         businesses: state.businesses.businesses,
         isLoggedIn: state.user.isLoggedIn,
+        status: state.businesses.status,
+        message: state.businesses.message,
     };
 };
 
 BusinessesGen.propTypes = {
     businesses: PropTypes.object.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
+    status: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
     createBusinessAct: PropTypes.func.isRequired,
     updateBusinessByIdAct: PropTypes.func.isRequired,
 };
