@@ -136,7 +136,7 @@ const Navigation = props => {
                                 Items
                             </NavLink>
                         </Button>
-                        <Button>
+                        {/* <Button>
                             <NavLink
                                 to="/settings"
                                 activeClassName={classes.selected}
@@ -144,7 +144,7 @@ const Navigation = props => {
                             >
                                 Settings
                             </NavLink>
-                        </Button>
+                        </Button> */}
                         <Button>
                             <TranslateIcon></TranslateIcon>
                             <Select
