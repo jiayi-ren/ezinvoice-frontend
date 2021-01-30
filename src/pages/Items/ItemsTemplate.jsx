@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TextField, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -10,45 +10,35 @@ const useStyles = makeStyles({
     },
 });
 
-const InitialForm = {
-    description: '',
-    rate: '',
-};
-
 const ItemsTemplate = props => {
-    const { setData } = props;
+    const { data, setData, setIsModified } = props;
     const classes = useStyles();
-    const [template, setTemplate] = useState(InitialForm);
-
-    useEffect(() => {
-        setData(template);
-    }, [template, setData]);
 
     const handleChange = event => {
-        const value = event.target.value;
-        const target = event.target.name;
+        const { name, value } = event.target;
 
-        setTemplate({
-            ...template,
-            [target]: value,
+        setData({
+            ...data,
+            [name]: value,
         });
+        setIsModified(true);
     };
 
     return (
-        <div className="items-template">
+        <div className="items-data">
             <form className={classes.form}>
                 <TextField
                     name="description"
                     type="text"
-                    value={template.description}
-                    label="Item Description"
+                    value={data.description}
+                    placeholder="Item Description"
                     onChange={handleChange}
                 />
                 <TextField
                     name="rate"
                     type="number"
-                    value={template.rate}
-                    label="Rate"
+                    value={data.rate}
+                    placeholder="Rate"
                     onChange={handleChange}
                 />
             </form>
