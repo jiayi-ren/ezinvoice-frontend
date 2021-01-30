@@ -10,6 +10,7 @@ export const SaveAlert = props => {
         saveAlertOpen,
         setSaveAlertOpen,
         isSaved,
+        isModified,
         isValidated,
         path,
         status,
@@ -18,43 +19,47 @@ export const SaveAlert = props => {
 
     return (
         <Collapse in={saveAlertOpen}>
-            {!isValidated && (
-                <Alert severity="error">
-                    There are some errors. Please fix the red fields before
-                    saving.
-                </Alert>
-            )}
-            {isValidated && !isSaved && (
-                <Alert
-                    severity="warning"
-                    action={
-                        <>
-                            <Button
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    history.push(`${path}`);
-                                }}
-                            >
-                                Yes
-                            </Button>
-                            <Button
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => {
-                                    setSaveAlertOpen(false);
-                                }}
-                            >
-                                No
-                            </Button>
-                        </>
-                    }
-                >
-                    Your work has not been saved. Do you still want to leave?
-                </Alert>
-            )}
+            {(typeof isValidated !== 'undefined' ? !isValidated : false) &&
+                isModified && (
+                    <Alert severity="error">
+                        There are some errors. Please fix the error fields
+                        before saving.
+                    </Alert>
+                )}
+            {(typeof isValidated !== 'undefined' ? isValidated : true) &&
+                isSaved === false &&
+                isModified && (
+                    <Alert
+                        severity="warning"
+                        action={
+                            <>
+                                <Button
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        history.push(`${path}`);
+                                    }}
+                                >
+                                    Yes
+                                </Button>
+                                <Button
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setSaveAlertOpen(false);
+                                    }}
+                                >
+                                    No
+                                </Button>
+                            </>
+                        }
+                    >
+                        Your work has not been saved. Do you still want to
+                        leave?
+                    </Alert>
+                )}
             {status === 'loading' && (
                 <Alert
                     severity="info"
@@ -70,9 +75,9 @@ export const SaveAlert = props => {
                     Saving
                 </Alert>
             )}
-            {isValidated &&
-                ((isLoggedIn && status === 'succeeded') ||
-                    (!isLoggedIn && isSaved)) && (
+            {(typeof isValidated !== 'undefined' ? isValidated : true) &&
+                ((isLoggedIn && status === 'succeeded') || !isLoggedIn) &&
+                isSaved && (
                     <Alert severity="success">
                         Saved Successfully. {message}
                     </Alert>
@@ -89,10 +94,11 @@ SaveAlert.propTypes = {
     history: PropTypes.shape({
         push: PropTypes.func.isRequired,
     }).isRequired,
-    saveAlertOpen: PropTypes.func.isRequired,
+    saveAlertOpen: PropTypes.bool.isRequired,
     setSaveAlertOpen: PropTypes.func.isRequired,
     isSaved: PropTypes.bool.isRequired,
-    isValidated: PropTypes.bool.isRequired,
+    isModified: PropTypes.bool.isRequired,
+    isValidated: PropTypes.bool,
     path: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
