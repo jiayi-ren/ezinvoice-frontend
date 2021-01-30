@@ -21,10 +21,14 @@ export const getItemsAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: GET_ITEMS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: GET_ITEMS_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: GET_ITEMS_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -43,10 +47,14 @@ export const createItemAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: CREATE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: CREATE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: CREATE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -66,10 +74,14 @@ export const updateItemByIdAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: UPDATE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: UPDATE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: UPDATE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -90,11 +102,15 @@ export const deleteItemsAct = ids => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage =
-                err && err.response.data.message
-                    ? err.response.data.message
-                    : err.response.statusText;
-            dispatch({ type: DELETE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: DELETE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: DELETE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };
