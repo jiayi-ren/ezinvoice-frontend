@@ -25,6 +25,11 @@ const useStyles = makeStyles({
     },
 });
 
+const InitialForm = {
+    description: '',
+    rate: '',
+};
+
 const ItemsGen = props => {
     const {
         items,
@@ -37,8 +42,9 @@ const ItemsGen = props => {
     const history = useHistory();
     const classes = useStyles();
     const { slug } = useParams();
-    const [data, setData] = useState({});
+    const [data, setData] = useState(JSON.parse(JSON.stringify(InitialForm)));
     const [isSaved, setIsSaved] = useState(false);
+    const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     useEffect(() => {
@@ -87,11 +93,10 @@ const ItemsGen = props => {
     };
 
     const goBack = () => {
-        if (isSaved) {
+        if (!isModified || isSaved) {
             history.push(`/items`);
-        } else {
-            setSaveAlertOpen(true);
         }
+        setSaveAlertOpen(true);
     };
 
     return (
@@ -102,6 +107,7 @@ const ItemsGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isModified={isModified}
                     path={'/items'}
                     isLoggedIn={isLoggedIn}
                     status={status}
@@ -131,7 +137,11 @@ const ItemsGen = props => {
                     Save
                 </Button>
             </div>
-            <ItemsTemplate setData={setData} />
+            <ItemsTemplate
+                data={data}
+                setData={setData}
+                setIsModified={setIsModified}
+            />
         </div>
     );
 };
@@ -145,7 +155,7 @@ const mapStateToProps = state => {
     };
 };
 
-ItemsGen.propType = {
+ItemsGen.propTypes = {
     items: PropTypes.array.isRequired,
     status: PropTypes.string.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,

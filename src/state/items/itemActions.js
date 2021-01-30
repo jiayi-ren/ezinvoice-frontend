@@ -2,7 +2,7 @@ import {
     getItems,
     createItem,
     updateItemById,
-    deleteItemById,
+    deleteItems,
 } from '../../api/items';
 import { convertKeysCase } from '../../utils/caseConversion';
 
@@ -21,10 +21,14 @@ export const getItemsAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: GET_ITEMS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: GET_ITEMS_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: GET_ITEMS_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -43,10 +47,14 @@ export const createItemAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: CREATE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: CREATE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: CREATE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -66,10 +74,14 @@ export const updateItemByIdAct = item => {
                 payload: convertKeysCase(res.data.item, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: UPDATE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage = err.response.data.message
+                    ? err.response.data.message
+                    : err.response.statusText;
+                dispatch({ type: UPDATE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: UPDATE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -78,22 +90,27 @@ export const DELETE_ITEM_REQUEST = 'DELETE_ITEM_REQUEST';
 export const DELETE_ITEM_SUCCESS = 'DELETE_ITEM_SUCCESS';
 export const DELETE_ITEM_FAILURE = 'DELETE_ITEM_FAILURE';
 
-export const deleteItemByIdAct = id => {
+export const deleteItemsAct = ids => {
     return async dispatch => {
         dispatch({ type: DELETE_ITEM_REQUEST });
 
         try {
-            await deleteItemById(id);
+            await deleteItems(ids);
             const res = await getItems();
             dispatch({
                 type: DELETE_ITEM_SUCCESS,
-                payload: convertKeysCase(res.data.item, 'camel'),
+                payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: DELETE_ITEM_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: DELETE_ITEM_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: DELETE_ITEM_FAILURE, payload: err.message });
+            }
         }
     };
 };

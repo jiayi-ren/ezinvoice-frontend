@@ -17,7 +17,7 @@ const ItemsList = props => {
     return (
         <TableComponent
             data={itemsList}
-            dataType={'Item'}
+            dataType={'items'}
             dense={dense}
             headCells={headCells}
             selected={selected}

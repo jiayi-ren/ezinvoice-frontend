@@ -12,9 +12,10 @@ import {
     DELETE_ITEM_SUCCESS,
     DELETE_ITEM_FAILURE,
 } from './itemActions';
+import { arrToObj } from '../../utils/arrToObj';
 
 const initState = {
-    items: [],
+    items: {},
     status: 'idle',
     message: '',
 };
@@ -30,7 +31,7 @@ export const itemReducer = (state = initState, action) => {
         case GET_ITEMS_SUCCESS:
             return {
                 ...state,
-                items: action.payload,
+                items: arrToObj(action.payload, 'id'),
                 status: 'succeeded',
             };
         case GET_ITEMS_FAILURE:
@@ -46,9 +47,10 @@ export const itemReducer = (state = initState, action) => {
                 message: '',
             };
         case CREATE_ITEM_SUCCESS:
+            let { id, ...newItem } = action.payload;
             return {
                 ...state,
-                items: [...state.items, action.payload],
+                items: { ...state.items, id: newItem },
                 status: 'succeeded',
             };
         case CREATE_ITEM_FAILURE:
@@ -66,7 +68,7 @@ export const itemReducer = (state = initState, action) => {
         case UPDATE_ITEM_SUCCESS:
             return {
                 ...state,
-                items: [...state.items, action.payload],
+                items: { ...state.items, [action.payload.id]: action.payload },
                 status: 'succeeded',
             };
         case UPDATE_ITEM_FAILURE:
@@ -82,9 +84,11 @@ export const itemReducer = (state = initState, action) => {
                 message: '',
             };
         case DELETE_ITEM_SUCCESS:
+            let itemsList =
+                action.payload.length > 0 ? arrToObj(action.payload, 'id') : {};
             return {
                 ...state,
-                items: action.payload,
+                items: itemsList,
                 status: 'succeeded',
             };
         case DELETE_ITEM_FAILURE:
