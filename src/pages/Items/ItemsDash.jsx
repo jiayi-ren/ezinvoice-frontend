@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -7,8 +8,8 @@ import {
     FormControlLabel,
     Switch,
 } from '@material-ui/core';
-import { getItemsAct } from '../../state/items/itemActions';
-import isEqual from 'lodash.isequal';
+import { getItemsAct, deleteItemsAct } from '../../state/items/itemActions';
+import { DeleteAlert } from '../../components/Alerts';
 import ItemsList from './ItemsList';
 
 const useStyles = makeStyles({
@@ -33,49 +34,97 @@ const useStyles = makeStyles({
 });
 
 const ItemsDash = props => {
-    const { items, isLoggedIn, getItemsAct } = props;
+    const { items, status, isLoggedIn, getItemsAct, deleteItemsAct } = props;
     const history = useHistory();
     const classes = useStyles();
     const [itemsList, setItemsList] = useState([]);
     const [selected, setSelected] = useState([]);
+    const [isDeleted, setIsDeleted] = useState(false);
+    const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [dense, setDense] = useState(false);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            getItemsAct();
+        }
+    }, [isLoggedIn, getItemsAct]);
+
+    useEffect(() => {
+        if (!isLoggedIn) {
+            const localItems = JSON.parse(window.localStorage.getItem('items'));
+            setItemsList(localItems);
+        } else {
+            setItemsList(Object.values(items));
+        }
+    }, [isLoggedIn, items]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
     };
 
-    useEffect(() => {
-        getItemsAct();
-    }, [getItemsAct]);
-
-    useEffect(() => {
+    const deleteItems = () => {
         if (!isLoggedIn) {
-            const localItems = JSON.parse(window.localStorage.getItem('items'));
-            if (!isEqual(localItems, itemsList)) {
-                setItemsList(localItems);
+            let deleteItemsList = Object.assign(itemsList);
+            for (let i = 0; i < selected.length; i++) {
+                const label = selected[i].split('-')[1];
+                deleteItemsList.splice(label, 1);
             }
+            deleteItemsList.length > 0
+                ? window.localStorage.setItem(
+                      'items',
+                      JSON.stringify(deleteItemsList),
+                  )
+                : window.localStorage.setItem('items', JSON.stringify([]));
+            setItemsList(deleteItemsList);
         } else {
-            if (!isEqual(items, itemsList)) {
-                setItemsList(items);
+            let deleteItemsList = [];
+            for (let i = 0; i < selected.length; i++) {
+                const label = selected[i].split('-')[0];
+                deleteItemsList.push(label.substring(5));
             }
+            deleteItemsAct(deleteItemsList);
         }
-    }, [isLoggedIn, items, itemsList]);
+        setIsDeleted(true);
+        setSelected([]);
+    };
 
     return (
         <div className={classes.container}>
+            {deleteAlertOpen && (
+                <DeleteAlert
+                    deleteAlertOpen={deleteAlertOpen}
+                    setDeleteAlertOpen={setDeleteAlertOpen}
+                    isDeleted={isDeleted}
+                    deleteAction={deleteItems}
+                    status={status}
+                />
+            )}
             <div className={`${classes.container} ${classes.searchBar}`}>
                 Search
             </div>
             <div className={`${classes.container} ${classes.options}`}>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={() => {
-                        history.push(`${history.location.pathname}/new`);
-                    }}
-                >
-                    New
-                </Button>
+                <div>
+                    <Button
+                        variant="contained"
+                        className={classes.button}
+                        onClick={() => {
+                            history.push(`${history.location.pathname}/new`);
+                        }}
+                    >
+                        New
+                    </Button>
+                    {selected.length > 0 && (
+                        <Button
+                            variant="contained"
+                            className={classes.button}
+                            onClick={() => {
+                                setDeleteAlertOpen(true);
+                            }}
+                        >
+                            DELETE
+                        </Button>
+                    )}
+                </div>
                 <FormControlLabel
                     control={
                         <Switch checked={dense} onChange={handleChangeDense} />
@@ -98,10 +147,20 @@ const ItemsDash = props => {
 const mapStateToProps = state => {
     return {
         items: state.items.items,
+        status: state.items.status,
         isLoggedIn: state.user.isLoggedIn,
     };
 };
 
+ItemsDash.propTypes = {
+    items: PropTypes.object.isRequired,
+    status: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    getItemsAct: PropTypes.func.isRequired,
+    deleteItemsAct: PropTypes.func.isRequired,
+};
+
 export default connect(mapStateToProps, {
     getItemsAct,
+    deleteItemsAct,
 })(ItemsDash);
