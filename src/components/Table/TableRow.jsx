@@ -76,10 +76,17 @@ const TableCustomRow = props => {
                     <Button>
                         <Link
                             style={{ textDecoration: 'none' }}
-                            to={`/${dataType}/${dataType.substring(
-                                0,
-                                3,
-                            )}=${index}&id=${row.id}`}
+                            to={
+                                row.id
+                                    ? `/${dataType}/${dataType.substring(
+                                          0,
+                                          3,
+                                      )}&id=${row.id}`
+                                    : `/${dataType}/${dataType.substring(
+                                          0,
+                                          3,
+                                      )}=${index}&`
+                            }
                         >
                             Edit
                         </Link>
@@ -100,10 +107,17 @@ const TableCustomRow = props => {
                     <Button>
                         <Link
                             style={{ textDecoration: 'none' }}
-                            to={`/${dataType}/${dataType.substring(
-                                0,
-                                3,
-                            )}=${index}&id=${row.id}`}
+                            to={
+                                row.id
+                                    ? `/${dataType}/${dataType.substring(
+                                          0,
+                                          3,
+                                      )}&id=${row.id}`
+                                    : `/${dataType}/${dataType.substring(
+                                          0,
+                                          3,
+                                      )}=${index}&`
+                            }
                         >
                             Edit
                         </Link>
@@ -111,7 +125,7 @@ const TableCustomRow = props => {
                 </TableCell>
             </>
         );
-    } else if (dataType === 'Item' && row) {
+    } else if (dataType === 'items' && row) {
         return (
             <>
                 <TableCell>{row && row.description}</TableCell>
