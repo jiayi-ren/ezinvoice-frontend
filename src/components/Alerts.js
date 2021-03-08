@@ -15,10 +15,11 @@ export const SaveAlert = props => {
         path,
         status,
         message,
+        isGoingBack,
     } = props;
 
     return (
-        <Collapse in={saveAlertOpen}>
+        <Collapse in={saveAlertOpen} id="notification">
             {(typeof isValidated !== 'undefined' ? !isValidated : false) &&
                 isModified && (
                     <Alert severity="error">
@@ -28,7 +29,8 @@ export const SaveAlert = props => {
                 )}
             {(typeof isValidated !== 'undefined' ? isValidated : true) &&
                 isSaved === false &&
-                isModified && (
+                isModified &&
+                isGoingBack && (
                     <Alert
                         severity="warning"
                         action={
