@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Document, PDFViewer } from '@react-pdf/renderer';
+import React from 'react';
+import { pdf, Document, PDFViewer } from '@react-pdf/renderer';
 import Header from './Header';
 import ContactInfo from './ContactInfo';
 import ItemsTable from './ItemsTable/ItemsTable';
@@ -14,32 +14,37 @@ const StyledPage = styled.Page`
     flex-direction: column;
 `;
 
+const doc = data => (
+    <Document
+        title={`${data.date}_${data.title}_${data.client.street}${
+            data.docNumber ? '_' + data.docNumber : ''
+        }`}
+        author={`${data.business.name}`}
+        subject={`${data.date}_${data.title}_${data.client.street}${
+            data.docNumber ? '_' + data.docNumber : ''
+        }`}
+    >
+        <StyledPage size="LETTER">
+            <Header
+                title={data.title}
+                docNumber={data.docNumber}
+                date={data.date}
+            />
+            <ContactInfo business={data.business} client={data.client} />
+            <ItemsTable items={data.items} />
+            <Footer business={data.business} />
+        </StyledPage>
+    </Document>
+);
+
+export const pdfBlob = data => pdf(doc(data).toBlob());
+
 const PDF = props => {
     const { data } = props;
 
-    const [pdfData, setPdfData] = useState(data);
-
-    useEffect(() => {
-        setPdfData(data);
-    }, [data]);
-
     return (
         <PDFViewer style={{ width: '80vw', height: '1200px' }}>
-            <Document title="pdf">
-                <StyledPage size="LETTER">
-                    <Header
-                        title={pdfData.title}
-                        docNumber={pdfData.docNumber}
-                        date={pdfData.date}
-                    />
-                    <ContactInfo
-                        business={pdfData.business}
-                        client={pdfData.client}
-                    />
-                    <ItemsTable items={pdfData.items} />
-                    <Footer business={pdfData.business} />
-                </StyledPage>
-            </Document>
+            {doc(data)}
         </PDFViewer>
     );
 };
