@@ -7,6 +7,7 @@ import { SaveAlert } from '../../components/Alerts';
 import { convertKeysCase } from '../../utils/caseConversion';
 import isEqual from 'lodash.isequal';
 import {
+    getBusinessesAct,
     createBusinessAct,
     updateBusinessByIdAct,
 } from '../../state/businesses/businessActions';
@@ -50,6 +51,7 @@ const BusinessesGen = props => {
         isLoggedIn,
         status,
         message,
+        getBusinessesAct,
         createBusinessAct,
         updateBusinessByIdAct,
     } = props;
@@ -64,6 +66,12 @@ const BusinessesGen = props => {
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            getBusinessesAct();
+        }
+    }, [isLoggedIn, getBusinessesAct]);
 
     useEffect(() => {
         if (slug !== 'new') {
@@ -108,21 +116,30 @@ const BusinessesGen = props => {
         setIsValidated(true);
     };
 
-    const saveBusiness = () => {
+    const saveBusiness = async () => {
         if (!isEqual(errors, InitialErrors)) {
             return setIsValidated(false);
         }
 
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createBusinessAct(reqData);
+            await createBusinessAct(reqData);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateBusinessByIdAct(reqData, reqData.id);
+            await updateBusinessByIdAct(reqData, reqData.id);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         }
-        setIsSaved(true);
         setIsValidated(true);
     };
 
@@ -141,6 +158,7 @@ const BusinessesGen = props => {
                     saveAlertOpen={saveAlertOpen}
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
+                    isModified={isModified}
                     isValidated={isValidated}
                     isLoggedIn={isLoggedIn}
                     path={'/businesses'}
@@ -197,11 +215,13 @@ BusinessesGen.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     status: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    getBusinessesAct: PropTypes.func.isRequired,
     createBusinessAct: PropTypes.func.isRequired,
     updateBusinessByIdAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
+    getBusinessesAct,
     createBusinessAct,
     updateBusinessByIdAct,
 })(BusinessesGen);
