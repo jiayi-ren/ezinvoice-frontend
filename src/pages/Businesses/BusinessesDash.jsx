@@ -80,21 +80,18 @@ const BusinessesDash = props => {
                 const label = selected[i].split('-')[1];
                 deleteBusinessesList.splice(label, 1);
             }
-            console.log(deleteBusinessesList);
             deleteBusinessesList.length > 0
                 ? window.localStorage.setItem(
                       'businesses',
                       JSON.stringify(deleteBusinessesList),
                   )
                 : window.localStorage.setItem('businesses', JSON.stringify([]));
-            setBusinessesList(deleteBusinessesList);
         } else {
             let deleteBusinessesList = [];
             for (let i = 0; i < selected.length; i++) {
                 const label = selected[i].split('-')[0];
                 deleteBusinessesList.push(label.substring(10));
             }
-            console.log(deleteBusinessesList);
             deleteBusinessesAct(deleteBusinessesList);
         }
         setIsDeleted(true);

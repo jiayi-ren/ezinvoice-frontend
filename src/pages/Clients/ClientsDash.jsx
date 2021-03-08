@@ -67,7 +67,7 @@ const ClientsDash = props => {
         } else {
             setClientsList(Object.values(clients));
         }
-    }, [isLoggedIn, clients, getClientsAct]);
+    }, [isLoggedIn, clients]);
 
     const handleChangeDense = event => {
         setDense(event.target.checked);
@@ -80,7 +80,6 @@ const ClientsDash = props => {
                 const label = selected[i].split('-')[1];
                 deleteClientsList.splice(label, 1);
             }
-            console.log(deleteClientsList);
             deleteClientsList.length > 0
                 ? window.localStorage.setItem(
                       'clients',
@@ -94,7 +93,6 @@ const ClientsDash = props => {
                 const label = selected[i].split('-')[0];
                 deleteClientsList.push(label.substring(7));
             }
-            console.log(deleteClientsList);
             deleteClientsAct(deleteClientsList);
         }
         setIsDeleted(true);
