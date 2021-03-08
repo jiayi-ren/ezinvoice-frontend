@@ -78,17 +78,25 @@ const ItemsGen = props => {
         setSaveAlertOpen(false);
     };
 
-    const saveItem = () => {
+    const saveItem = async () => {
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createItemAct(reqData);
-            setIsSaved(true);
+            await createItemAct(reqData);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateItemByIdAct(reqData, reqData.id);
-            setIsSaved(true);
+            await updateItemByIdAct(reqData, reqData.id);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         }
     };
 
