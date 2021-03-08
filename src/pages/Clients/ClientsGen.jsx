@@ -6,6 +6,7 @@ import { Button, makeStyles } from '@material-ui/core';
 import { convertKeysCase } from '../../utils/caseConversion';
 import isEqual from 'lodash.isequal';
 import {
+    getClientsAct,
     createClientAct,
     updateClientByIdAct,
 } from '../../state/clients/clientActions';
@@ -50,6 +51,7 @@ const ClientsGen = props => {
         isLoggedIn,
         status,
         message,
+        getClientsAct,
         createClientAct,
         updateClientByIdAct,
     } = props;
@@ -64,6 +66,12 @@ const ClientsGen = props => {
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            getClientsAct();
+        }
+    }, [isLoggedIn, getClientsAct]);
 
     useEffect(() => {
         if (slug !== 'new') {
@@ -103,21 +111,30 @@ const ClientsGen = props => {
         setIsValidated(true);
     };
 
-    const saveClient = () => {
+    const saveClient = async () => {
         if (!isEqual(errors, InitialErrors)) {
             return setIsValidated(false);
         }
 
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createClientAct(reqData);
+            await createClientAct(reqData);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateClientByIdAct(reqData, reqData.id);
+            await updateClientByIdAct(reqData, reqData.id);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         }
-        setIsSaved(true);
         setIsValidated(true);
     };
 
@@ -137,6 +154,7 @@ const ClientsGen = props => {
                     setSaveAlertOpen={setSaveAlertOpen}
                     isSaved={isSaved}
                     isValidated={isValidated}
+                    isModified={isModified}
                     path={'/clients'}
                     isLoggedIn={isLoggedIn}
                     status={status}
@@ -192,11 +210,13 @@ ClientsGen.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     status: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    getClientsAct: PropTypes.func.isRequired,
     createClientAct: PropTypes.func.isRequired,
     updateClientByIdAct: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, {
+    getClientsAct,
     createClientAct,
     updateClientByIdAct,
 })(ClientsGen);
