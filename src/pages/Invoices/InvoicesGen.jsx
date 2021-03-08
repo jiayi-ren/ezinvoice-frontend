@@ -42,14 +42,6 @@ const contactInit = {
     phone: '',
 };
 
-const item = {
-    description: '',
-    quantity: '',
-    rate: '',
-};
-
-const itemInit = [JSON.parse(JSON.stringify(item))];
-
 const InitialForm = {
     title: 'Invoice',
     date: new Date(
@@ -59,7 +51,7 @@ const InitialForm = {
         .slice(0, 10),
     business: contactInit,
     client: contactInit,
-    items: itemInit,
+    items: [],
 };
 
 const InitialErrors = {
@@ -67,7 +59,7 @@ const InitialErrors = {
     date: '',
     business: contactInit,
     client: contactInit,
-    items: itemInit,
+    items: [],
 };
 
 const InvoicesGen = props => {
@@ -95,6 +87,7 @@ const InvoicesGen = props => {
     const [isValidated, setIsValidated] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
     const [isModified, setIsModified] = useState(false);
+    const [isGoingBack, setIsGoingBack] = useState(false);
     const [saveAlertOpen, setSaveAlertOpen] = useState(false);
 
     // generate complete invoice using business id and client id
@@ -164,21 +157,30 @@ const InvoicesGen = props => {
         setIsValidated(true);
     };
 
-    const saveInvoice = () => {
+    const saveInvoice = async () => {
         if (!isEqual(errors, InitialErrors)) {
             return setIsValidated(false);
         }
 
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createInvoiceAct(reqData);
+            await createInvoiceAct(reqData);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateInvoiceByIdAct(reqData, reqData.id);
+            await updateInvoiceByIdAct(reqData, reqData.id);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         }
-        setIsSaved(true);
         setIsValidated(true);
     };
 
@@ -187,6 +189,7 @@ const InvoicesGen = props => {
             history.push(`/invoices`);
         }
         setSaveAlertOpen(true);
+        setIsGoingBack(true);
     };
 
     return (
@@ -198,11 +201,13 @@ const InvoicesGen = props => {
                         saveAlertOpen={saveAlertOpen}
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
+                        isModified={isModified}
                         isValidated={isValidated}
                         path={'/invoices'}
                         status={status}
                         isLoggedIn={isLoggedIn}
                         message={message}
+                        isGoingBack={isGoingBack}
                     />
                 )}
                 <div className={`${classes.container} ${classes.options}`}>

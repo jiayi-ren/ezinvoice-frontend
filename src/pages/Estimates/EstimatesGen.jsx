@@ -42,20 +42,12 @@ const contactInit = {
     phone: '',
 };
 
-const item = {
-    description: '',
-    quantity: '',
-    rate: '',
-};
-
-const itemInit = [JSON.parse(JSON.stringify(item))];
-
 const InitialForm = {
     title: 'Estimate',
     date: new Date().toJSON().slice(0, 10),
     business: contactInit,
     client: contactInit,
-    items: itemInit,
+    items: [],
 };
 
 const InitialErrors = {
@@ -63,7 +55,7 @@ const InitialErrors = {
     date: '',
     business: contactInit,
     client: contactInit,
-    items: itemInit,
+    items: [],
 };
 
 const EstimatesGen = props => {
@@ -160,21 +152,30 @@ const EstimatesGen = props => {
         setIsValidated(true);
     };
 
-    const saveEstimate = () => {
+    const saveEstimate = async () => {
         if (!isEqual(errors, InitialErrors)) {
             return setIsValidated(false);
         }
 
         if (slug === 'new') {
             const reqData = convertKeysCase(data, 'snake');
-            createEstimateAct(reqData);
+            await createEstimateAct(reqData);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         } else {
             let reqData = convertKeysCase(data, 'snake');
             reqData.id = data.id;
             reqData.user_id = data.userId;
-            updateEstimateByIdAct(reqData, reqData.id);
+            await updateEstimateByIdAct(reqData, reqData.id);
+            if (status === 'succeeded') {
+                setIsSaved(true);
+            } else if (status === 'failed') {
+                setIsSaved(false);
+            }
         }
-        setIsSaved(true);
         setIsValidated(true);
     };
 
@@ -196,6 +197,7 @@ const EstimatesGen = props => {
                         setSaveAlertOpen={setSaveAlertOpen}
                         isSaved={isSaved}
                         isValidated={isValidated}
+                        isModified={isModified}
                         path={'/estimates'}
                         status={status}
                         isLoggedIn={isLoggedIn}
