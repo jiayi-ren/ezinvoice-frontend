@@ -14,7 +14,7 @@ const ContactList = props => {
 
     return (
         <TableComponent
-            data={contactList}
+            data={contactList.filter(contact => contact.isHidden === false)}
             dataType={dataType}
             dense={dense}
             headCells={headCells}
