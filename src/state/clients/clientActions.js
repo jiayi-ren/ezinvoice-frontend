@@ -21,10 +21,15 @@ export const getClientsAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: GET_CLIENTS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: GET_CLIENTS_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: GET_CLIENTS_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -44,10 +49,15 @@ export const createClientAct = client => {
                 payload: convertKeysCase(res.data.client, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: CREATE_CLIENT_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: CREATE_CLIENT_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: CREATE_CLIENT_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -67,10 +77,15 @@ export const updateClientByIdAct = client => {
                 payload: convertKeysCase(res.data.client, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: UPDATE_CLIENT_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: UPDATE_CLIENT_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: UPDATE_CLIENT_FAILURE, payload: err.message });
+            }
         }
     };
 };
@@ -91,10 +106,15 @@ export const deleteClientsAct = ids => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: DELETE_CLIENT_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: DELETE_CLIENT_FAILURE, payload: errMessage });
+            } else {
+                dispatch({ type: DELETE_CLIENT_FAILURE, payload: err.message });
+            }
         }
     };
 };

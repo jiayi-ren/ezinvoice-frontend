@@ -21,10 +21,18 @@ export const getBusinessesAct = () => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: GET_BUSINESSES_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({ type: GET_BUSINESSES_FAILURE, payload: errMessage });
+            } else {
+                dispatch({
+                    type: GET_BUSINESSES_FAILURE,
+                    payload: err.message,
+                });
+            }
         }
     };
 };
@@ -44,10 +52,21 @@ export const createBusinessAct = business => {
                 payload: convertKeysCase(res.data.business, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: CREATE_BUSINESS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({
+                    type: CREATE_BUSINESS_FAILURE,
+                    payload: errMessage,
+                });
+            } else {
+                dispatch({
+                    type: CREATE_BUSINESS_FAILURE,
+                    payload: err.message,
+                });
+            }
         }
     };
 };
@@ -69,10 +88,21 @@ export const updateBusinessByIdAct = business => {
                 payload: convertKeysCase(res.data.business, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: UPDATE_BUSINESS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({
+                    type: UPDATE_BUSINESS_FAILURE,
+                    payload: errMessage,
+                });
+            } else {
+                dispatch({
+                    type: UPDATE_BUSINESS_FAILURE,
+                    payload: err.message,
+                });
+            }
         }
     };
 };
@@ -93,10 +123,21 @@ export const deleteBusinessesAct = ids => {
                 payload: convertKeysCase(res.data, 'camel'),
             });
         } catch (err) {
-            const errMessage = err.response.data.message
-                ? err.response.data.message
-                : err.response.statusText;
-            dispatch({ type: DELETE_BUSINESS_FAILURE, payload: errMessage });
+            if (typeof err.response !== 'undefined') {
+                const errMessage =
+                    err && err.response.data.message
+                        ? err.response.data.message
+                        : err.response.statusText;
+                dispatch({
+                    type: DELETE_BUSINESS_FAILURE,
+                    payload: errMessage,
+                });
+            } else {
+                dispatch({
+                    type: UPDATE_BUSINESS_FAILURE,
+                    payload: err.message,
+                });
+            }
         }
     };
 };
